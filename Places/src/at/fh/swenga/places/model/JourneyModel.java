@@ -22,17 +22,16 @@ public class JourneyModel {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@DateTimeFormat(pattern = "dd.MM.yyyy")
 	@NotNull(message = "Date cannot be null")
 	private LocalDate arrivalDate;
-	
+
 	@DateTimeFormat(pattern = "dd.MM.yyyy")
 	@NotNull(message = "Date cannot be null")
 	private LocalDate departureDate;
-	
-	@ManyToOne (cascade = CascadeType.PERSIST)
+
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	private JourneyDestinationModel journeyDestination;
-	
-	
+
 }

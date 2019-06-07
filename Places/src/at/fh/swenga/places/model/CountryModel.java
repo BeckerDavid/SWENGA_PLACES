@@ -14,24 +14,24 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Country")
 public class CountryModel {
-	
+
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-    
-    @Column(nullable = false, length = 3)
-    private String countryShortCut;
-	
+
+	@Column(nullable = false, length = 3)
+	private String countryShortCut;
+
 	@Column(nullable = false, length = 30)
 	private String countryName;
-	
-    @OneToMany(mappedBy="country",fetch=FetchType.LAZY)
-    private Set<RecommendationModel> recommendations;
-    
-    @OneToMany(mappedBy="country",fetch=FetchType.LAZY)
-    private Set<DestinationModel> destinations;
-	
+
+	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
+	private Set<RecommendationModel> recommendations;
+
+	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
+	private Set<DestinationModel> destinations;
+
 	public CountryModel() {
 		super();
 	}
@@ -40,12 +40,7 @@ public class CountryModel {
 		super();
 		this.countryShortCut = countryShortCut;
 		this.countryName = countryName;
-		
+
 	}
-
-	
-	
-	
-
 
 }

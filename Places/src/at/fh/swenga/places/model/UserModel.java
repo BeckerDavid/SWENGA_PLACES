@@ -19,7 +19,6 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-
 @Entity
 @Table(name = "Users")
 
@@ -28,39 +27,39 @@ public class UserModel {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@Column(nullable = false, length = 30)
 	private String username;
-	
+
 	@Column(nullable = false, length = 30)
 	private String password;
-	
+
 	@Column(nullable = false, length = 30)
 	private String firstName;
-	
+
 	@Column(nullable = false, length = 30)
-	private String lastName;	
-	
+	private String lastName;
+
 	@Column(nullable = false, length = 30)
 	private String mail;
-	
+
 	@Column(nullable = false, length = 30)
 	private String country;
-	
+
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] profilePicture;
-	
+
 	@DateTimeFormat(pattern = "dd.MM.yyyy")
 	@NotNull(message = "Date cannot be null")
 	private LocalDate dayOfBirht;
 
-	@ManyToOne (cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	private UserCategoryModel category;
-	
-    @OneToMany(mappedBy="user",fetch=FetchType.LAZY)
-    private Set<RecommendationModel> recommendations;
-	
+
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	private Set<RecommendationModel> recommendations;
+
 	public UserModel(int id, String username, String password, String firstName, String lastName, String mail,
 			String country, LocalDate dayOfBirht) {
 		super();
@@ -158,12 +157,6 @@ public class UserModel {
 		if (id != other.id)
 			return false;
 		return true;
-	}	
-	
-	
-	
-	
-	
-	
+	}
 
 }
