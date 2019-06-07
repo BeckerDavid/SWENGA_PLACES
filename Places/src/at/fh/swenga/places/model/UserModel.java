@@ -58,7 +58,7 @@ public class UserModel {
 	@ManyToOne (cascade = CascadeType.PERSIST)
 	private UserCategoryModel category;
 	
-    @OneToMany(mappedBy="recommendation",fetch=FetchType.LAZY)
+    @OneToMany(mappedBy="user",fetch=FetchType.LAZY)
     private Set<RecommendationModel> recommendations;
 	
 	public UserModel(int id, String username, String password, String firstName, String lastName, String mail,

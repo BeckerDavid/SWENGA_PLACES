@@ -20,7 +20,7 @@ public class UserCategoryModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-    @OneToMany(mappedBy="categroy",fetch=FetchType.LAZY)
+    @OneToMany(mappedBy="category",fetch=FetchType.LAZY)
     private Set<UserModel> users;
 	
 	@Column(nullable = false, length = 30)

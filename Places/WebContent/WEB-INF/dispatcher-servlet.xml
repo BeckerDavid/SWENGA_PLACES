@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/data/jpa
+	    http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+		">
+
+
+	<!-- Read settings from external file and replace all ${...} in the xml -->
+	<context:property-placeholder location="classpath:db.properties" />
+
+
+	<!-- - POJOs labeled with the @Controller, @Service,..... annotations are auto-detected. -->
+	<context:component-scan base-package="at.fh.swenga" />
+
+	<!-- ################################################################ -->
+
+	<!-- looks up Spring Data repositories -->
+	<jpa:repositories base-package="at.fh.swenga" />
+
+	<!-- ################################################################ -->
+
+	<!-- 
+	<bean class="org.springframework.data.web.config.SpringDataWebConfiguration"/>  
+	-->
+
+ 
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
+
+	<bean
+		class="org.springframework.data.repository.support.DomainClassConverter">
+		<constructor-arg ref="conversionService" />
+	</bean>
+
+	<bean id="sortResolver"
+		class="org.springframework.data.web.SortHandlerMethodArgumentResolver" />
+	
+	<bean id="pageableResolver"
+		class="org.springframework.data.web.PageableHandlerMethodArgumentResolver">
+		<constructor-arg ref="sortResolver" />
+	</bean>
+
+	<mvc:annotation-driven conversion-service="conversionService">
+		<mvc:argument-resolvers>
+			<ref bean="sortResolver" />
+			<ref bean="pageableResolver" />
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
+
+	<!-- ################################################################ -->
+
+	<!--  <mvc:annotation-driven/> -->
+
+	<!-- if no Controller can handle a request, ask Servlet Container, if he 
+		can handle it, otherwise return 404 -->
+	<mvc:default-servlet-handler />
+
+
+	<bean id="templateResolver"
+		class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+		<property name="prefix" value="/WEB-INF/templates/" />
+		<property name="suffix" value=".html" />
+		<property name="templateMode" value="HTML5" />
+		<property name="cacheable" value="false" />
+	</bean>
+
+	<bean id="templateEngine" class="org.thymeleaf.spring5.SpringTemplateEngine">
+		<property name="templateResolver" ref="templateResolver" />
+		<property name="enableSpringELCompiler" value="true" />
+	</bean>
+	
+	<bean class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+  	  <property name="templateEngine" ref="templateEngine" />
+  </bean>
+  
+	<!-- ################################################################ -->
+
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+		<property name="initialSize" value="2" />
+		<property name="maxTotal" value="5" />
+	</bean>
+
+	<bean
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+		id="entityManagerFactory">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan" value="at.fh.swenga" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+		</property>
+		<property name="jpaProperties">
+			<props>
+				<!-- validate: validate the schema, makes no changes to the database. 
+					update: update the schema. create: creates the schema, destroying previous 
+					data. create-drop: drop the schema at the end of the session. -->
+				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	
+	<tx:annotation-driven />
+
+</beans>
