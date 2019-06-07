@@ -18,10 +18,10 @@ public class RatingModel {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-    @OneToMany(mappedBy="rating",fetch=FetchType.LAZY)
-    private Set<RecommendationModel> recommendations;
-	
+
+	@OneToMany(mappedBy = "rating", fetch = FetchType.LAZY)
+	private Set<RecommendationModel> recommendations;
+
 	@Column(nullable = false, length = 30)
 	private String ratingLevel;
 }

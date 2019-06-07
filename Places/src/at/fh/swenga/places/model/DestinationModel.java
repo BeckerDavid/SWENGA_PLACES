@@ -13,19 +13,17 @@ import javax.persistence.Table;
 @Table(name = "Destination")
 public class DestinationModel {
 
-
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@Column(length = 30)
 	private String destinationPlace;
-	
-	@ManyToOne (cascade = CascadeType.PERSIST)
+
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	private CountryModel country;
-	
-	@ManyToOne (cascade = CascadeType.PERSIST)
+
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	private JourneyDestinationModel destinationJourney;
 }
- 

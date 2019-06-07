@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:util="http://www.springframework.org/schema/util" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
 
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/aop 
@@ -24,11 +28,14 @@
 
 
 	<!-- Read settings from external file and replace all ${...} in the xml -->
-	<context:property-placeholder location="classpath:db.properties" />
+	<context:property-placeholder
+		location="classpath:db.properties" />
 
 
-	<!-- - POJOs labeled with the @Controller, @Service,..... annotations are auto-detected. -->
-	<context:component-scan base-package="at.fh.swenga" />
+	<!-- - POJOs labeled with the @Controller, @Service,..... annotations are 
+		auto-detected. -->
+	<context:component-scan
+		base-package="at.fh.swenga" />
 
 	<!-- ################################################################ -->
 
@@ -37,11 +44,9 @@
 
 	<!-- ################################################################ -->
 
-	<!-- 
-	<bean class="org.springframework.data.web.config.SpringDataWebConfiguration"/>  
-	-->
+	<!-- <bean class="org.springframework.data.web.config.SpringDataWebConfiguration"/> -->
 
- 
+
 	<bean id="conversionService"
 		class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
 
@@ -52,13 +57,14 @@
 
 	<bean id="sortResolver"
 		class="org.springframework.data.web.SortHandlerMethodArgumentResolver" />
-	
+
 	<bean id="pageableResolver"
 		class="org.springframework.data.web.PageableHandlerMethodArgumentResolver">
 		<constructor-arg ref="sortResolver" />
 	</bean>
 
-	<mvc:annotation-driven conversion-service="conversionService">
+	<mvc:annotation-driven
+		conversion-service="conversionService">
 		<mvc:argument-resolvers>
 			<ref bean="sortResolver" />
 			<ref bean="pageableResolver" />
@@ -67,7 +73,7 @@
 
 	<!-- ################################################################ -->
 
-	<!--  <mvc:annotation-driven/> -->
+	<!-- <mvc:annotation-driven/> -->
 
 	<!-- if no Controller can handle a request, ask Servlet Container, if he 
 		can handle it, otherwise return 404 -->
@@ -82,19 +88,38 @@
 		<property name="cacheable" value="false" />
 	</bean>
 
-	<bean id="templateEngine" class="org.thymeleaf.spring5.SpringTemplateEngine">
+
+	<bean id="templateEngine"
+		class="org.thymeleaf.spring5.SpringTemplateEngine">
+
 		<property name="templateResolver" ref="templateResolver" />
-		<property name="enableSpringELCompiler" value="true" />
+		<!-- Enabling the SpringEL compiler with Spring 4.2.4 or newer can speed 
+			up -->
+		<!-- execution in most scenarios, but might be incompatible with specific -->
+		<!-- cases when expressions in one template are reused across different 
+			data -->
+		<!-- types, so this flag is "false" by default for safer backwards -->
+		<!-- compatibility. -->
+		<property name="enableSpringELCompiler" value="false" />
+
+		<property name="additionalDialects">
+			<set>
+				<bean
+					class="org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect" />
+			</set>
+		</property>
 	</bean>
-	
+
 	<bean class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
-  	  <property name="templateEngine" ref="templateEngine" />
-  </bean>
-  
+		<property name="templateEngine" ref="templateEngine" />
+	</bean>
+
 	<!-- ################################################################ -->
 
-	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.Driver" />
 		<property name="url" value="${db.url}" />
 		<property name="username" value="${db.username}" />
 		<property name="password" value="${db.password}" />
@@ -108,7 +133,8 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="packagesToScan" value="at.fh.swenga" />
 		<property name="jpaVendorAdapter">
-			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+			<bean
+				class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
 		</property>
 		<property name="jpaProperties">
 			<props>
@@ -122,10 +148,17 @@
 		</property>
 	</bean>
 
-	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	<bean id="transactionManager"
+		class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory"
+			ref="entityManagerFactory" />
 	</bean>
-	
+
+
+	<bean class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+		<property name="templateEngine" ref="templateEngine" />
+	</bean>
+
 	<tx:annotation-driven />
 
 </beans>

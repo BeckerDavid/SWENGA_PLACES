@@ -4,15 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import at.fh.swenga.places.model.UserModel;
-
-
+import at.fh.swenga.places.model.CountryModel;
 
 @Repository
 @Transactional
-public interface UserDAO extends JpaRepository<UserModel, Integer>{
-	
-
+public interface CountryRepository extends JpaRepository<CountryModel, Integer>{
 
 }
-

@@ -15,16 +15,16 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Pictures")
 public class PictureModel {
-	
+
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] recPicture;
-	
-	@ManyToOne (cascade = CascadeType.PERSIST)
+
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	private RecommendationModel recommendation;
 }

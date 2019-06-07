@@ -19,11 +19,11 @@ public class UserCategoryModel {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-    @OneToMany(mappedBy="category",fetch=FetchType.LAZY)
-    private Set<UserModel> users;
-	
+
+	@OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+	private Set<UserModel> users;
+
 	@Column(nullable = false, length = 30)
 	private String name;
-	
+
 }
