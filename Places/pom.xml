@@ -5,8 +5,12 @@
 	<groupId>Places</groupId>
 	<artifactId>Places</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	
 	<packaging>war</packaging>
-
+	<properties>
+		<spring.version>5.1.6.RELEASE</spring.version>
+		<spring-security.version>5.1.5.RELEASE</spring-security.version>
+	</properties>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -74,7 +78,18 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.9</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
 
 		<!-- Mail jars -->
 		<dependency>

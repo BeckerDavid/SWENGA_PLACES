@@ -94,10 +94,25 @@
 		<property name="cacheable" value="false" />
 	</bean>
 
+	
 	<bean id="templateEngine"
 		class="org.thymeleaf.spring5.SpringTemplateEngine">
 		<property name="templateResolver" ref="templateResolver" />
-		<property name="enableSpringELCompiler" value="true" />
+		<!-- Enabling the SpringEL compiler with Spring 4.2.4 or newer can speed 
+			up -->
+		<!-- execution in most scenarios, but might be incompatible with specific -->
+		<!-- cases when expressions in one template are reused across different 
+			data -->
+		<!-- types, so this flag is "false" by default for safer backwards -->
+		<!-- compatibility. -->
+		<property name="enableSpringELCompiler" value="false" />
+
+		<property name="additionalDialects">
+			<set>
+				<bean
+					class="org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect" />
+			</set>
+		</property>
 	</bean>
 
 	<bean class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
@@ -142,6 +157,11 @@
 		class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory"
 			ref="entityManagerFactory" />
+	</bean>
+	
+
+	<bean class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+		<property name="templateEngine" ref="templateEngine" />
 	</bean>
 
 	<tx:annotation-driven />
