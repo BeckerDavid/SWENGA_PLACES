@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Login - Places</title>
-<link rel="stylesheet" href="Resources/Login/login.css">
+<link rel="stylesheet" href="./Login/login.css">
 </head>
 <body>
 			<form class="loginform" id="register-form" action="register.php" method="post" novalidate="novalidate">

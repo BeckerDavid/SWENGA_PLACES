@@ -34,44 +34,44 @@
                 </div>
                 <ul class="nav">
                     <li class="nav-item active">
-                        <a class="nav-link" href="dashboard.html">
+                        <a class="nav-link" href="./files/dashboard.jsp">
                             <i class="nc-icon nc-icon nc-paper-2"></i>
                             <p>Dashboard</p>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="./user.html">
+                        <a class="nav-link" href="./files/browse.jsp">
                             <i class="nc-icon nc-tablet-2"></i>
                             <p>Browse</p>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="./user.html">
+                        <a class="nav-link" href="./files/journey.jsp">
                             <i class="nc-icon nc-map-big"></i>
                             <p>Journey</p>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="./user.html">
+                        <a class="nav-link" href="./files/following.jsp">
                             <i class="nc-icon nc-chart"></i>
                             <p>Following</p>
                         </a>
                     </li>
 
                     <li>
-                        <a class="nav-link" href="./user.html">
+                        <a class="nav-link" href="./files/achievements.jsp">
                             <i class="nc-icon nc-pin-3"></i>
                             <p>Achievements</p>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="./user.html">
+                        <a class="nav-link" href="./files/contracts.jsp">
                             <i class="nc-icon nc-chat-round"></i>
                             <p>Contacts</p>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="./user.html">
+                        <a class="nav-link" href="./files/userProfile.jsp">
                             <i class="nc-icon nc-globe-2"></i>
                             <p>Public Profile</p>
                         </a>
@@ -144,7 +144,7 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="./login.jsp">
+                                <a class="nav-link" href="./Resources/login.jsp">
                                     <span class="no-icon">Log in</span>
                                 </a>
                             </li>
