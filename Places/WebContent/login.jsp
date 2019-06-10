@@ -15,7 +15,6 @@
 					required> 
 				<input type="submit" value="Login">
 				<input class="register" type="submit" value="Register">
-
 	</form>
 
 
