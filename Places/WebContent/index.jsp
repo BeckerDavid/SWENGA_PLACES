@@ -144,8 +144,8 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#pablo">
-                                    <span class="no-icon">Log out</span>
+                                <a class="nav-link" href="login.jsp">
+                                    <span class="no-icon">Log in</span>
                                 </a>
                             </li>
                         </ul>
