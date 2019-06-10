@@ -34,4 +34,80 @@ public class JourneyModel {
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private JourneyDestinationModel journeyDestination;
 
+	public JourneyModel(@NotNull(message = "Date cannot be null") LocalDate arrivalDate,
+			@NotNull(message = "Date cannot be null") LocalDate departureDate,
+			JourneyDestinationModel journeyDestination) {
+		super();
+		this.arrivalDate = arrivalDate;
+		this.departureDate = departureDate;
+		this.journeyDestination = journeyDestination;
+	}
+
+	public JourneyModel() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public LocalDate getArrivalDate() {
+		return arrivalDate;
+	}
+
+	public void setArrivalDate(LocalDate arrivalDate) {
+		this.arrivalDate = arrivalDate;
+	}
+
+	public LocalDate getDepartureDate() {
+		return departureDate;
+	}
+
+	public void setDepartureDate(LocalDate departureDate) {
+		this.departureDate = departureDate;
+	}
+
+	public JourneyDestinationModel getJourneyDestination() {
+		return journeyDestination;
+	}
+
+	public void setJourneyDestination(JourneyDestinationModel journeyDestination) {
+		this.journeyDestination = journeyDestination;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JourneyModel other = (JourneyModel) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "JourneyModel [id=" + id + ", arrivalDate=" + arrivalDate + ", departureDate=" + departureDate
+				+ ", journeyDestination=" + journeyDestination + "]";
+	}
+	
+	
+
 }

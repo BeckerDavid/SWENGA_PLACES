@@ -1,6 +1,7 @@
 package at.fh.swenga.places.model;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -158,5 +159,15 @@ public class UserModel {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "UserModel [id=" + id + ", username=" + username + ", password=" + password + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", mail=" + mail + ", country=" + country + ", profilePicture="
+				+ Arrays.toString(profilePicture) + ", dayOfBirth=" + dayOfBirth + ", category=" + category
+				+ ", recommendations=" + recommendations + "]";
+	}
+	
+	
 
 }
