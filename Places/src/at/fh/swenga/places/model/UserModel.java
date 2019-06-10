@@ -52,7 +52,7 @@ public class UserModel {
 
 	@DateTimeFormat(pattern = "dd.MM.yyyy")
 	@NotNull(message = "Date cannot be null")
-	private LocalDate dayOfBirht;
+	private LocalDate dayOfBirth;
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private UserCategoryModel category;
@@ -61,7 +61,7 @@ public class UserModel {
 	private Set<RecommendationModel> recommendations;
 
 	public UserModel(int id, String username, String password, String firstName, String lastName, String mail,
-			String country, LocalDate dayOfBirht) {
+			String country, LocalDate dayOfBirth) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -70,7 +70,7 @@ public class UserModel {
 		this.lastName = lastName;
 		this.mail = mail;
 		this.country = country;
-		this.dayOfBirht = dayOfBirht;
+		this.dayOfBirth = dayOfBirth;
 	}
 
 	public int getId() {
@@ -130,11 +130,11 @@ public class UserModel {
 	}
 
 	public LocalDate getDayOfBirht() {
-		return dayOfBirht;
+		return dayOfBirth;
 	}
 
-	public void setDayOfBirht(LocalDate dayOfBirht) {
-		this.dayOfBirht = dayOfBirht;
+	public void setDayOfBirht(LocalDate dayOfBirth) {
+		this.dayOfBirth = dayOfBirth;
 	}
 
 	@Override
