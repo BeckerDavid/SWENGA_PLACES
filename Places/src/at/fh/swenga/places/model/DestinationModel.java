@@ -27,8 +27,7 @@ public class DestinationModel {
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private JourneyDestinationModel destinationJourney;
 
-	public DestinationModel(String destinationPlace, CountryModel country,
-			JourneyDestinationModel destinationJourney) {
+	public DestinationModel(String destinationPlace, CountryModel country, JourneyDestinationModel destinationJourney) {
 		super();
 		this.destinationPlace = destinationPlace;
 		this.country = country;
@@ -39,8 +38,6 @@ public class DestinationModel {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	
 
 	public int getId() {
 		return id;
@@ -101,7 +98,5 @@ public class DestinationModel {
 		return "DestinationModel [id=" + id + ", destinationPlace=" + destinationPlace + ", country=" + country
 				+ ", destinationJourney=" + destinationJourney + "]";
 	}
-	
-	
-	
+
 }

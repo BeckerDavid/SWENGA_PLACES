@@ -194,7 +194,5 @@ public class RecommendationModel {
 				+ ", description=" + description + ", startDate=" + startDate + ", endDate=" + endDate + ", pictures="
 				+ pictures + ", country=" + country + ", user=" + user + ", rating=" + rating + "]";
 	}
-	
-	
 
 }

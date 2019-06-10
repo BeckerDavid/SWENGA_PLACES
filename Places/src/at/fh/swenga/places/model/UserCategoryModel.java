@@ -31,41 +31,33 @@ public class UserCategoryModel {
 		this.name = name;
 	}
 
-	
 	public UserCategoryModel() {
 		super();
 	}
-
 
 	public int getId() {
 		return id;
 	}
 
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
 
 	public Set<UserModel> getUsers() {
 		return users;
 	}
 
-
 	public void setUsers(Set<UserModel> users) {
 		this.users = users;
 	}
-
 
 	public String getName() {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -74,7 +66,6 @@ public class UserCategoryModel {
 		result = prime * result + id;
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -89,7 +80,5 @@ public class UserCategoryModel {
 			return false;
 		return true;
 	}
-	
-	
-	
+
 }

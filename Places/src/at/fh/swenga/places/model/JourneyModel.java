@@ -107,7 +107,5 @@ public class JourneyModel {
 		return "JourneyModel [id=" + id + ", arrivalDate=" + arrivalDate + ", departureDate=" + departureDate
 				+ ", journeyDestination=" + journeyDestination + "]";
 	}
-	
-	
 
 }
