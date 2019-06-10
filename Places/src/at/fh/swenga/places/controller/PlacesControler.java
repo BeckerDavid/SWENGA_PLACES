@@ -1,8 +1,5 @@
 package at.fh.swenga.places.controller;
 
-import java.time.LocalDate;
-import java.time.Month;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +19,6 @@ public class PlacesControler {
 	@RequestMapping("/fillDataBase")
 	@Transactional
 	public String fillDataBase(Model model) {
-		LocalDate now = LocalDate.now();
-		LocalDate specific1 = LocalDate.of(2019, Month.JUNE, 20);
-		LocalDate specific2 = LocalDate.of(2019, Month.JUNE, 15);
-		LocalDate specific3 = LocalDate.of(2019, Month.AUGUST, 31);
-		LocalDate specific4 = LocalDate.of(2020, Month.SEPTEMBER, 20);
-		LocalDate specific5 = LocalDate.of(2020, Month.JANUARY, 01);
 
 		CountryModel country1 = new CountryModel("AF", "AFGHANISTAN");
 		CountryModel country2 = new CountryModel("AL", "ALBANIA");
