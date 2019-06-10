@@ -8,6 +8,7 @@
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:security="http://www.springframework.org/schema/security"
 
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/aop 
@@ -24,7 +25,8 @@
 		http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/data/jpa
 	    http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-		">
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security.xsd">
 
 
 	<!-- Read settings from external file and replace all ${...} in the xml -->
@@ -41,6 +43,12 @@
 
 	<!-- looks up Spring Data repositories -->
 	<jpa:repositories base-package="at.fh.swenga" />
+
+	<!-- JSR-303/JSR-349 support will be detected on classpath and enabled automatically -->
+	<mvc:annotation-driven />
+
+	<security:global-method-security
+		secured-annotations="enabled" />
 
 	<!-- ################################################################ -->
 
