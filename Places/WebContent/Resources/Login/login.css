@@ -24,7 +24,7 @@ body {
   background:rgba(255,255,255,0.1);
   font-size: 1.3em;
   font-weight: bold;
-  color: #6db7a2;
+  color: #d6a44d;
   border: none;
   font-family: 'Roboto Slab', serif;
       
@@ -60,7 +60,7 @@ textarea:focus, input:focus{
   background:rgba(255,255,255,0.1);
   font-size: 1.3em;
   font-weight: bold;
-  color: #6db7a2;
+  color: #d6a44d;
   border:none;
   font-family: 'Roboto Slab', serif;
   
@@ -99,7 +99,7 @@ input[type=submit] {
   top: 63%;
   left: 39.2%;
   width: 10%;
-  background-color: #6db7a2;
+  background-color: #d6a44d;
   color: black;
   padding: 14px 20px;
   margin: 4px 0;
