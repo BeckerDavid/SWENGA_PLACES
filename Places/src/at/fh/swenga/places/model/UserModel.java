@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 @Table(name = "Users")
@@ -61,10 +62,9 @@ public class UserModel {
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private Set<RecommendationModel> recommendations;
 
-	public UserModel(int id, String username, String password, String firstName, String lastName, String mail,
-			String country, LocalDate dayOfBirth) {
+	public UserModel(String username, String password, String firstName, String lastName, String mail,
+			String country, LocalDate dayOfBirth, UserCategoryModel category) {
 		super();
-		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
@@ -72,6 +72,7 @@ public class UserModel {
 		this.mail = mail;
 		this.country = country;
 		this.dayOfBirth = dayOfBirth;
+		this.category = category;
 	}
 
 	public int getId() {
@@ -166,6 +167,11 @@ public class UserModel {
 				+ ", lastName=" + lastName + ", mail=" + mail + ", country=" + country + ", profilePicture="
 				+ Arrays.toString(profilePicture) + ", dayOfBirth=" + dayOfBirth + ", category=" + category
 				+ ", recommendations=" + recommendations + "]";
+	}
+	
+	public void encryptPassword() {
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		password = passwordEncoder.encode(password);		
 	}
 
 }

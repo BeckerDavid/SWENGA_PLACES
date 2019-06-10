@@ -1,5 +1,8 @@
 package at.fh.swenga.places.controller;
 
+import java.time.LocalDate;
+import java.time.Month;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,13 +11,40 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import at.fh.swenga.places.dao.CountryRepository;
+import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
+import at.fh.swenga.places.model.UserCategoryModel;
+import at.fh.swenga.places.model.UserModel;
 
 @Controller
 public class PlacesControler {
 
 	@Autowired
 	CountryRepository countryRepository;
+
+	@Autowired
+	UserRepository userRepository;
+
+	@RequestMapping("/fillUserList")
+	@Transactional
+	public String fillUserList(Model model) {
+
+		LocalDate user1D = LocalDate.of(2000, Month.MAY, 23);
+		LocalDate admin1D = LocalDate.of(1989, Month.DECEMBER, 02);
+		UserCategoryModel admin = new UserCategoryModel("admin");
+		UserCategoryModel user = new UserCategoryModel("user");
+
+		UserModel admin1 = new UserModel("admin1", "password", "Robert", "Admin", "robert.admin@boop.fh", "China",
+				admin1D, admin);
+		UserModel user1 = new UserModel("user", "password", "Alexander", "User", "alex.ei@nischl.fh", "Uganda", user1D,
+				user);
+
+		userRepository.save(admin1);
+		userRepository.save(user1);
+
+		return "forward:list";
+
+	}
 
 	@RequestMapping("/fillDataBase")
 	@Transactional
@@ -72,7 +102,7 @@ public class PlacesControler {
 		CountryModel country50 = new CountryModel("CD", "CONGO, THE DEMOCRATIC REPUBLIC OF");
 		CountryModel country51 = new CountryModel("CK", "COOK ISLANDS");
 		CountryModel country52 = new CountryModel("CR", "COSTA RICA");
-		CountryModel country53 = new CountryModel("CI", "CÔTE D'IVOIRE");
+		CountryModel country53 = new CountryModel("CI", "Cï¿½TE D'IVOIRE");
 		CountryModel country54 = new CountryModel("HR", "CROATIA");
 		CountryModel country55 = new CountryModel("CU", "CUBA");
 		CountryModel country56 = new CountryModel("CY", "CYPRUS");
@@ -194,7 +224,7 @@ public class PlacesControler {
 		CountryModel country172 = new CountryModel("PT", "PORTUGAL");
 		CountryModel country173 = new CountryModel("PR", "PUERTO RICO");
 		CountryModel country174 = new CountryModel("QA", "QATAR");
-		CountryModel country175 = new CountryModel("RE", "RÉUNION");
+		CountryModel country175 = new CountryModel("RE", "Rï¿½UNION");
 		CountryModel country176 = new CountryModel("RO", "ROMANIA");
 		CountryModel country177 = new CountryModel("RU", "RUSSIAN FEDERATION");
 		CountryModel country178 = new CountryModel("RW", "RWANDA");
