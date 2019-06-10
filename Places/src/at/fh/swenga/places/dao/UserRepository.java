@@ -8,9 +8,6 @@ import at.fh.swenga.places.model.UserModel;
 
 @Repository
 @Transactional
-public interface UserRepository extends JpaRepository<UserModel, Integer>{
-	
-
+public interface UserRepository extends JpaRepository<UserModel, Integer> {
 
 }
-

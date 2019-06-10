@@ -92,6 +92,5 @@ public class PictureModel {
 		return "PictureModel [id=" + id + ", recPicture=" + Arrays.toString(recPicture) + ", recommendation="
 				+ recommendation + "]";
 	}
-	
-	
+
 }

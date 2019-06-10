@@ -85,6 +85,5 @@ public class RatingModel {
 	public String toString() {
 		return "RatingModel [id=" + id + ", recommendations=" + recommendations + ", ratingLevel=" + ratingLevel + "]";
 	}
-	
-	
+
 }

@@ -19,12 +19,12 @@ public class JourneyDestinationModel {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-    @OneToMany(mappedBy="journeyDestination",fetch=FetchType.LAZY)
-    private Set<JourneyModel> journeies;
-    
-    @OneToMany(mappedBy="destinationJourney",fetch=FetchType.LAZY)
-    private Set<DestinationModel> destinations;
+
+	@OneToMany(mappedBy = "journeyDestination", fetch = FetchType.LAZY)
+	private Set<JourneyModel> journeies;
+
+	@OneToMany(mappedBy = "destinationJourney", fetch = FetchType.LAZY)
+	private Set<DestinationModel> destinations;
 
 	public int getId() {
 		return id;
@@ -77,7 +77,5 @@ public class JourneyDestinationModel {
 		return "JourneyDestinationModel [id=" + id + ", journeies=" + journeies + ", destinations=" + destinations
 				+ "]";
 	}
-    
-    
-	
+
 }

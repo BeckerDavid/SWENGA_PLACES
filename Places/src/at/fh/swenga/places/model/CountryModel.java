@@ -36,15 +36,12 @@ public class CountryModel {
 		super();
 	}
 
-
 	public CountryModel(String countryShortCut, String countryName) {
 		super();
 		this.countryShortCut = countryShortCut;
 		this.countryName = countryName;
 
 	}
-
-
 
 	public int getId() {
 		return id;
@@ -108,13 +105,10 @@ public class CountryModel {
 		return true;
 	}
 
-
 	@Override
 	public String toString() {
 		return "CountryModel [id=" + id + ", countryShortCut=" + countryShortCut + ", countryName=" + countryName
 				+ ", recommendations=" + recommendations + ", destinations=" + destinations + "]";
 	}
-	
-	
 
 }

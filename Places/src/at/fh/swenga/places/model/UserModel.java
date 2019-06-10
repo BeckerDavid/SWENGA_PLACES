@@ -167,7 +167,5 @@ public class UserModel {
 				+ Arrays.toString(profilePicture) + ", dayOfBirth=" + dayOfBirth + ", category=" + category
 				+ ", recommendations=" + recommendations + "]";
 	}
-	
-	
 
 }
