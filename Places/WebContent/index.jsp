@@ -144,7 +144,7 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="login.jsp">
+                                <a class="nav-link" href="./login.jsp">
                                     <span class="no-icon">Log in</span>
                                 </a>
                             </li>
