@@ -20,7 +20,7 @@
 
 <body>
     <div class="wrapper">
-        <div class="sidebar" data-image="Resources/sidebar-bg.jpg" data-color="blue">
+        <div class="sidebar" data-image="Resources/sidebarbg.jpg" data-color="blue">
             <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
 
