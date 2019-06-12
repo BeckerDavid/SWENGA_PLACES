@@ -8,14 +8,21 @@
 <link rel="stylesheet" href="./Login/login.css">
 </head>
 <body>
-			<form class="loginform" id="register-form" action="register.php" method="post" novalidate="novalidate">
+	<form class="loginform" id="login-form"
+		method="post">
 
-				<input type="text" name="username" placeholder="Username" required>
-				<input type="password" name="password" placeholder="Password"
-					required> 
-				<input type="submit" value="Login">
-				<input class="register" type="submit" value="Register">
-			</form>
+		<input type="text" name="username" placeholder="Username" required>
+		<input type="password" name="password" placeholder="Password" required>
+
+		<a href="login">
+			<button type="button" class="btn btn-success" type="submit">Login</button>
+		</a> 
+		
+		<a href="./register">
+			<button type="button" class="btn btn-success">Register</button>
+		</a>
+	</form>
+
 
 
 </body>

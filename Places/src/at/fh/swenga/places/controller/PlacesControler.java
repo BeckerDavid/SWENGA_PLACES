@@ -2,12 +2,14 @@ package at.fh.swenga.places.controller;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import at.fh.swenga.places.dao.CountryRepository;
@@ -25,6 +27,16 @@ public class PlacesControler {
 	@Autowired
 	UserRepository userRepository;
 
+	@PostMapping("/login")
+	@Transactional
+	public String registerUser(Model model) {
+	List<UserModel> users = null;
+	
+	users = userRepository.findAll();
+	
+		return "forward:index";
+	}
+	
 	@RequestMapping("/fillUserList")
 	@Transactional
 	public String fillUserList(Model model) {
@@ -526,7 +538,7 @@ public class PlacesControler {
 		countryRepository.save(country236);
 		countryRepository.save(country237);
 
-		return "forward:listMakeups";
+		return "forward:list";
 	}
 
 }
