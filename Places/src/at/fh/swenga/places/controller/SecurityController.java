@@ -1,16 +1,7 @@
 package at.fh.swenga.places.controller;
  
 
-import org.apache.tomcat.jni.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import at.fh.swenga.places.dao.UserCategoryRepository;
-import at.fh.swenga.places.dao.UserRepository;
  
 @Controller
 public class SecurityController {

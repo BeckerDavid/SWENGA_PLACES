@@ -25,13 +25,13 @@
 		http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/data/jpa
 	    http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-		http://www.springframework.org/schema/security
+	    http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security.xsd">
 
 
 	<!-- Read settings from external file and replace all ${...} in the xml -->
 	<context:property-placeholder
-		location="classpath:db.properties" />
+		location="classpath:app.properties" />
 
 
 	<!-- - POJOs labeled with the @Controller, @Service,..... annotations are 
@@ -43,12 +43,6 @@
 
 	<!-- looks up Spring Data repositories -->
 	<jpa:repositories base-package="at.fh.swenga" />
-
-	<!-- JSR-303/JSR-349 support will be detected on classpath and enabled automatically -->
-	<mvc:annotation-driven />
-
-	<security:global-method-security
-		secured-annotations="enabled" />
 
 	<!-- ################################################################ -->
 
@@ -82,10 +76,19 @@
 	<!-- ################################################################ -->
 
 	<!-- <mvc:annotation-driven/> -->
+	<security:global-method-security
+		secured-annotations="enabled" />
 
 	<!-- if no Controller can handle a request, ask Servlet Container, if he 
 		can handle it, otherwise return 404 -->
 	<mvc:default-servlet-handler />
+
+	<!-- Customized ViewResolver in external file (PDF) -->
+	<bean class="org.springframework.web.servlet.view.XmlViewResolver">
+		<property name="location">
+			<value>/WEB-INF/spring-views.xml</value>
+		</property>
+	</bean>
 
 
 	<bean id="templateResolver"
@@ -96,20 +99,12 @@
 		<property name="cacheable" value="false" />
 	</bean>
 
-
 	<bean id="templateEngine"
 		class="org.thymeleaf.spring5.SpringTemplateEngine">
-
 		<property name="templateResolver" ref="templateResolver" />
-		<!-- Enabling the SpringEL compiler with Spring 4.2.4 or newer can speed 
-			up -->
-		<!-- execution in most scenarios, but might be incompatible with specific -->
-		<!-- cases when expressions in one template are reused across different 
-			data -->
-		<!-- types, so this flag is "false" by default for safer backwards -->
-		<!-- compatibility. -->
-		<property name="enableSpringELCompiler" value="false" />
+		<property name="enableSpringELCompiler" value="true" />
 
+		<!--######################### Spring Security############################## -->
 		<property name="additionalDialects">
 			<set>
 				<bean
@@ -122,18 +117,10 @@
 		<property name="templateEngine" ref="templateEngine" />
 	</bean>
 
-	<!-- ################################################################ -->
 
-	<bean id="dataSource"
-		class="org.apache.commons.dbcp2.BasicDataSource">
-		<property name="driverClassName"
-			value="com.mysql.jdbc.Driver" />
-		<property name="url" value="${db.url}" />
-		<property name="username" value="${db.username}" />
-		<property name="password" value="${db.password}" />
-		<property name="initialSize" value="2" />
-		<property name="maxTotal" value="5" />
-	</bean>
+
+
+	<!-- ################################################################ -->
 
 	<bean
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
@@ -147,9 +134,10 @@
 		<property name="jpaProperties">
 			<props>
 				<!-- validate: validate the schema, makes no changes to the database. 
-					update: update the schema. create: creates the schema, destroying previous 
-					data. create-drop: drop the schema at the end of the session. -->
-				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+					update: update the schema. 
+					create: creates the schema, destroying previous data. 
+					create-drop: drop the schema at the end of the session. -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
 				<prop key="hibernate.show_sql">true</prop>
 			</props>
@@ -162,6 +150,50 @@
 			ref="entityManagerFactory" />
 	</bean>
 
+
+
+	<!-- MULTIJSR-303/JSR-349 support will be detected on classpath and enabled 
+		automatically -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- the maximum file size in bytes -->
+		<property name="maxUploadSize" value="10000000" />
+	</bean>
+
+	<!-- hoedlale16: Mail sending -->
+	<bean id="mailSender"
+		class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mail.smtp.host}" />
+		<property name="port" value="${mail.smtp.port}" />
+		<property name="username" value="${mail.smtp.user}" />
+		<property name="password" value="${mail.smtp.pass}" />
+
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="customMailMessage"
+		class="org.springframework.mail.SimpleMailMessage">
+
+		<property name="from" value="office@plavent.com" />
+		<property name="to" value="test@test.com" />
+		<property name="subject" value="Testing Subject" />
+		<property name="text">
+			<value><![CDATA[Dear %s,
+ 
+Mail Content: 
+%s
+%s 
+Regards
+Plavent Team!
+		]]>
+			</value>
+		</property>
+	</bean>
 
 	<tx:annotation-driven />
 
