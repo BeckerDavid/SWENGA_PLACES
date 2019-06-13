@@ -41,33 +41,33 @@
 				</div>
 				<ul class="nav">
 					<li class="nav-item active"><a class="nav-link"
-						href="../files/dashboard.jsp"> <i
+						href="../files/dashboard.html"> <i
 							class="nc-icon nc-icon nc-paper-2"></i>
 							<p>Dashboard</p>
 					</a></li>
-					<li><a class="nav-link" href="../files/browse.jsp"> <i
+					<li><a class="nav-link" href="../files/browse.html"> <i
 							class="nc-icon nc-tablet-2"></i>
 							<p>Browse</p>
 					</a></li>
-					<li><a class="nav-link" href="../files/journey.jsp"> <i
+					<li><a class="nav-link" href="../files/journey.html"> <i
 							class="nc-icon nc-map-big"></i>
 							<p>Journey</p>
 					</a></li>
-					<li><a class="nav-link" href="../files/following.jsp"> <i
+					<li><a class="nav-link" href="../files/following.html"> <i
 							class="nc-icon nc-chart"></i>
 							<p>Following</p>
 					</a></li>
 
-					<li><a class="nav-link" href="../files/achievements.jsp">
+					<li><a class="nav-link" href="../files/achievements.html">
 							<i class="nc-icon nc-pin-3"></i>
 							<p>Achievements</p>
 					</a></li>
-					<li><a class="nav-link" href="../files/contracts.jsp"> <i
+					<li><a class="nav-link" href="../files/contracts.html"> <i
 							class="nc-icon nc-chat-round"></i>
 							<p>Contacts</p>
 					</a></li>
-					<li><a class="nav-link" href="../files/userProfile.jsp"> <i
-							class="nc-icon nc-globe-2"></i>
+					<li><a class="nav-link" href="../files/userProfile.html">
+							<i class="nc-icon nc-globe-2"></i>
 							<p>Public Profile</p>
 					</a></li>
 					<li class="nav-item active active-pro"><a
@@ -150,65 +150,78 @@
 								<div class="card-header">
 									<h4 class="card-title">Edit Profile</h4>
 								</div>
+<<<<<<< HEAD
 								
+=======
+								<div class="card-body">
+									<form class="form-horizontal" method="post"
+										th:action="${user} ? @{/editUser(id=${user.id})}">
+										<div class="row">
+											<!--  ----------------  id ---------------- -->
+											<div class="col-md-3 pr-1">
+												<div class="form-group">
+													<label for="inputID">ID</label> <input class="form-control"
+														placeholder="ID" id="inputID" type="text" name="id"
+														th:value="${user} ? ${user.id}" th:readonly="${user}">
+>>>>>>> branch 'master' of https://github.com/BeckerDavid/SWENGA_PLACES
 												</div>
+<<<<<<< HEAD
 																		<!--  ----------------  id ---------------- -->
 
 										
-										</div>
-										<div class="row">
-											<div class="col-md-6 pr-1">
+=======
+											</div>
+											<div class="col-md-3 px-1">
 												<div class="form-group">
-													<label>First Name</label> <input type="text"
-														class="form-control" placeholder="Company" value="Mike">
+													<label for="inputUsername">Username</label> <input
+														type="text" class="form-control" placeholder="Username"
+														name="username" th:value="${user} ? ${user.username}">
 												</div>
 											</div>
 											<div class="col-md-6 pl-1">
 												<div class="form-group">
-													<label>Last Name</label> <input type="text"
-														class="form-control" placeholder="Last Name"
-														value="Andrew">
+													<label for="inputEmail">Email address</label> <input
+														type="email" class="form-control" placeholder="Email"
+														name="email" th:value="${user} ? ${user.mail}">
 												</div>
 											</div>
+>>>>>>> branch 'master' of https://github.com/BeckerDavid/SWENGA_PLACES
 										</div>
 										<div class="row">
-											<div class="col-md-12">
+											<div class="col-md-6 pr-1">
 												<div class="form-group">
-													<label>Address</label> <input type="text"
-														class="form-control" placeholder="Home Address"
-														value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
+													<label for="inputFirstName">First Name</label> <input
+														type="text" class="form-control" placeholder="FirstName"
+														name="firstName" th:value="${user} ? ${user.firstName}">
+												</div>
+											</div>
+											<div class="col-md-6 pl-1">
+												<div class="form-group">
+													<label for="inputLastName">Last Name</label> <input
+														type="text" class="form-control" placeholder="LastName"
+														name="lastName" th:value="${user} ? ${user.lastName}">
 												</div>
 											</div>
 										</div>
+
 										<div class="row">
 											<div class="col-md-4 pr-1">
 												<div class="form-group">
-													<label>City</label> <input type="text" class="form-control"
-														placeholder="City" value="Mike">
+													<label for="inputCountry">Country</label> <input
+														type="text" class="form-control" placeholder="Country"
+														name="country" th:value="${user} ? ${user.country}">
 												</div>
 											</div>
-											<div class="col-md-4 px-1">
+											<div class="col-md-4 pr-1">
 												<div class="form-group">
-													<label>Country</label> <input type="text"
-														class="form-control" placeholder="Country" value="Andrew">
+													<label for="inputDayOfBirth">Day of Birth</label> <input
+														type="text" class="form-control"  name="dayOfBirth"
+														th:value="${user} ? ${#dates.format(user.dayOfBirth, 'dd.MM.yyyy')}">
 												</div>
-											</div>
-											<div class="col-md-4 pl-1">
-												<div class="form-group">
-													<label>Postal Code</label> <input type="number"
-														class="form-control" placeholder="ZIP Code">
-												</div>
+
 											</div>
 										</div>
-										<div class="row">
-											<div class="col-md-12">
-												<div class="form-group">
-													<label>About Me</label>
-													<textarea rows="4" cols="80" class="form-control"
-														placeholder="Here can be your description" value="Mike">Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</textarea>
-												</div>
-											</div>
-										</div>
+
 										<button type="submit" class="btn btn-info btn-fill pull-right">Update
 											Profile</button>
 										<div class="clearfix"></div>
@@ -227,14 +240,10 @@
 									<div class="author">
 										<a href="#"> <img class="avatar border-gray"
 											src="../assets/img/faces/face-3.jpg" alt="...">
-											<h5 class="title">Mike Andrew</h5>
+											<h5 class="title" th:value="${user} ? ${user.firstName}"></h5>
 										</a>
-										<p class="description">michael24</p>
+										<p class="description" th:value="${user} ? ${user.username}"></p>
 									</div>
-									<p class="description text-center">
-										"Lamborghini Mercy <br> Your chick she so thirsty <br>
-										I'm in that two seat Lambo"
-									</p>
 								</div>
 								<hr>
 								<div class="button-container mr-auto ml-auto">
