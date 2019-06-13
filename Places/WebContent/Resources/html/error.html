@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Error Page</title>
+</head>
+<body>
+	<h1>Error</h1>
+	Exception: <span th:text="${#request.getAttribute('javax.servlet.error.exception')}"></span><br/>
+	Status Code: <span th:text="${#request.getAttribute('javax.servlet.error.status_code')}"></span><br/>
+	Request-URI: <span th:text="${#request.getAttribute('javax.servlet.error.request_uri')}"></span><br/>
+	Servlet Name: <span th:text="${#request.getAttribute('javax.servlet.error.servlet_name')}"></span><br/>
+	<a href="./">back</a>
+</body>
+</html>
