@@ -150,37 +150,11 @@
 								<div class="card-header">
 									<h4 class="card-title">Edit Profile</h4>
 								</div>
-								<div class="card-body">
-									<form class="form-horizontal" method="post" th:action="${user} ? @{/editUser(id=${user.id})}">
-										<div class="row">
-											<div class="col-md-5 pr-1">
-												<div class="form-group">
-													<label for="inputID" class="col-md-2 control-label">ID</label> <input type="text"
-														class="form-control" placeholder="Username"
-														value="michael23">
+								
 												</div>
 																		<!--  ----------------  id ---------------- -->
-						<div class="form-group">
-							<label for="inputID" class="col-md-2 control-label">ID</label>
-							<div class="col-md-10">
-								<input class="form-control" id="inputID" type="text" name="id"
-									th:value="${makeup} ? ${makeup.id}" th:readonly="${makeup}">
-							</div>
-						</div>
-											</div>
-											<div class="col-md-3 px-1">
-												<div class="form-group">
-													<label>Username</label> <input type="text"
-														class="form-control" placeholder="Username"
-														value="michael23">
-												</div>
-											</div>
-											<div class="col-md-4 pl-1">
-												<div class="form-group">
-													<label for="exampleInputEmail1">Email address</label> <input
-														type="email" class="form-control" placeholder="Email">
-												</div>
-											</div>
+
+										
 										</div>
 										<div class="row">
 											<div class="col-md-6 pr-1">
