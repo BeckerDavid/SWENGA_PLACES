@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml"   xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 
 <head>
 <meta charset="utf-8" />
@@ -9,13 +10,19 @@
 <link rel="icon" type="image/png" href="../bootstrap/img/favicon.ico">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <title>Browse</title>
-<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+<meta
+	content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+	name='viewport' />
 <!--     Fonts and icons     -->
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+<link
+	href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200"
+	rel="stylesheet" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
 <!-- CSS Files -->
 <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<link href="../bootstrap/css/light-bootstrap-dashboard.css?v=2.0.0 " rel="stylesheet" />
+<link href="../bootstrap/css/light-bootstrap-dashboard.css?v=2.0.0 "
+	rel="stylesheet" />
 <!-- CSS Just for demo purpose, don't include it in your project -->
 <link href="../bootstrap/css/demo.css" rel="stylesheet" />
 </head>
@@ -55,8 +62,8 @@
 							<p>Following</p>
 					</a></li>
 
-					<li><a class="nav-link" href="../achievements.jsp">
-							<i class="nc-icon nc-pin-3"></i>
+					<li><a class="nav-link" href="../achievements.jsp"> <i
+							class="nc-icon nc-pin-3"></i>
 							<p>Achievements</p>
 					</a></li>
 					<li><a class="nav-link" href="../contacts.html"> <i
@@ -79,7 +86,7 @@
 			<!-- Navbar -->
 			<nav class="navbar navbar-expand-lg " color-on-scroll="500">
 				<div class="container-fluid">
-					<a class="navbar-brand" href="#pablo">Templates</a>
+					<a class="navbar-brand" href="#pablo">Recommendations</a>
 					<button href="" class="navbar-toggler navbar-toggler-right"
 						type="button" data-toggle="collapse"
 						aria-controls="navigation-index" aria-expanded="false"
@@ -112,11 +119,9 @@
 							</a></li>
 						</ul>
 						<ul class="navbar-nav ml-auto">
-							<li class="nav-item">
-                                <a class="nav-link" href="./userProfile.html">
-                                    <span class="no-icon">Account</span>
-                                </a>
-							</li>
+							<li class="nav-item"><a class="nav-link"
+								href="./userProfile.html"> <span class="no-icon">Account</span>
+							</a></li>
 							<li class="nav-item dropdown"><a
 								class="nav-link dropdown-toggle" href="http://example.com"
 								id="navbarDropdownMenuLink" data-toggle="dropdown"
@@ -146,37 +151,24 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card strpied-tabled-with-hover">
-								<div class="card-header ">
-									<h4 class="card-title">Striped Table with Hover</h4>
-									<p class="card-category">Here is a subtitle for this table</p>
-								</div>
+								<div class="card-header "></div>
 								<div class="card-body table-full-width table-responsive">
-									<table class="table table-hover table-striped">
-										<thead>
-
-										</thead>
+									<table data-toggle="table"
+										class="table table-hover table-striped"
+										th:each="recommendation : ${recommendations}">
 										<tbody>
-
 											<!--  list all items ----------------------------------------------------------- -->
-											<tr th:each="recommendation:${#request.getAttribute('recommendations')}">
+											<tr>
 												<td th:text="${recommendation.id}"></td>
-												<td th:text="${makeup.name}"></td>
-												<td th:text="${makeup.price}"></td>
-												<td th:text="${makeup.rating}"></td>
-												<td
-													th:text="${#dates.format(makeup.expirationDate,'dd.MM.yyyy')}"></td>
-
-												<td><a th:href="@{/editMakeup(id=${makeup.id})}"
-													class="btn btn-xs btn-success"> <span
-														class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-														Edit
-												</a> <a th:href="@{/deleteMakeup(id=${makeup.id})}"
-													class="btn btn-xs btn-danger"> <span
-														class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-														Delete
-												</a></td>
+												<td th:text="${recommendation.name}"></td>
+												<td th:text="${recommendation.colour}"></td>
+												<td th:text="${recommendation.price}"></td>
+												<td th:text="${recommendation.producer.brandName}"></td>
+												<td th:text="${recommendation.rating}"></td>
+												<td th:text="${recommendation.expirationDate}"></td>
 											</tr>
 											<!--  list all items ----------------------------------------------------------- -->
+
 										</tbody>
 									</table>
 								</div>
