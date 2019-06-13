@@ -163,10 +163,6 @@
 	</bean>
 
 
-	<bean class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
-		<property name="templateEngine" ref="templateEngine" />
-	</bean>
-
 	<tx:annotation-driven />
 
 </beans>

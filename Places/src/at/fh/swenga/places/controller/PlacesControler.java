@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import at.fh.swenga.places.dao.CountryRepository;
+import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
 import at.fh.swenga.places.model.UserCategoryModel;
@@ -26,6 +27,9 @@ public class PlacesControler {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	RecommendationRepository recommendationRepository;
 
 	@PostMapping("/login")
 	@Transactional
@@ -36,6 +40,15 @@ public class PlacesControler {
 	
 		return "forward:index";
 	}
+	
+	@RequestMapping(value = { "/", "browse" })
+	@Transactional
+	public String fillRecommendations (Model model) {
+		model.addAttribute("recommendations", recommendationRepository.findAll());
+		
+		return "forward:browse";
+	}
+	
 	
 	@RequestMapping("/fillUserList")
 	@Transactional

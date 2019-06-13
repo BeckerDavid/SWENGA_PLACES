@@ -34,44 +34,44 @@
                 </div>
                 <ul class="nav">
                     <li class="nav-item active">
-                        <a class="nav-link" href="./files/dashboard.jsp">
+                        <a class="nav-link" href="./files/dashboard.html">
                             <i class="nc-icon nc-icon nc-paper-2"></i>
                             <p>Dashboard</p>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="./files/browse.jsp">
+                        <a class="nav-link" href="./files/browse.html">
                             <i class="nc-icon nc-tablet-2"></i>
                             <p>Browse</p>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="./files/journey.jsp">
+                        <a class="nav-link" href="./files/journey.html">
                             <i class="nc-icon nc-map-big"></i>
                             <p>Journey</p>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="./files/following.jsp">
+                        <a class="nav-link" href="./files/following.html">
                             <i class="nc-icon nc-chart"></i>
                             <p>Following</p>
                         </a>
                     </li>
 
                     <li>
-                        <a class="nav-link" href="./files/achievements.jsp">
+                        <a class="nav-link" href="./files/achievements.html">
                             <i class="nc-icon nc-pin-3"></i>
                             <p>Achievements</p>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="./files/contracts.jsp">
+                        <a class="nav-link" href="./files/contracts.html">
                             <i class="nc-icon nc-chat-round"></i>
                             <p>Contacts</p>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="./files/userProfile.jsp">
+                        <a class="nav-link" href="./files/userProfile.html">
                             <i class="nc-icon nc-globe-2"></i>
                             <p>Public Profile</p>
                         </a>
@@ -126,7 +126,7 @@
                         </ul>
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="./files/userProfile.jsp">
+                                <a class="nav-link" href="./files/userProfile.html">
                                     <span class="no-icon">Account</span>
                                 </a>
                             </li>
