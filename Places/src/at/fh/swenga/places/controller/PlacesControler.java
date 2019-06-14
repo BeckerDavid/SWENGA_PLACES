@@ -1,7 +1,5 @@
 package at.fh.swenga.places.controller;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -9,6 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,10 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import at.fh.swenga.places.dao.CountryRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserRepository;
-import at.fh.swenga.places.model.CountryModel;
 import at.fh.swenga.places.model.RecommendationModel;
-import at.fh.swenga.places.model.UserCategoryModel;
-import at.fh.swenga.places.model.UserModel;
 
 @Controller
 public class PlacesControler {
@@ -32,18 +28,17 @@ public class PlacesControler {
 	
 	@Autowired
 	RecommendationRepository recommendationRepository;
-
-	@PostMapping("/login")
+	
+	@GetMapping("/achievements")
 	@Transactional
-	public String registerUser(Model model) {
-	List<UserModel> users = null;
-	
-	users = userRepository.findAll();
-	
-		return "index";
+	public String getAchievments(Model model) {
+		
+			
+		return "achievements";
+		
 	}
 	
-	@RequestMapping(value = {"browse" })
+	@RequestMapping("/browse")
 	@Transactional
 	public String fillRecommendations (Model model) {
 		
@@ -59,7 +54,68 @@ public class PlacesControler {
 		return "browse";
 	}
 	
+	@GetMapping("/contacts")
+	@Transactional
+	public String getContacts(Model model) {
+		
+			
+		return "contacts";
+		
+	}
 	
+	@GetMapping("/dashboard")
+	@Transactional
+	public String getDashboard(Model model) {
+		
+			
+		return "dashboard";
+		
+	}
+	
+	@GetMapping("/following")
+	@Transactional
+	public String getFollowing(Model model) {
+		
+			
+		return "following";
+		
+	}
+	
+	@GetMapping("/journey")
+	@Transactional
+	public String getJourney(Model model) {
+		
+			
+		return "journey";
+		
+	}
+	
+	@RequestMapping("/login")
+	@Transactional
+	public String loginUser(Model model) {
+
+	
+		return "login";
+	}
+	
+	
+	@GetMapping("/recommendations")
+	@Transactional
+	public String getRecommendations(Model model) {
+		
+			
+		return "recommendations";
+		
+	}
+
+	@GetMapping("/register")
+	@Transactional
+	public String getRegister(Model model) {
+		
+			
+		return "register";
+		
+	}
 	
 	@GetMapping("/userProfile")
 	@Transactional
@@ -70,17 +126,14 @@ public class PlacesControler {
 		return "userProfile";
 		
 	}
-
 	
-	@GetMapping("/recommendations")
-	@Transactional
-	public String getRecommendations(Model model) {
-		List<CountryModel> countries = countryRepository.findAll();
-		
-		model.addAttribute("countries", countries);
-		
-		return "forward:recommendations";
-	}
+	 @ExceptionHandler(Exception.class)
+	 public String handleAllException(Exception ex) {
+
+	  return"error";
+
+	 }
+	
 
 	
 }
