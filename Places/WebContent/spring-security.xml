@@ -1,42 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans
-	xmlns="http://www.springframework.org/schema/security"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-           http://www.springframework.org/schema/security 
-           http://www.springframework.org/schema/security/spring-security.xsd
-		   http://www.springframework.org/schema/context 
-		   http://www.springframework.org/schema/context/spring-context.xsd">
-	<http auto-config="true">
-		<intercept-url pattern="/login" access="permitAll" />
-		<intercept-url pattern="/" access="permitAll" />
-		<intercept-url pattern="/registerUser"
-			access="permitAll" />
-		<intercept-url pattern="/resetPassword"
-			access="permitAll" />
+<b:beans xmlns:b="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-		<!-- FERNBACH16: Use Annotation @Secured({ "ROLE_GUEST"}) instead of intercept-url 
-			@Secured({ "ROLE_GUEST"}) for Guest Permissions @Secured({ "ROLE_HOST"}) 
-			for Host Permissions @Secured({ "ROLE_ADMIN"}) for Admin Permissions -->
-
-		<form-login login-page="/login"
-			default-target-url="/dashboard" always-use-default-target="true" />
+	<http>
+		<csrf/>
+		<intercept-url pattern="/login" access="permitAll"/>
+		<intercept-url pattern= "/deleteEmployee" access= "hasRole('ADMIN')"/>
+		<intercept-url pattern="/**" access="hasRole('USER')" />
+		<form-login login-page="/login" />
 		<logout logout-success-url="/login" logout-url="/logout" />
 	</http>
 
 	<authentication-manager>
 		<authentication-provider>
-			<password-encoder hash="bcrypt" />
-			<jdbc-user-service data-source-ref="dataSource"
-				users-by-username-query="SELECT username, password, CASE enabled WHEN 1 THEN 'true' ELSE 'false' END 'enabled' 
-				FROM User WHERE username=?"
-				authorities-by-username-query="SELECT uur.username, ur.roleName  FROM User_UserRole uur JOIN UserRole ur ON(ur.roleID = uur.roleID) WHERE uur.username = ?" />
+			<user-service>
+			<!-- {noop} see https://docs.spring.io/spring-security/site/docs/5.0.4.RELEASE/reference/htmlsingle/#ns-minimal -->
+				<user name="user" password="{noop}password" authorities="ROLE_USER" />
+				<user name="admin" password="{noop}password" authorities="ROLE_USER,ROLE_ADMIN" />
+			</user-service>
 		</authentication-provider>
 	</authentication-manager>
-
-
-
-</beans:beans>
+	
+</b:beans>
