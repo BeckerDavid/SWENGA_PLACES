@@ -1,8 +1,8 @@
 package at.fh.swenga.places.controller;
 
+import java.util.List;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -26,23 +26,23 @@ public class InitController {
 
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	RecommendationRepository recommendationRepository;
 
 	@RequestMapping("/")
 	public String loadIndex() {
-		
-		Optional<CountryModel> test = countryRepository.findById(1);
-		if (test.isPresent()) {
+
+		List<CountryModel> test = countryRepository.findAll();
+		if (test.size() > 0) {
+			return "index";
+		} else {
 			System.out.println("bin da");
 			return "forward:init";
-		} else {
-			return "forward:index";
 		}
-		
+
 	}
-	
+
 	@RequestMapping("/init")
 	@Transactional
 	public String fillDataBase(Model model) {
@@ -521,10 +521,10 @@ public class InitController {
 		countryRepository.save(country235);
 		countryRepository.save(country236);
 		countryRepository.save(country237);
-		
+
 		LocalDate user1D = LocalDate.of(2000, Month.MAY, 23);
 		LocalDate admin1D = LocalDate.of(1989, Month.DECEMBER, 02);
-		
+
 		UserCategoryModel admin = new UserCategoryModel("admin");
 		UserCategoryModel user = new UserCategoryModel("user");
 
@@ -535,9 +535,8 @@ public class InitController {
 
 		userRepository.save(admin1);
 		userRepository.save(user1);
-		
-		
-		return "forward:index";
+
+		return "index";
 	}
 
 }

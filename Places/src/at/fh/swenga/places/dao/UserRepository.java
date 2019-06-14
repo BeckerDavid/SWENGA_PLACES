@@ -14,9 +14,6 @@ import at.fh.swenga.places.model.UserModel;
 @Transactional
 public interface UserRepository extends JpaRepository<UserModel, Integer> {
 
-	//Query2
-	@Query("SELECT m FROM MakeupModel m WHERE LOWER(m.name) LIKE CONCAT('%', LOWER(:searchString), '%')")
-	List<UserModel> findUserWithID(
-		@Param("searchString") String input);
+
 	
 }

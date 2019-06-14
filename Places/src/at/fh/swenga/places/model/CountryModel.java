@@ -23,7 +23,7 @@ public class CountryModel {
 	@Column(nullable = false, length = 3)
 	private String countryShortCut;
 
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false, length = 100)
 	private String countryName;
 
 	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)

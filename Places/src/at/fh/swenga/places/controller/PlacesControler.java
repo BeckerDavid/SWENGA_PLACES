@@ -17,6 +17,7 @@ import at.fh.swenga.places.dao.CountryRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
+import at.fh.swenga.places.model.RecommendationModel;
 import at.fh.swenga.places.model.UserCategoryModel;
 import at.fh.swenga.places.model.UserModel;
 
@@ -39,18 +40,36 @@ public class PlacesControler {
 	
 	users = userRepository.findAll();
 	
-		return "forward:index";
+		return "index";
 	}
 	
-	@RequestMapping(value = { "/", "browse" })
+	@RequestMapping(value = {"browse" })
 	@Transactional
 	public String fillRecommendations (Model model) {
-		model.addAttribute("recommendations", recommendationRepository.findAll());
 		
-		return "forward:browse";
+		List<RecommendationModel> allModels = recommendationRepository.findAll();
+		RecommendationModel defaultModel = new RecommendationModel();
+
+		if (allModels.size()>0) {
+			model.addAttribute("recommendations", allModels);
+		}else {
+			model.addAttribute("recommendations", defaultModel);
+		}
+		
+		return "browse";
 	}
 	
 	
+	
+	@GetMapping("/userProfile")
+	@Transactional
+	public String getProfile(Model model) {
+		
+		
+		
+		return "userProfile";
+		
+	}
 
 	
 	@GetMapping("/recommendations")
