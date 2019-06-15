@@ -12,7 +12,7 @@ body {
 	margin:0 auto;
 	margin-top: 200px;
 	height: 340px;
-	width: 25%;
+	width: 320px;
     background-color: white;
     
     border-radius: 25px 25px 25px 25px;
@@ -35,12 +35,11 @@ h1 {
 
 
 input[type=text] {
-	position:fixed;
-	left: 41%;
-	top: 45%;
-	width: 18%;
-	height: 6%;
-	margin-top: 40px;
+	position: relative;
+	top: 40%;
+	left: 55px;
+	width: 200px;
+	height: 60px;
 	font-size: 1em;
 	font-weight: bold;
 	color: #AAAAAA;
@@ -53,12 +52,11 @@ input[type=text] {
 }
 
 input[type=password], select {
-  	position:fixed;
-  	left: 41%;
-  	top: 55%;
-  	width: 18%;
-  	height: 6%;
-  	margin-top: 40px;
+  	position: relative;
+	top: 50%;
+	left: 55px;
+	width: 200px;
+	height: 60px;
   	font-size: 1em;
   	font-weight: bold;
   	color: #AAAAAA;
@@ -74,12 +72,14 @@ input:focus {
     outline: none;    
   }
 
+div.buttons {
+ margin-left: 35px;
+ margin-top: 40px;
+}
+
 button {
-	position: fixed;
-	top: 73%;
-	left: 39%;
-  	width: 10%;
-  	height: 6%;
+  	width: 120px;
+  	height: 40px;
  	background-color: #039eb9;
   	color: black;
  	border: none;
@@ -91,5 +91,5 @@ button {
 }
 
 button[name=button2] {
-  	left: 51%;
+	left: 400px;
 }
