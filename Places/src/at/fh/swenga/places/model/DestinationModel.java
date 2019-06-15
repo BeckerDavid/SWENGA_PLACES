@@ -27,11 +27,10 @@ public class DestinationModel {
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private JourneyDestinationModel destinationJourney;
 
-	public DestinationModel(String destinationPlace, CountryModel country, JourneyDestinationModel destinationJourney) {
+	public DestinationModel(String destinationPlace, CountryModel country) {
 		super();
 		this.destinationPlace = destinationPlace;
 		this.country = country;
-		this.destinationJourney = destinationJourney;
 	}
 
 	public DestinationModel() {
