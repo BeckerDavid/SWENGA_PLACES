@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 body {
-  background-image: url("../images/loginbg.jpg");
+  background-image: url("../../images/loginbg.jpg");
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

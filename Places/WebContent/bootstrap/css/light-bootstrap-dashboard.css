@@ -429,7 +429,7 @@ body>.navbar-collapse .nav {
 body>.navbar-collapse .nav li .nav-link {
     color: #FFFFFF;
     margin: 5px 15px;
-    opacity: .86;
+    opacity: 1.0;
     border-radius: 4px;
     display: block;
     padding: 10px 15px;
@@ -437,8 +437,16 @@ body>.navbar-collapse .nav li .nav-link {
 
 .sidebar .nav li .nav-link:hover,
 body>.navbar-collapse .nav li .nav-link:hover {
-    background: rgba(255, 255, 255, 0.13);
+    background: rgba(255, 255, 255, 0.23);
     opacity: 1;
+}
+
+.drop .dropdowny{
+	display:none;
+}
+
+.drop:hover .dropdowny {
+	display:block;
 }
 
 .sidebar .nav li .nav-link p,
@@ -464,6 +472,11 @@ body>.navbar-collapse .nav li .nav-link i {
 .sidebar .nav li:hover .nav-link,
 body>.navbar-collapse .nav li:hover .nav-link {
     background: rgba(255, 255, 255, 0.13);
+    opacity: 1;
+}
+
+.nav .drop .dropdowny li:hover .nav-link {
+    background: rgba(0, 255, 255, 0.13);
     opacity: 1;
 }
 
@@ -518,7 +531,7 @@ body>.navbar-collapse .nav .nav-link {
 
 .sidebar .logo,
 body>.navbar-collapse .logo {
-    padding: 10px 15px;
+    padding: 10px 0px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
