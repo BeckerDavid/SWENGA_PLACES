@@ -469,14 +469,14 @@ body>.navbar-collapse .nav li .nav-link i {
     float: left;
 }
 
-.sidebar .nav li:hover .nav-link,
-body>.navbar-collapse .nav li:hover .nav-link {
+.sidebar .nav li .nav-link:hover,
+body>.navbar-collapse .nav li .nav-link:hover {
     background: rgba(255, 255, 255, 0.13);
     opacity: 1;
 }
 
 .nav .drop .dropdowny li:hover .nav-link {
-    background: rgba(0, 255, 255, 0.13);
+    background: rgba(255, 255, 255, 0.13);
     opacity: 1;
 }
 
