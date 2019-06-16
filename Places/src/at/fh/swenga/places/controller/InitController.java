@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import at.fh.swenga.places.dao.CountryRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
+import at.fh.swenga.places.dao.UserCategoryRepository;
 import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
@@ -31,6 +32,9 @@ public class InitController {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	UserCategoryRepository userCatRepo;
 
 	@Autowired
 	RecommendationRepository recommendationRepository;
@@ -42,7 +46,6 @@ public class InitController {
 		if (test.size() > 0) {
 			return "login";
 		} else {
-			System.out.println("bin da");
 			return "forward:init";
 		}
 
@@ -164,6 +167,7 @@ public class InitController {
 		CountryModel country111 = new CountryModel("KI", "KIRIBATI");
 		CountryModel country112 = new CountryModel("KP", "KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF");
 		CountryModel country113 = new CountryModel("KR", "KOREA, REPUBLIC OF");
+		CountryModel countryK = new CountryModel("XK", "KOSOVO");
 		CountryModel country114 = new CountryModel("KW", "KUWAIT");
 		CountryModel country115 = new CountryModel("KG", "KYRGYZSTAN");
 		CountryModel country116 = new CountryModel("LA", "LAO PEOPLE'S DEMOCRATIC REPUBLIC");
@@ -225,7 +229,7 @@ public class InitController {
 		CountryModel country172 = new CountryModel("PT", "PORTUGAL");
 		CountryModel country173 = new CountryModel("PR", "PUERTO RICO");
 		CountryModel country174 = new CountryModel("QA", "QATAR");
-		CountryModel country175 = new CountryModel("RE", "R�UNION");
+		CountryModel country175 = new CountryModel("RE", "RÉUNION");
 		CountryModel country176 = new CountryModel("RO", "ROMANIA");
 		CountryModel country177 = new CountryModel("RU", "RUSSIAN FEDERATION");
 		CountryModel country178 = new CountryModel("RW", "RWANDA");
@@ -526,25 +530,29 @@ public class InitController {
 		countryRepository.save(country235);
 		countryRepository.save(country236);
 		countryRepository.save(country237);
-
-		LocalDate user1D = LocalDate.of(2000, Month.MAY, 23);
-		LocalDate admin1D = LocalDate.of(1989, Month.DECEMBER, 02);
+		countryRepository.save(countryK);
 
 		UserCategoryModel admin = new UserCategoryModel("ROLE_ADMIN");
 		UserCategoryModel user = new UserCategoryModel("ROLE_USER");
+		UserCategoryModel viewer = new UserCategoryModel("ROLE_VIEWER");
+		
+		userCatRepo.save(admin);
+		userCatRepo.save(user);
+		userCatRepo.save(viewer);
 
-		UserModel admin1 = new UserModel("admin", "password", "Robert", "Admin", "robert.admin@boop.fh", "China",
-				admin1D, null, true);
+		UserModel admin1 = new UserModel("admin", "password", "Robert", "Admin", "robert.admin@boop.fh", "China", null, true);
 		admin1.encryptPassword();
 		admin1.addUserCategory(admin);
 		admin1.addUserCategory(user);
-		userDao.persist(admin1);
+		admin1.addUserCategory(viewer);
+		userRepository.save(admin1);
 		
-		UserModel user1 = new UserModel("user", "password", "Alexander", "User", "alex.ei@nischl.fh", "Uganda", user1D,
+		UserModel user1 = new UserModel("user", "password", "Alexander", "User", "alex.ei@nischl.fh", "Uganda",
 				null, true);
 		user1.encryptPassword();
 		user1.addUserCategory(user);
-		userDao.persist(user1);
+		user1.addUserCategory(viewer);
+		userRepository.save(user1);
 
 		return "login";
 	}

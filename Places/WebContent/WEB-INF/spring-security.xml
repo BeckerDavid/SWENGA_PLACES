@@ -10,6 +10,7 @@
 <http>
 		<csrf/>
 		<intercept-url pattern="/login" access="permitAll" />
+		<intercept-url pattern="/register" access="permitAll"/>
 		<intercept-url pattern="/bootstrap/**" access="permitAll" />
 		<intercept-url pattern="/images/**" access="permitAll" />	
 		<intercept-url pattern="/**" access="authenticated" />

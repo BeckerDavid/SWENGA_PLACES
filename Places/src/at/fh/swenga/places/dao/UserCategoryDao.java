@@ -20,7 +20,7 @@ public class UserCategoryDao {
 	public UserCategoryModel getRole(String role) {
 		try {
 			TypedQuery<UserCategoryModel> typedQuery = entityManager
-					.createQuery("select ur from UserRole ur where ur.role= :role", UserCategoryModel.class);
+					.createQuery("select ur from UserCategoryModel ur where ur.role= :role", UserCategoryModel.class);
 			typedQuery.setParameter("role", role);
 			return typedQuery.getSingleResult();
 		} catch (NoResultException e) {
@@ -31,4 +31,5 @@ public class UserCategoryDao {
 	public void persist(UserCategoryModel userRole) {
 		entityManager.persist(userRole);
 	}
+
 }

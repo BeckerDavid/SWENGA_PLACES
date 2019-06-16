@@ -57,10 +57,6 @@ public class UserModel {
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] profilePicture;
 
-	@DateTimeFormat(pattern = "dd.MM.yyyy")
-	@NotNull(message = "Date cannot be null")
-	private LocalDate dayOfBirth;
-
 	@ManyToMany(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private Set<UserCategoryModel> category;
 
@@ -70,7 +66,7 @@ public class UserModel {
 	public UserModel() {}
 	
 	public UserModel(String username, String password, String firstName, String lastName, String mail,
-			String country, LocalDate dayOfBirth, Set<UserCategoryModel> cat, boolean enabled) {
+			String country, Set<UserCategoryModel> cat, boolean enabled) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -78,7 +74,6 @@ public class UserModel {
 		this.lastName = lastName;
 		this.mail = mail;
 		this.country = country;
-		this.dayOfBirth = dayOfBirth;
 		this.category = cat;
 		this.enabled = enabled;
 	}
@@ -97,14 +92,6 @@ public class UserModel {
 
 	public void setProfilePicture(byte[] profilePicture) {
 		this.profilePicture = profilePicture;
-	}
-
-	public LocalDate getDayOfBirth() {
-		return dayOfBirth;
-	}
-
-	public void setDayOfBirth(LocalDate dayOfBirth) {
-		this.dayOfBirth = dayOfBirth;
 	}
 
 	public Set<UserCategoryModel> getCategory() {
@@ -179,14 +166,6 @@ public class UserModel {
 		this.country = country;
 	}
 
-	public LocalDate getDayOfBirht() {
-		return dayOfBirth;
-	}
-
-	public void setDayOfBirht(LocalDate dayOfBirth) {
-		this.dayOfBirth = dayOfBirth;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -213,7 +192,7 @@ public class UserModel {
 	public String toString() {
 		return "UserModel [id=" + id + ", username=" + username + ", password=" + password + ", firstName=" + firstName
 				+ ", lastName=" + lastName + ", mail=" + mail + ", country=" + country + ", profilePicture="
-				+ Arrays.toString(profilePicture) + ", dayOfBirth=" + dayOfBirth + ", category=" + category
+				+ Arrays.toString(profilePicture) + ", category=" + category
 				+ ", recommendations=" + recommendations + "]";
 	}
 	
