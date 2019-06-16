@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8" />
 <!--     <link rel="apple-touch-icon" sizes="76x76" href="../bootstrap/img/apple-icon.png"> -->
@@ -116,13 +118,16 @@
 								aria-haspopup="true" aria-expanded="false"> <span
 									class="no-icon">Account</span>
 							</a>
+							
 								<div class="dropdown-menu"
 									aria-labelledby="navbarDropdownMenuLink">
 									<a class="dropdown-item" href="#">Settings</a>
 									<div class="divider"></div>
+									<a class="dropdown-item" href="userProfile">User Profile</a>
+									<div class="divider"></div>
 									<a class="dropdown-item" href="#">Log out</a>
 								</div></li>
-							<li class="nav-item"><a class="nav-link" href="login"> <span class="no-icon">
+							<li class="nav-item"><a class="nav-link" href="login" sec:authorize="hasRole('ROLE_ADMIN')"> <span class="no-icon">
 							Log in</span>
 							</a></li>
 						</ul>

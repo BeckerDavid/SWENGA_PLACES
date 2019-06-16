@@ -29,6 +29,7 @@ public class PlacesControler {
 	@Autowired
 	RecommendationRepository recommendationRepository;
 	
+	
 	@GetMapping("/achievements")
 	@Transactional
 	public String getAchievments(Model model) {
