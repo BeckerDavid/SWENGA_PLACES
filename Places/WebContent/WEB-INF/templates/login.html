@@ -9,21 +9,17 @@
 <body>
 	<div class="formstyle">
 		<h1>Login</h1>
-		<form class="loginform" id="login-form" method="post">
-
+		<form class="loginform" id="login-form" method="post" th:action="@{/login}">
 			<input type="text" name="username" placeholder="Username" required>
-			<input type="password" name="password" placeholder="Password"
-				required>
-		</form>
+			<input type="password" name="password" placeholder="Password" required>
 		<div class="buttons">
-		<form action="login" method="post">
-			<button type="submit" name="button1 " class="btn">Login</button>
-			</from>
-
-		<form  action="register">
-				<button type="submit" name="button2" class="btn">Sign Up</button>
-			</form>
-			</div>
+			<button type="submit" name="button1" class="btn">Login</button>
+				</form>
+		</div>
+		<div class="sign-vis">
+			<button type="submit" name="button2" class="btn2">Sign Up</button>
+			<button type="submit" name="button3" class="btn2">Visitor</button>
+		</div>
 	</div>
 </body>
 </html>
