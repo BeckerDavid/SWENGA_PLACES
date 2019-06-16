@@ -11,7 +11,7 @@ body {
  div.formstyle{
 	margin:0 auto;
 	margin-top: 200px;
-	height: 340px;
+	height: 360px;
 	width: 320px;
     background-color: white;
     
@@ -73,8 +73,12 @@ input:focus {
   }
 
 div.buttons {
- margin-left: 35px;
- margin-top: 40px;
+ 	margin-left: 95px;
+ 	margin-top: 40px;
+}
+
+div.sign-vis{
+	margin-left: 35px;
 }
 
 button {
@@ -90,6 +94,5 @@ button {
   	font-weight: bold;
 }
 
-button[name=button2] {
-	left: 400px;
-}
+
+
