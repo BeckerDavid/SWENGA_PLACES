@@ -90,14 +90,6 @@ public class PlacesControler {
 		
 	}
 	
-	@RequestMapping("/login")
-	@Transactional
-	public String loginUser(Model model) {
-
-	
-		return "login";
-	}
-	
 	
 	@GetMapping("/recommendations")
 	@Transactional

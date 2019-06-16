@@ -1,50 +1,30 @@
 package at.fh.swenga.places.controller;
  
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
  
 @Controller
 public class SecurityController {
-
-	/*
-	@Autowired
-	UserRepository userRepository;
 	
-
-	@Autowired
-	UserCategoryRepository userCategoryRepository,
-	
- 
-	@RequestMapping("/fillUsers")
+	@GetMapping("/login")
 	@Transactional
-	public String fillData(Model model) {
- 
-		UserRepository adminRole = userCategoryRepository.getRole("ROLE_ADMIN");
-		if (adminRole == null)
-			adminRole = new UserRepository("ROLE_ADMIN");
- 
-		UserRepository UserRepository = userCategoryRepository.getRole("ROLE_USER");
-		if (UserRepository == null)
-			UserRepository = new UserRepository("ROLE_USER");
- 
-		User admin = new User("admin", "password", true);
-		admin.encryptPassword();
-		admin.addUserRepository(UserRepository);
-		admin.addUserRepository(adminRole);
-		userRepository.persist(admin);
- 
-		User user = new User("user", "password", true);
-		user.encryptPassword();
-		user.addUserRepository(UserRepository);
-		userRepository.persist(user);
- 
-		return "forward:login";
+	public String loginUser(Model model) {
+
+	
+		return "forward:/";
 	}
  
 	@ExceptionHandler(Exception.class)
 	public String handleAllException(Exception ex) {
-
+ 
 		return "error";
-  */
+ 
+	}
+	
 }
 

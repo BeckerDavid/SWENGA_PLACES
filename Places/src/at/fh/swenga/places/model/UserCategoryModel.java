@@ -8,27 +8,27 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "UserCategories")
-public class UserCategoryModel {
-
+@Table(name = "user_roles")
+public class UserCategoryModel implements java.io.Serializable {
+	private static final long serialVersionUID = 4290441020117679859L;
+	
 	@Id
-	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "category", fetch = FetchType.LAZY)
 	private Set<UserModel> users;
 
-	@Column(nullable = false, length = 30)
-	private String name;
+	@Column(name="role",nullable = false, length = 45)
+	private String role;
 
-	public UserCategoryModel(String name) {
+	public UserCategoryModel(String role) {
 		super();
-		this.name = name;
+		this.role = role;
 	}
 
 	public UserCategoryModel() {
@@ -51,12 +51,12 @@ public class UserCategoryModel {
 		this.users = users;
 	}
 
-	public String getName() {
-		return name;
+	public String getRole() {
+		return role;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	
+	public void setRole(String name) {
+		this.role = name;
 	}
 
 	@Override

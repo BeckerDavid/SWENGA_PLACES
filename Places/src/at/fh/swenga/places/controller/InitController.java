@@ -1,18 +1,20 @@
 package at.fh.swenga.places.controller;
 
-import java.util.List;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import at.fh.swenga.places.dao.CountryRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
+import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
 import at.fh.swenga.places.model.UserCategoryModel;
@@ -20,6 +22,9 @@ import at.fh.swenga.places.model.UserModel;
 
 @Controller
 public class InitController {
+	
+	@Autowired
+	UserDao userDao;
 
 	@Autowired
 	CountryRepository countryRepository;
@@ -35,7 +40,7 @@ public class InitController {
 
 		List<CountryModel> test = countryRepository.findAll();
 		if (test.size() > 0) {
-			return "index";
+			return "login";
 		} else {
 			System.out.println("bin da");
 			return "forward:init";
@@ -525,18 +530,30 @@ public class InitController {
 		LocalDate user1D = LocalDate.of(2000, Month.MAY, 23);
 		LocalDate admin1D = LocalDate.of(1989, Month.DECEMBER, 02);
 
-		UserCategoryModel admin = new UserCategoryModel("admin");
-		UserCategoryModel user = new UserCategoryModel("user");
+		UserCategoryModel admin = new UserCategoryModel("ROLE_ADMIN");
+		UserCategoryModel user = new UserCategoryModel("ROLE_USER");
 
-		UserModel admin1 = new UserModel("admin1", "password", "Robert", "Admin", "robert.admin@boop.fh", "China",
-				admin1D, admin);
+		UserModel admin1 = new UserModel("admin", "password", "Robert", "Admin", "robert.admin@boop.fh", "China",
+				admin1D, null, true);
+		admin1.encryptPassword();
+		admin1.addUserCategory(admin);
+		admin1.addUserCategory(user);
+		userDao.persist(admin1);
+		
 		UserModel user1 = new UserModel("user", "password", "Alexander", "User", "alex.ei@nischl.fh", "Uganda", user1D,
-				user);
+				null, true);
+		user1.encryptPassword();
+		user1.addUserCategory(user);
+		userDao.persist(user1);
 
-		userRepository.save(admin1);
-		userRepository.save(user1);
-
-		return "index";
+		return "login";
+	}
+	
+	@ExceptionHandler(Exception.class)
+	public String handleAllException(Exception ex) {
+ 
+		return "error";
+ 
 	}
 
 }

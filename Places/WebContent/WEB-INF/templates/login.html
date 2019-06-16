@@ -1,4 +1,6 @@
-<html>
+<html
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <title>Login - Places</title>
@@ -9,21 +11,20 @@
 <body>
 	<div class="formstyle">
 		<h1>Login</h1>
-		<form class="loginform" id="login-form" method="post">
+		<form th:action="@{/perform_login}" class="loginform" id="login-form" method="post">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+		
+		<div th:if="${param.error}" class="alert alert-danger">Invalid username and password.</div>
 
-			<input type="text" name="username" placeholder="Username" required>
-			<input type="password" name="password" placeholder="Password"
+			<input type="text" name="username" id="username" placeholder="Username" required autofocus>
+			<input type="password" name="password" id="password" placeholder="Password"
 				required>
-		</form>
 		<div class="buttons">
-		<form action="login" method="post">
-			<button type="submit" name="button1 " class="btn">Login</button>
-			</from>
+			<button type="submit" id="button1" class="btn">Login</button>
+			
 
-		<form  action="register">
-				<button type="submit" name="button2" class="btn">Sign Up</button>
-			</form>
-			</div>
+				<button type="button" id="button2" class="btn">Sign Up</button>
+			</div></form>
 	</div>
 </body>
 </html>

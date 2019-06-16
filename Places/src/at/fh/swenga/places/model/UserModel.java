@@ -2,6 +2,7 @@ package at.fh.swenga.places.model;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -13,16 +14,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 
 public class UserModel {
 	@Id
@@ -30,12 +32,15 @@ public class UserModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(nullable = false, length = 30)
+	@Column(name="username", unique=true, nullable = false, length = 45)
 	private String username;
 
-	@Column(nullable = false, length = 30)
+	@Column(name="password", nullable = false, length = 60)
 	private String password;
 
+	@Column(name="enabled", nullable=false)
+	private boolean enabled;
+	
 	@Column(nullable = false, length = 30)
 	private String firstName;
 
@@ -56,14 +61,16 @@ public class UserModel {
 	@NotNull(message = "Date cannot be null")
 	private LocalDate dayOfBirth;
 
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	private UserCategoryModel category;
+	@ManyToMany(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
+	private Set<UserCategoryModel> category;
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private Set<RecommendationModel> recommendations;
 
+	public UserModel() {}
+	
 	public UserModel(String username, String password, String firstName, String lastName, String mail,
-			String country, LocalDate dayOfBirth, UserCategoryModel category) {
+			String country, LocalDate dayOfBirth, Set<UserCategoryModel> cat, boolean enabled) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -72,7 +79,48 @@ public class UserModel {
 		this.mail = mail;
 		this.country = country;
 		this.dayOfBirth = dayOfBirth;
+		this.category = cat;
+		this.enabled = enabled;
+	}
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public byte[] getProfilePicture() {
+		return profilePicture;
+	}
+
+	public void setProfilePicture(byte[] profilePicture) {
+		this.profilePicture = profilePicture;
+	}
+
+	public LocalDate getDayOfBirth() {
+		return dayOfBirth;
+	}
+
+	public void setDayOfBirth(LocalDate dayOfBirth) {
+		this.dayOfBirth = dayOfBirth;
+	}
+
+	public Set<UserCategoryModel> getCategory() {
+		return category;
+	}
+
+	public void setCategory(Set<UserCategoryModel> category) {
 		this.category = category;
+	}
+
+	public Set<RecommendationModel> getRecommendations() {
+		return recommendations;
+	}
+
+	public void setRecommendations(Set<RecommendationModel> recommendations) {
+		this.recommendations = recommendations;
 	}
 
 	public int getId() {
@@ -169,9 +217,14 @@ public class UserModel {
 				+ ", recommendations=" + recommendations + "]";
 	}
 	
-	/*public void encryptPassword() {
+	public void addUserCategory(UserCategoryModel cat) {
+		if(category==null) category = new HashSet<UserCategoryModel>();
+		category.add(cat);
+		}
+	
+	public void encryptPassword() {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		password = passwordEncoder.encode(password);		
-	}*/
+	}
 
 }
