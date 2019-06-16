@@ -68,9 +68,15 @@ public class PlacesControler {
 	
 	@GetMapping("/dashboard")
 	@Transactional
-	public String getDashboard(Model model) {
+	public String getDashboard(Model model, Authentication authentication) {
 		
-			
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);			
+		}
 		return "dashboard";
 		
 	}
