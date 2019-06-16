@@ -124,13 +124,8 @@
 									<div class="divider"></div>
 									<a class="dropdown-item" href="userProfile">User Profile</a>
 									<div class="divider"></div>
-									<a class="dropdown-item" href="#">Log out</a>
+									<a class="dropdown-item" href="#" th:href="@{/logout}">Log out</a>
 								</div></li>
-							<li class="logout">
-							<form name="logoutForm" th:action="@{/logout}" method="post">
-							<input class="logout" type="submit" value="Sign Out"/>
-							</form>
-							</li>
 						</ul>
 					</div>
 				</div>
