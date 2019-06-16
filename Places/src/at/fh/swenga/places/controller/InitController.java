@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import at.fh.swenga.places.dao.CountryRepository;
+import at.fh.swenga.places.dao.RatingRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserCategoryRepository;
 import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
+import at.fh.swenga.places.model.RatingModel;
+import at.fh.swenga.places.model.RecommendationModel;
 import at.fh.swenga.places.model.UserCategoryModel;
 import at.fh.swenga.places.model.UserModel;
 
@@ -38,6 +41,9 @@ public class InitController {
 
 	@Autowired
 	RecommendationRepository recommendationRepository;
+	
+	@Autowired
+	RatingRepository ratingRepository;
 
 	@RequestMapping("/")
 	public String loadIndex() {
@@ -532,6 +538,7 @@ public class InitController {
 		countryRepository.save(country237);
 		countryRepository.save(countryK);
 
+
 		UserCategoryModel admin = new UserCategoryModel("ROLE_ADMIN");
 		UserCategoryModel user = new UserCategoryModel("ROLE_USER");
 		UserCategoryModel viewer = new UserCategoryModel("ROLE_VIEWER");
@@ -539,8 +546,22 @@ public class InitController {
 		userCatRepo.save(admin);
 		userCatRepo.save(user);
 		userCatRepo.save(viewer);
+		
+		RatingModel rating1 = new RatingModel("very good");
+		RatingModel rating2 = new RatingModel("good");
+		RatingModel rating3 = new RatingModel("ok");
+		RatingModel rating4 = new RatingModel("sufficient");
+		RatingModel rating5 = new RatingModel("not good");
+		
+		ratingRepository.save(rating1);
+		ratingRepository.save(rating2);
+		ratingRepository.save(rating3);
+		ratingRepository.save(rating4);
+		ratingRepository.save(rating5);
+
 
 		UserModel admin1 = new UserModel("admin", "password", "Robert", "Admin", "robert.admin@boop.fh", "China", null, true);
+
 		admin1.encryptPassword();
 		admin1.addUserCategory(admin);
 		admin1.addUserCategory(user);
@@ -553,6 +574,15 @@ public class InitController {
 		user1.addUserCategory(user);
 		user1.addUserCategory(viewer);
 		userRepository.save(user1);
+
+		
+		LocalDate startDate1 = LocalDate.of(2015, Month.OCTOBER, 15);
+		LocalDate endDate1 = LocalDate.of(2015, Month.OCTOBER, 30);
+		
+		RecommendationModel recommendation1 = new RecommendationModel("Travelling in Thailand","Bangkok","Enjoy a trip in one of the most intresting cities in the world!",startDate1,endDate1,country211,user1,rating1);
+	
+		recommendationRepository.save(recommendation1);
+		
 
 		return "login";
 	}

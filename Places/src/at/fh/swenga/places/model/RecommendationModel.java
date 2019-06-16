@@ -29,9 +29,6 @@ public class RecommendationModel {
 	private String title;
 
 	@Column(length = 30)
-	private String region;
-
-	@Column(length = 30)
 	private String city;
 
 	@Column(length = 500)
@@ -57,13 +54,12 @@ public class RecommendationModel {
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private RatingModel rating;
 
-	public RecommendationModel(String title, String region, String city, String description,
+	public RecommendationModel(String title, String city, String description,
 			@NotNull(message = "Date cannot be null") LocalDate startDate,
 			@NotNull(message = "Date cannot be null") LocalDate endDate, CountryModel country, UserModel user,
 			RatingModel rating) {
 		super();
 		this.title = title;
-		this.region = region;
 		this.city = city;
 		this.description = description;
 		this.startDate = startDate;
@@ -72,6 +68,8 @@ public class RecommendationModel {
 		this.user = user;
 		this.rating = rating;
 	}
+	
+	
 
 	public RecommendationModel() {
 		super();
@@ -92,14 +90,6 @@ public class RecommendationModel {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public String getRegion() {
-		return region;
-	}
-
-	public void setRegion(String region) {
-		this.region = region;
 	}
 
 	public String getCity() {
@@ -190,7 +180,7 @@ public class RecommendationModel {
 
 	@Override
 	public String toString() {
-		return "RecommendationModel [id=" + id + ", title=" + title + ", region=" + region + ", city=" + city
+		return "RecommendationModel [id=" + id + ", title=" + title + ", city=" + city
 				+ ", description=" + description + ", startDate=" + startDate + ", endDate=" + endDate + ", pictures="
 				+ pictures + ", country=" + country + ", user=" + user + ", rating=" + rating + "]";
 	}
