@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -96,6 +97,40 @@ public class PlacesControler {
 		}
 		return "dashboard";
 
+	}
+
+	@Secured("ROLE_USER")
+	@PostMapping("/editUser")
+	@Transactional
+	public String editUser(@Valid UserModel changedUserModel, BindingResult bindingResult, Model model) {
+
+		List<CountryModel> countries = countryRepository.findAll();
+		model.addAttribute("countries", countries);
+
+		// Any errors? -> Create a String out of all errors and return to the page
+		if (bindingResult.hasErrors()) {
+			String errorMessage = "";
+			for (FieldError fieldError : bindingResult.getFieldErrors()) {
+				errorMessage += fieldError.getField() + " is invalid: " + fieldError.getCode() + "<br>";
+			}
+			model.addAttribute("errorMessage", errorMessage);
+			return "forward:/userProfile";
+		}
+
+		UserModel user = userRepository.findById(changedUserModel.getId());
+
+		// Change the attributes
+		user.setId(changedUserModel.getId());
+		user.setUsername(changedUserModel.getUsername());
+		user.setFirstName(changedUserModel.getFirstName());
+		user.setLastName(changedUserModel.getLastName());
+		user.setMail(changedUserModel.getMail());
+		user.setCountry(changedUserModel.getCountry());
+
+		// Save a message for the web page
+		model.addAttribute("message", "Changed user " + changedUserModel.getId());
+
+		return "forward:/userProfile";
 	}
 
 	@Secured("ROLE_USER")
@@ -182,6 +217,9 @@ public class PlacesControler {
 	@Transactional
 	public String getProfile(Model model, Authentication authentication) {
 
+		List<CountryModel> countries = countryRepository.findAll();
+		model.addAttribute("countries", countries);
+	
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
 
 		if (user != null && user.isEnabled()) {
@@ -197,9 +235,7 @@ public class PlacesControler {
 	@Transactional
 	public String getVisitor(Model model) {
 
-		System.out.println("Hallo");
-		
-		UserModel user = userRepository.getDefaultUser("default"); 
+		UserModel user = userRepository.getDefaultUser("default");
 
 		if (user != null && user.isEnabled()) {
 

@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -50,12 +51,12 @@ public class UserModel {
 	@Column(nullable = false, length = 30)
 	private String mail;
 
-	@Column(nullable = false, length = 30)
-	private String country;
-
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] profilePicture;
+	
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	private CountryModel country;
 
 	@ManyToMany(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private Set<UserCategoryModel> category;
@@ -66,7 +67,7 @@ public class UserModel {
 	public UserModel() {}
 	
 	public UserModel(String username, String password, String firstName, String lastName, String mail,
-			String country, Set<UserCategoryModel> cat, boolean enabled) {
+			CountryModel country, Set<UserCategoryModel> cat, boolean enabled) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -76,6 +77,16 @@ public class UserModel {
 		this.country = country;
 		this.category = cat;
 		this.enabled = enabled;
+	}
+	
+	public UserModel(String username, String firstName, String lastName, String mail,
+			CountryModel country) {
+		super();
+		this.username = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.mail = mail;
+		this.country = country;
 	}
 	
 	public boolean isEnabled() {
@@ -158,11 +169,11 @@ public class UserModel {
 		this.mail = mail;
 	}
 
-	public String getCountry() {
+	public CountryModel getCountry() {
 		return country;
 	}
 
-	public void setCountry(String country) {
+	public void setCountry(CountryModel country) {
 		this.country = country;
 	}
 

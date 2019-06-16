@@ -89,18 +89,6 @@
 							<li class="nav-item"><a href="#" class="nav-link"> <i
 									class="nc-icon nc-zoom-split"></i> <span class="d-lg-block">&nbsp;Search</span>
 							</a></li>
-							<li class="dropdown nav-item"><a href="#"
-								class="dropdown-toggle nav-link" data-toggle="dropdown"> <i
-									class="nc-icon nc-planet"></i> <span class="notification">5</span>
-									<span class="d-lg-none">Notification</span>
-							</a>
-								<ul class="dropdown-menu">
-									<a class="dropdown-item" href="#">Notification 1</a>
-									<a class="dropdown-item" href="#">Notification 2</a>
-									<a class="dropdown-item" href="#">Notification 3</a>
-									<a class="dropdown-item" href="#">Notification 4</a>
-									<a class="dropdown-item" href="#">Another notification</a>
-								</ul></li>
 							<li class="nav-item dropdown"><a
 								class="nav-link dropdown-toggle" href="http://example.com"
 								id="navbarDropdownMenuLink" data-toggle="dropdown"
@@ -128,7 +116,7 @@
 								<div class="card-header">
 									<h4 class="card-title">Edit Profile</h4>
 								</div>
-								<div class="card-body">
+								<div class="card-body">								
 									<form class="form-horizontal" method="post"
 										th:action="${user} ? @{/editUser(id=${user.id})}">
 										<div class="row">
@@ -176,12 +164,14 @@
 											</div>
 										<!--  ----------------  Country  ---------------- -->
 											<div class="col-md-4 pr-1">
-												<div class="form-group">
-													<label for="inputCountry">Country</label> 
-													<input type="text" class="form-control" placeholder="Country"
-													name="country" th:value="${user} ? ${user.country}">
-												</div>
-											</div>																					
+												<select name="user.country" id="user.country">
+													<option th:each="country:${#request.getAttribute('countries')}"
+               												th:value="${country.id}"
+               												th:text="${country.countryName}"
+               												th:selected="${country.id == user.country.id}">
+               										</option>
+               									</select>
+											</div>																														
 										</div>
 										<button type="submit" class="btn btn-info btn-fill pull-right">Update Profile</button>
 										<div class="clearfix"></div>										

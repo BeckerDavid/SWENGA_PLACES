@@ -25,12 +25,15 @@ public class CountryModel {
 
 	@Column(nullable = false, length = 100)
 	private String countryName;
-
+	
 	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
 	private Set<RecommendationModel> recommendations;
 
 	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
 	private Set<DestinationModel> destinations;
+	
+	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
+	private Set<UserModel> users;
 
 	public CountryModel() {
 		super();
@@ -40,8 +43,8 @@ public class CountryModel {
 		super();
 		this.countryShortCut = countryShortCut;
 		this.countryName = countryName;
-
 	}
+
 
 	public int getId() {
 		return id;

@@ -12,6 +12,8 @@ import at.fh.swenga.places.model.UserModel;
 @Transactional
 public interface UserRepository extends JpaRepository<UserModel, Integer> {
 
+	UserModel findById(int id);
+	
 	UserModel findByUsername(String username);
 
 	UserModel findFirstByUsername(String username);
@@ -19,5 +21,4 @@ public interface UserRepository extends JpaRepository<UserModel, Integer> {
 	@Query("Select u From UserModel u where u.username = :username")
 	UserModel getDefaultUser(@Param("username") String username);
 
-	
 }

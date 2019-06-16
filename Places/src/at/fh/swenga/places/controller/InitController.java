@@ -561,7 +561,7 @@ public class InitController {
 
 
 
-		UserModel admin1 = new UserModel("admin", "password", "Robert", "Admin", "robert.admin@boop.fh", "CHINA", null, true);
+		UserModel admin1 = new UserModel("admin", "password", "Robert", "Admin", "robert.admin@boop.fh", country44, null, true);
 		admin1.encryptPassword();
 		admin1.addUserCategory(admin);
 		admin1.addUserCategory(user);
@@ -569,13 +569,13 @@ public class InitController {
 		userRepository.save(admin1);
 		
 
-		UserModel user1 = new UserModel("user", "password", "Alexander", "User", "alex.ei@nischl.fh", "UGANDA", null, true);
+		UserModel user1 = new UserModel("user", "password", "Alexander", "User", "alex.ei@nischl.fh", country222, null, true);
 		user1.encryptPassword();
 		user1.addUserCategory(user);
 		user1.addUserCategory(viewer);
 		userRepository.save(user1);
 		
-		UserModel defaultUser1 = new UserModel("default", "default", "default", "default", "default@default", "default", null, true);
+		UserModel defaultUser1 = new UserModel("default", "default", "default", "default", "default@default", country1, null, true);
 		defaultUser1.encryptPassword();
 		defaultUser1.addUserCategory(viewer);
 		userRepository.save(defaultUser1);
