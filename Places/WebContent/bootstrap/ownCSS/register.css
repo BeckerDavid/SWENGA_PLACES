@@ -78,11 +78,11 @@ input[name=password2] {
   	top: -60px;
 }
 
-input[name=firstname] {
+input[name=firstName] {
   	top: -80px;
 }
 
-input[name=lastname] {
+input[name=lastName] {
   	top: -100px;
 }
 
@@ -90,17 +90,13 @@ input[name=mail] {
   	top: -120px;
 }
 
-input[name=country] {
+select[name=country] {
   	top: -140px;
-}
-
-input[name=dayofbirth] {
-  	top: -160px;
 }
 
 button {
 	position:relative;
-  	top:-140px;
+  	top:-120px;
   	left: 75px;
   	width: 160px;
   	height: 40px;

@@ -560,7 +560,7 @@ public class InitController {
 		ratingRepository.save(rating5);
 
 
-		UserModel admin1 = new UserModel("admin", "password", "Robert", "Admin", "robert.admin@boop.fh", "China", null, true);
+		UserModel admin1 = new UserModel("admin", "password", "Robert", "Admin", "robert.admin@boop.fh", "CHINA", null, true);
 
 		admin1.encryptPassword();
 		admin1.addUserCategory(admin);
@@ -568,7 +568,7 @@ public class InitController {
 		admin1.addUserCategory(viewer);
 		userRepository.save(admin1);
 		
-		UserModel user1 = new UserModel("user", "password", "Alexander", "User", "alex.ei@nischl.fh", "Uganda",
+		UserModel user1 = new UserModel("user", "password", "Alexander", "User", "alex.ei@nischl.fh", "UGANDA",
 				null, true);
 		user1.encryptPassword();
 		user1.addUserCategory(user);

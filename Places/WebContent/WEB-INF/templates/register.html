@@ -30,6 +30,7 @@
 				<input type="email"
 				name="mail" id="mail" placeholder="E-Mail Address" required>
 				<select name="country" id="country">
+				<option selected disabled>COUNTRY</option>
 				<div th:each="country:${#request.getAttribute('countries')}">
 					<option th:text="${country.countryName}"></option>
 				</div>
