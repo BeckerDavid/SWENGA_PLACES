@@ -10,6 +10,8 @@ import at.fh.swenga.places.model.UserModel;
 @Transactional
 public interface UserRepository extends JpaRepository<UserModel, Integer> {
 
-	UserModel findByUsername(String username);
+
+	public UserModel findFirstByUsername(String username);
+	
 	
 }

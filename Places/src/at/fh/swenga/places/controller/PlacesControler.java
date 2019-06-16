@@ -5,19 +5,21 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import at.fh.swenga.places.dao.CountryRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.RecommendationModel;
+import at.fh.swenga.places.model.UserModel;
 
 @Controller
+//@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "session")
 public class PlacesControler {
 
 	@Autowired
@@ -82,6 +84,15 @@ public class PlacesControler {
 		
 	}
 	
+	 @GetMapping("/index")
+	 @Transactional
+	 public String getIndex(Model model) {
+			
+			
+			return "index";
+			
+		}
+	
 	@GetMapping("/journey")
 	@Transactional
 	public String getJourney(Model model) {
@@ -112,9 +123,15 @@ public class PlacesControler {
 	
 	@GetMapping("/userProfile")
 	@Transactional
-	public String getProfile(Model model) {
+	public String getProfile(Model model, Authentication authentication) {
 		
-		
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);			
+		}
 		
 		return "userProfile";
 		
