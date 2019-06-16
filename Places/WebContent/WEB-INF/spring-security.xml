@@ -11,8 +11,10 @@
 		<csrf/>
 		<intercept-url pattern="/login" access="permitAll" />
 		<intercept-url pattern="/bootstrap/**" access="permitAll" />
+		<intercept-url pattern="/images/**" access="permitAll" />	
 		<intercept-url pattern="/**" access="authenticated" />
 		<intercept-url pattern="/delete" access="hasRole('ADMIN')" />
+	
 	
 		<form-login login-page="/login" default-target-url='/dashboard' always-use-default-target='true' login-processing-url="/perform_login"/>
 		<logout logout-url="/logout" />
