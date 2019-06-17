@@ -10,4 +10,6 @@ import at.fh.swenga.places.model.CountryModel;
 @Transactional
 public interface CountryRepository extends JpaRepository<CountryModel, Integer> {
 
+
+	
 }

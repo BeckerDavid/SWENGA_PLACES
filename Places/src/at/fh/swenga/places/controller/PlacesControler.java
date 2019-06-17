@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import at.fh.swenga.places.dao.CountryRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
@@ -119,18 +121,19 @@ public class PlacesControler {
 
 		UserModel user = userRepository.findById(changedUserModel.getId());
 
-		// Change the attributes
-		user.setId(changedUserModel.getId());
+		// Change the attributes		
 		user.setUsername(changedUserModel.getUsername());
 		user.setFirstName(changedUserModel.getFirstName());
 		user.setLastName(changedUserModel.getLastName());
 		user.setMail(changedUserModel.getMail());
 		user.setCountry(changedUserModel.getCountry());
+		
+		userRepository.save(user);
 
 		// Save a message for the web page
 		model.addAttribute("message", "Changed user " + changedUserModel.getId());
 
-		return "forward:/userProfile";
+		return "userProfile";
 	}
 
 	@Secured("ROLE_USER")
@@ -245,6 +248,60 @@ public class PlacesControler {
 		return "index";
 
 	}
+	
+	
+	/*@Secured({ "ROLE_ADMIN" })
+	@GetMapping(value = "/changeUserRole")
+	public String changeUserRole(@RequestParam("username") String username, Model model,
+			Authentication authentication) {
+
+		UserModel user = userRepository.findFirstByUsername(username);
+
+		if (user != null && user.isEnabled()) {
+
+			if (user.getUsername().equalsIgnoreCase(authentication.getName())) {
+				model.addAttribute("warningMessage", "You cannot change your own user role!");
+				return showUserManagement(model, authentication);
+			}
+
+			model.addAttribute("user", user);
+			return "changeUserRole";
+		} else {
+			model.addAttribute("errorMessage", "Error while reading User data! Either dissabled or does not exist");
+			return showUserManagement(model, authentication);
+		}
+}*/
+
+
+
+	@Secured({ "ROLE_USER" })
+	@PostMapping(value = "/changePassword")
+	public String changePassword(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password, 
+			Model model, Authentication authentication) {
+
+		UserModel user = userRepository.getDefaultUser("default");
+
+		if (user != null && user.isEnabled()) {
+			if ((user.getUsername().equalsIgnoreCase(authentication.getName())
+					|| authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))) {
+
+				user.setPassword(password);
+				user.encryptPassword();
+				userRepository.save(user);
+
+				model.addAttribute("message", "Password successfully changed for User: " + username);
+				return"userProfile";
+				
+			} else {
+				model.addAttribute("warningMessage", "Error while reading User data!");
+				return"error";
+			}
+		} 
+		
+		return"userProfile";
+	}
+
+	
 
 	@ExceptionHandler(Exception.class)
 	public String handleAllException(Exception ex) {
