@@ -38,7 +38,7 @@ import at.fh.swenga.places.model.UserModel;
 
 @Controller
 //@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "session")
-public class PlacesControler {
+public class PlacesController {
 
 	@Autowired
 	CountryRepository countryRepository;
@@ -199,7 +199,7 @@ public class PlacesControler {
 
 	@PostMapping("/register")
 	@Transactional
-	public String registerUser(@Valid UserModel user, BindingResult res, Model model, Authentication auth, @RequestParam(value = "countryId") int cid) {
+	public String registerUser(@Valid UserModel user, BindingResult res, Model model, Authentication auth, @RequestParam(value = "countryId") int cid, @RequestParam(value="noShow") boolean no) {
 		if (userRepository.findFirstByUsername(user.getUsername()) != null) {
 			model.addAttribute("error", "Username is already in use, sorry!");
 		} else {
@@ -210,7 +210,8 @@ public class PlacesControler {
 			roles.add(catU);
 			
 			CountryModel country = countryRepository.getOne(cid);
-			
+			System.out.println(no);
+			if(no) user.setPrivate(true);
 			user.encryptPassword();
 			user.setCategory(roles);
 			user.setEnabled(true);

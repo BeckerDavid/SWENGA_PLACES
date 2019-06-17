@@ -547,7 +547,7 @@ public class InitController {
 		userCatRepo.save(user);
 		userCatRepo.save(viewer);
 
-		UserModel admin1 = new UserModel("admin", "password", true, "Robert", "Admin", "robert.admin@boop.fh", country44, true);
+		UserModel admin1 = new UserModel("admin", "password", true, "Robert", "Admin", "robert.admin@boop.fh", country44, false);
 		admin1.encryptPassword();
 		admin1.addUserCategory(admin);
 		admin1.addUserCategory(user);
@@ -555,26 +555,30 @@ public class InitController {
 		userRepository.save(admin1);
 		
 
-		UserModel user1 = new UserModel("user", "password", true, "Alexander", "User", "alex.ei@nischl.fh", country222, true);
+		UserModel user1 = new UserModel("user", "password", true, "Alexander", "User", "alex.ei@nischl.fh", country222, false);
 		user1.encryptPassword();
 		user1.addUserCategory(user);
 		user1.addUserCategory(viewer);
 		userRepository.save(user1);
 		
-		UserModel defaultUser1 = new UserModel("default", "default", true, "default", "default", "default@default", country1, true);
+		UserModel defaultUser1 = new UserModel("default", "default", true, "default", "default", "default@default", country1, false);
 		defaultUser1.encryptPassword();
 		defaultUser1.addUserCategory(viewer);
 		userRepository.save(defaultUser1);
 		
 		PlaceModel bangkok = new PlaceModel(country211, "Bangkok");
-		placeRepo.save(bangkok);
-		
-
 		PlaceModel place1 = new PlaceModel(country14, "FH Joanneum");
 		PlaceModel place2 = new PlaceModel(country149, "Mount Everest");
 		PlaceModel place3 = new PlaceModel(country233, "Atlantis");
 		PlaceModel place4 = new PlaceModel(country226, "Pentagon");
 		PlaceModel place5 = new PlaceModel(country84, "Olymp");
+		
+		placeRepo.save(bangkok);
+		placeRepo.save(place1);
+		placeRepo.save(place2);
+		placeRepo.save(place3);
+		placeRepo.save(place4);
+		placeRepo.save(place5);
 		
 		//RecommendationModel rec1 = new RecommendationModel("Travelling in Thailand","Bangkok","Enjoy a trip in one of the most intresting cities in the world!",startDate1,endDate1,country211,user1,rating1);
 		RecommendationModel rec2 = new RecommendationModel("Raum 45 - Geburtsst�tte von Places", place1, "Durch die Entwicklung von Places ist dieser Ort heutzutage eine beliebte Pilgerst�tte f�r Fans.", admin1);

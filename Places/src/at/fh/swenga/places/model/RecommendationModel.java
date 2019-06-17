@@ -28,7 +28,7 @@ public class RecommendationModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false, length = 140)
 	private String title;
 	
 	@ManyToOne
