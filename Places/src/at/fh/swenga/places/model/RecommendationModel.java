@@ -28,8 +28,10 @@ public class RecommendationModel {
 	@Column(nullable = false, length = 30)
 	private String title;
 
+	
+	@ManyToOne
 	@Column(length = 30)
-	private String city;
+	private String place;
 
 	@Column(length = 500)
 	private String description;
@@ -42,31 +44,28 @@ public class RecommendationModel {
 	@NotNull(message = "Date cannot be null")
 	private LocalDate endDate;
 
-	@OneToMany(mappedBy = "recommendation", fetch = FetchType.LAZY)
-	private Set<PictureModel> pictures;
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private CountryModel country;
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private UserModel user;
+	
+	private boolean approved;
 
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	private RatingModel rating;
-
+	
 	public RecommendationModel(String title, String city, String description,
 			@NotNull(message = "Date cannot be null") LocalDate startDate,
-			@NotNull(message = "Date cannot be null") LocalDate endDate, CountryModel country, UserModel user,
-			RatingModel rating) {
+			@NotNull(message = "Date cannot be null") LocalDate endDate, CountryModel country, UserModel user
+			) {
 		super();
 		this.title = title;
-		this.city = city;
+		this.place = city;
 		this.description = description;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.country = country;
 		this.user = user;
-		this.rating = rating;
 	}
 	
 	
@@ -93,11 +92,11 @@ public class RecommendationModel {
 	}
 
 	public String getCity() {
-		return city;
+		return place;
 	}
 
 	public void setCity(String city) {
-		this.city = city;
+		this.place = city;
 	}
 
 	public String getDescription() {
@@ -124,13 +123,6 @@ public class RecommendationModel {
 		this.endDate = endDate;
 	}
 
-	public Set<PictureModel> getPictures() {
-		return pictures;
-	}
-
-	public void setPictures(Set<PictureModel> pictures) {
-		this.pictures = pictures;
-	}
 
 	public CountryModel getCountry() {
 		return country;
@@ -148,13 +140,6 @@ public class RecommendationModel {
 		this.user = user;
 	}
 
-	public RatingModel getRating() {
-		return rating;
-	}
-
-	public void setRating(RatingModel rating) {
-		this.rating = rating;
-	}
 
 	@Override
 	public int hashCode() {
@@ -180,9 +165,9 @@ public class RecommendationModel {
 
 	@Override
 	public String toString() {
-		return "RecommendationModel [id=" + id + ", title=" + title + ", city=" + city
+		return "RecommendationModel [id=" + id + ", title=" + title + ", city=" + place
 				+ ", description=" + description + ", startDate=" + startDate + ", endDate=" + endDate + ", pictures="
-				+ pictures + ", country=" + country + ", user=" + user + ", rating=" + rating + "]";
+				+ ", country=" + country + ", user=" + user + ", rating="  + "]";
 	}
 
 }

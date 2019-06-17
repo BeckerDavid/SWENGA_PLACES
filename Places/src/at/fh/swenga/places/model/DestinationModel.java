@@ -3,10 +3,12 @@ package at.fh.swenga.places.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,7 +19,8 @@ public class DestinationModel {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
+	
+	@OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
 	@Column(length = 30)
 	private String destinationPlace;
 
@@ -26,6 +29,7 @@ public class DestinationModel {
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private JourneyDestinationModel destinationJourney;
+	
 
 	public DestinationModel(String destinationPlace, CountryModel country) {
 		super();
