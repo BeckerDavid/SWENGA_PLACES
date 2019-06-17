@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import at.fh.swenga.places.dao.CountryRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserCategoryDao;
+import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
 import at.fh.swenga.places.model.RecommendationModel;
@@ -50,6 +51,9 @@ public class PlacesControler {
 
 	@Autowired
 	RecommendationRepository recommendationRepository;
+	
+	@Autowired
+	UserDao userDao;
 
 	@Secured("ROLE_USER")
 	@GetMapping("/achievements")
@@ -194,7 +198,7 @@ public class PlacesControler {
 
 	@PostMapping("/register")
 	@Transactional
-	public String registerUser(@Valid UserModel user, BindingResult res, Model model, Authentication auth) {
+	public String registerUser(@Valid UserModel user, BindingResult res, Model model, Authentication auth, @RequestParam(value = "countryId") int cid) {
 		if (userRepository.findFirstByUsername(user.getUsername()) != null) {
 			model.addAttribute("error", "Username is already in use, sorry!");
 		} else {
@@ -203,11 +207,14 @@ public class PlacesControler {
 			UserCategoryModel catU = userCatDao.getRole("ROLE_USER");
 			roles.add(catV);
 			roles.add(catU);
-
+			
+			CountryModel country = countryRepository.getOne(cid);
+			
 			user.encryptPassword();
 			user.setCategory(roles);
 			user.setEnabled(true);
-			userRepository.save(user);
+			user.setCountry(country);
+			userDao.persist(user);
 
 			model.addAttribute("message", "Welcome" + user.getUsername());
 		}
