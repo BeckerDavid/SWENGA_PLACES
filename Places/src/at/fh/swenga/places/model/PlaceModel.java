@@ -1,5 +1,7 @@
 package at.fh.swenga.places.model;
 
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,13 +9,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Destination")
-public class DestinationModel {
+@Table(name = "Place")
+public class PlaceModel {
 
 	@Id
 	@Column(name = "id")
@@ -22,25 +25,19 @@ public class DestinationModel {
 	
 	@OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
 	@Column(length = 30)
-	private String destinationPlace;
+	private Set<RecommendationModel> recPlace;
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private CountryModel country;
 
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	private JourneyDestinationModel destinationJourney;
+	@ManyToMany
+	private Set<JourneyModel> destinationJourney;
 	
-
-	public DestinationModel(String destinationPlace, CountryModel country) {
-		super();
-		this.destinationPlace = destinationPlace;
-		this.country = country;
-	}
-
-	public DestinationModel() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	@ManyToMany(mappedBy = "favoritePlaces")
+	private Set<UserModel> users;
+	
+	@Column(nullable=false)
+	private String name;
 
 	public int getId() {
 		return id;
@@ -50,12 +47,12 @@ public class DestinationModel {
 		this.id = id;
 	}
 
-	public String getDestinationPlace() {
-		return destinationPlace;
+	public Set<RecommendationModel> getRecPlace() {
+		return recPlace;
 	}
 
-	public void setDestinationPlace(String destinationPlace) {
-		this.destinationPlace = destinationPlace;
+	public void setRecPlace(Set<RecommendationModel> recPlace) {
+		this.recPlace = recPlace;
 	}
 
 	public CountryModel getCountry() {
@@ -66,18 +63,27 @@ public class DestinationModel {
 		this.country = country;
 	}
 
-	public JourneyDestinationModel getDestinationJourney() {
+	public Set<JourneyModel> getDestinationJourney() {
 		return destinationJourney;
 	}
 
-	public void setDestinationJourney(JourneyDestinationModel destinationJourney) {
+	public void setDestinationJourney(Set<JourneyModel> destinationJourney) {
 		this.destinationJourney = destinationJourney;
+	}
+
+	public Set<UserModel> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<UserModel> users) {
+		this.users = users;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + id;
 		return result;
 	}
@@ -90,16 +96,34 @@ public class DestinationModel {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DestinationModel other = (DestinationModel) obj;
+		PlaceModel other = (PlaceModel) obj;
+		if (country == null) {
+			if (other.country != null)
+				return false;
+		} else if (!country.equals(other.country))
+			return false;
 		if (id != other.id)
 			return false;
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "DestinationModel [id=" + id + ", destinationPlace=" + destinationPlace + ", country=" + country
-				+ ", destinationJourney=" + destinationJourney + "]";
+	public PlaceModel(CountryModel country, String name) {
+		super();
+		this.country = country;
+		this.name = name;
 	}
+
+	public PlaceModel() {
+		super();
+	}
+
+	public PlaceModel(CountryModel country, Set<JourneyModel> destinationJourney, String name) {
+		super();
+		this.country = country;
+		this.destinationJourney = destinationJourney;
+		this.name = name;
+	}
+	
+	
 
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import at.fh.swenga.places.dao.CountryRepository;
-import at.fh.swenga.places.dao.RatingRepository;
+import at.fh.swenga.places.dao.PlaceRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserCategoryRepository;
 import at.fh.swenga.places.dao.UserDao;
@@ -43,7 +43,7 @@ public class InitController {
 	RecommendationRepository recommendationRepository;
 	
 	@Autowired
-	RatingRepository ratingRepository;
+	PlaceRepository placeRepo;
 
 	@RequestMapping("/")
 	public String loadIndex() {
@@ -412,6 +412,7 @@ public class InitController {
 		countryRepository.save(country111);
 		countryRepository.save(country112);
 		countryRepository.save(country113);
+		countryRepository.save(countryK);
 		countryRepository.save(country114);
 		countryRepository.save(country115);
 		countryRepository.save(country116);
@@ -536,7 +537,6 @@ public class InitController {
 		countryRepository.save(country235);
 		countryRepository.save(country236);
 		countryRepository.save(country237);
-		countryRepository.save(countryK);
 
 
 		UserCategoryModel admin = new UserCategoryModel("ROLE_ADMIN");
@@ -546,22 +546,8 @@ public class InitController {
 		userCatRepo.save(admin);
 		userCatRepo.save(user);
 		userCatRepo.save(viewer);
-		
-		RatingModel rating1 = new RatingModel("very good");
-		RatingModel rating2 = new RatingModel("good");
-		RatingModel rating3 = new RatingModel("ok");
-		RatingModel rating4 = new RatingModel("sufficient");
-		RatingModel rating5 = new RatingModel("not good");
-		
-		ratingRepository.save(rating1);
-		ratingRepository.save(rating2);
-		ratingRepository.save(rating3);
-		ratingRepository.save(rating4);
-		ratingRepository.save(rating5);
 
-
-
-		UserModel admin1 = new UserModel("admin", "password", "Robert", "Admin", "robert.admin@boop.fh", country44, null, true);
+		UserModel admin1 = new UserModel("admin", "password", true, "Robert", "Admin", "robert.admin@boop.fh", country44, true);
 		admin1.encryptPassword();
 		admin1.addUserCategory(admin);
 		admin1.addUserCategory(user);
@@ -569,33 +555,33 @@ public class InitController {
 		userRepository.save(admin1);
 		
 
-		UserModel user1 = new UserModel("user", "password", "Alexander", "User", "alex.ei@nischl.fh", country222, null, true);
+		UserModel user1 = new UserModel("user", "password", true, "Alexander", "User", "alex.ei@nischl.fh", country222, true);
 		user1.encryptPassword();
 		user1.addUserCategory(user);
 		user1.addUserCategory(viewer);
 		userRepository.save(user1);
 		
-		UserModel defaultUser1 = new UserModel("default", "default", "default", "default", "default@default", country1, null, true);
+		UserModel defaultUser1 = new UserModel("default", "default", true, "default", "default", "default@default", country1, true);
 		defaultUser1.encryptPassword();
 		defaultUser1.addUserCategory(viewer);
 		userRepository.save(defaultUser1);
+		
+		PlaceModel bangkok = new PlaceModel(country211, "Bangkok");
+		placeRepo.save(bangkok);
+		
 
-		
-		LocalDate startDate1 = LocalDate.of(2015, Month.OCTOBER, 15);
-		LocalDate endDate1 = LocalDate.of(2015, Month.OCTOBER, 30);
-		
-		PlaceModel place1 = new PlaceModel("FH Joanneum", country14);
-		PlaceModel place2 = new PlaceModel("Mount Everest", country149);
-		PlaceModel place3 = new PlaceModel("Atlantis", country233);
-		PlaceModel place4 = new PlaceModel("Pentagon", country226);
-		PlaceModel place5 = new PlaceModel("Olymp", country84);
+		PlaceModel place1 = new PlaceModel(country14, "FH Joanneum");
+		PlaceModel place2 = new PlaceModel(country149, "Mount Everest");
+		PlaceModel place3 = new PlaceModel(country233, "Atlantis");
+		PlaceModel place4 = new PlaceModel(country226, "Pentagon");
+		PlaceModel place5 = new PlaceModel(country84, "Olymp");
 		
 		//RecommendationModel rec1 = new RecommendationModel("Travelling in Thailand","Bangkok","Enjoy a trip in one of the most intresting cities in the world!",startDate1,endDate1,country211,user1,rating1);
-		RecommendationModel rec2 = new RecommendationModel("Raum 45 - Geburtsstätte von Places", place1, "Durch die Entwicklung von Places ist dieser Ort heutzutage eine beliebte Pilgerstätte für Fans.", admin1, true, "" /* String für Bild */);
-		RecommendationModel rec3 = new RecommendationModel("Gipfelstürmung", place2, "Von hier oben sieht alles so klein aus #fancy", admin1, true, "" /* String für Bild */);
-		RecommendationModel rec4 = new RecommendationModel("Tauchgang", place3, "Kaum zu glauben, dass hier früher Menschen gelebt haben. Heutzutage würde es einen guten Drehort für \"Findet Nemo\" abgeben.", admin1, true, "" /* String für Bild */);
-		RecommendationModel rec5 = new RecommendationModel("Trumps Lieblingstoilette", place4, "Beim Besuch hat es noch ein wenig gemuffelt. lol", admin1, true, "" /* String für Bild */);
-		RecommendationModel rec6 = new RecommendationModel("Zeus beim Blitzschleudern", place5, "Heute konnten wir den Gott der Götter beim Blitze schießen beobachten. Aber Vorsicht: Zwischen Dienstag und Sonntag trinken die Götter Ambrosia und verwechseln euch vielleicht mit Zielscheiben.", admin1, true, "" /* String für Bild */);
+		RecommendationModel rec2 = new RecommendationModel("Raum 45 - Geburtsstï¿½tte von Places", place1, "Durch die Entwicklung von Places ist dieser Ort heutzutage eine beliebte Pilgerstï¿½tte fï¿½r Fans.", admin1);
+		RecommendationModel rec3 = new RecommendationModel("Gipfelstï¿½rmung", place2, "Von hier oben sieht alles so klein aus #fancy", admin1);
+		RecommendationModel rec4 = new RecommendationModel("Tauchgang", place3, "Kaum zu glauben, dass hier frï¿½her Menschen gelebt haben. Heutzutage wï¿½rde es einen guten Drehort fï¿½r \"Findet Nemo\" abgeben.", admin1);
+		RecommendationModel rec5 = new RecommendationModel("Trumps Lieblingstoilette", place4, "Beim Besuch hat es noch ein wenig gemuffelt. lol", admin1);
+		RecommendationModel rec6 = new RecommendationModel("Zeus beim Blitzschleudern", place5, "Heute konnten wir den Gott der Gï¿½tter beim Blitze schieï¿½en beobachten. Aber Vorsicht: Zwischen Dienstag und Sonntag trinken die Gï¿½tter Ambrosia und verwechseln euch vielleicht mit Zielscheiben.", admin1);
 		
 		//recommendationRepository.save(rec1);
 		recommendationRepository.save(rec2);
@@ -603,6 +589,10 @@ public class InitController {
 		recommendationRepository.save(rec4);
 		recommendationRepository.save(rec5);
 		recommendationRepository.save(rec6);
+
+		RecommendationModel recommendation1 = new RecommendationModel("Travelling in Thailand", bangkok, "Enjoy a trip in one of the most intresting cities in the world!",user1);
+	
+		recommendationRepository.save(recommendation1);
 		
 
 		return "login";
