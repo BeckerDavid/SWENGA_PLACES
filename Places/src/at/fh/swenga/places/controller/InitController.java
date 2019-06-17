@@ -19,7 +19,7 @@ import at.fh.swenga.places.dao.UserCategoryRepository;
 import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
-import at.fh.swenga.places.model.RatingModel;
+import at.fh.swenga.places.model.PlaceModel;
 import at.fh.swenga.places.model.RecommendationModel;
 import at.fh.swenga.places.model.UserCategoryModel;
 import at.fh.swenga.places.model.UserModel;
@@ -584,9 +584,25 @@ public class InitController {
 		LocalDate startDate1 = LocalDate.of(2015, Month.OCTOBER, 15);
 		LocalDate endDate1 = LocalDate.of(2015, Month.OCTOBER, 30);
 		
-		RecommendationModel recommendation1 = new RecommendationModel("Travelling in Thailand","Bangkok","Enjoy a trip in one of the most intresting cities in the world!",startDate1,endDate1,country211,user1,rating1);
-	
-		recommendationRepository.save(recommendation1);
+		PlaceModel place1 = new PlaceModel("FH Joanneum", country14);
+		PlaceModel place2 = new PlaceModel("Mount Everest", country149);
+		PlaceModel place3 = new PlaceModel("Atlantis", country233);
+		PlaceModel place4 = new PlaceModel("Pentagon", country226);
+		PlaceModel place5 = new PlaceModel("Olymp", country84);
+		
+		//RecommendationModel rec1 = new RecommendationModel("Travelling in Thailand","Bangkok","Enjoy a trip in one of the most intresting cities in the world!",startDate1,endDate1,country211,user1,rating1);
+		RecommendationModel rec2 = new RecommendationModel("Raum 45 - Geburtsstätte von Places", place1, "Durch die Entwicklung von Places ist dieser Ort heutzutage eine beliebte Pilgerstätte für Fans.", admin1, true, "" /* String für Bild */);
+		RecommendationModel rec3 = new RecommendationModel("Gipfelstürmung", place2, "Von hier oben sieht alles so klein aus #fancy", admin1, true, "" /* String für Bild */);
+		RecommendationModel rec4 = new RecommendationModel("Tauchgang", place3, "Kaum zu glauben, dass hier früher Menschen gelebt haben. Heutzutage würde es einen guten Drehort für \"Findet Nemo\" abgeben.", admin1, true, "" /* String für Bild */);
+		RecommendationModel rec5 = new RecommendationModel("Trumps Lieblingstoilette", place4, "Beim Besuch hat es noch ein wenig gemuffelt. lol", admin1, true, "" /* String für Bild */);
+		RecommendationModel rec6 = new RecommendationModel("Zeus beim Blitzschleudern", place5, "Heute konnten wir den Gott der Götter beim Blitze schießen beobachten. Aber Vorsicht: Zwischen Dienstag und Sonntag trinken die Götter Ambrosia und verwechseln euch vielleicht mit Zielscheiben.", admin1, true, "" /* String für Bild */);
+		
+		//recommendationRepository.save(rec1);
+		recommendationRepository.save(rec2);
+		recommendationRepository.save(rec3);
+		recommendationRepository.save(rec4);
+		recommendationRepository.save(rec5);
+		recommendationRepository.save(rec6);
 		
 
 		return "login";
