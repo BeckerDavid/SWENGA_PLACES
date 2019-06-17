@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="utf-8" />
 <!--     <link rel="apple-touch-icon" sizes="76x76" href="../bootstrap/img/apple-icon.png"> -->
@@ -170,7 +171,7 @@
 										</div>
 										<div class="row">
 											<!--  ----------------  First Name  ---------------- -->
-											<div class="col-md-4 pr-1">
+											<div class="col-md-6">
 												<div class="form-group">
 													<label for="inputFirstName">First Name</label> <input
 														type="text" class="form-control" placeholder="FirstName"
@@ -178,24 +179,30 @@
 												</div>
 											</div>
 											<!--  ----------------  Last Name  ---------------- -->
-											<div class="col-md-4 pl-1">
+											<div class="col-md-6">
 												<div class="form-group">
 													<label for="inputLastName">Last Name</label> <input
 														type="text" class="form-control" placeholder="LastName"
 														name="lastName" th:value="${user} ? ${user.lastName}">
 												</div>
-											</div>
+											</div></div>
+											<div class="row">
 											<!--  ----------------  Country  ---------------- -->
-											<div class="col-md-4 pr-1">
+											<div class="col-md-8">
+											<div class="form-group">
+													<label for="countryId">Country</label>
 												<select name="countryId">
 													<option th:each="country:${#request.getAttribute('countries')}"
                												th:value="${country.id}"
                												th:text="${country.countryName}"
                												th:selected="${country.id == user.country.id}">
                										</option>
-               									</select>
-											</div>																														
-
+               									</select></div>
+											</div>	
+											<div class="col-md-4">
+												<input name="noShow" type="radio" value="true" th:checked="${user.isPrivate()}">Display my profile publicly.<br/>
+												<input name="noShow" type="radio" value="false" th:checked="${!user.isPrivate()}">Don't display my profile publicly.<br/>
+											</div>																													
 										</div>
 										<button type="submit" class="btn btn-info btn-fill pull-right">Update
 											Profile</button>

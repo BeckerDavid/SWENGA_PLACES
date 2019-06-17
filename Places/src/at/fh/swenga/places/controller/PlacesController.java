@@ -108,7 +108,7 @@ public class PlacesController {
 	@Secured("ROLE_USER")
 	@PostMapping("/editUser")
 	@Transactional
-	public String editUser(@Valid UserModel changedUserModel, @RequestParam(value="countryId") int cid, BindingResult bindingResult, Model model) {
+	public String editUser(@Valid UserModel changedUserModel, @RequestParam(value="countryId") int cid, @RequestParam(value="noShow") boolean no, BindingResult bindingResult, Model model) {
 
 		List<CountryModel> countries = countryRepository.findAll();
 		model.addAttribute("countries", countries);
@@ -132,6 +132,7 @@ public class PlacesController {
 		user.setLastName(changedUserModel.getLastName());
 		user.setMail(changedUserModel.getMail());
 		user.setCountry(country);
+		user.setPrivate(no);
 		
 		userRepository.save(user);
 
