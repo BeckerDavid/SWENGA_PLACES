@@ -185,7 +185,7 @@
 											</div>
 										<!--  ----------------  Country  ---------------- -->
 											<div class="col-md-4 pr-1">
-												<select name="user.country" id="user.country">
+												<select name="countryId">
 													<option th:each="country:${#request.getAttribute('countries')}"
                												th:value="${country.id}"
                												th:text="${country.countryName}"

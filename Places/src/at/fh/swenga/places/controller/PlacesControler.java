@@ -108,7 +108,7 @@ public class PlacesControler {
 	@Secured("ROLE_USER")
 	@PostMapping("/editUser")
 	@Transactional
-	public String editUser(@Valid UserModel changedUserModel, BindingResult bindingResult, Model model) {
+	public String editUser(@Valid UserModel changedUserModel, @RequestParam(value="countryId") int cid, BindingResult bindingResult, Model model) {
 
 		List<CountryModel> countries = countryRepository.findAll();
 		model.addAttribute("countries", countries);
@@ -123,21 +123,22 @@ public class PlacesControler {
 			return "forward:/userProfile";
 		}
 
-		UserModel user = userRepository.findById(changedUserModel.getId());
+		UserModel user = userRepository.getOne(changedUserModel.getId());
+		CountryModel country = countryRepository.getOne(cid);
 
 		// Change the attributes		
 		user.setUsername(changedUserModel.getUsername());
 		user.setFirstName(changedUserModel.getFirstName());
 		user.setLastName(changedUserModel.getLastName());
 		user.setMail(changedUserModel.getMail());
-		user.setCountry(changedUserModel.getCountry());
+		user.setCountry(country);
 		
 		userRepository.save(user);
 
 		// Save a message for the web page
 		model.addAttribute("message", "Changed user " + changedUserModel.getId());
 
-		return "userProfile";
+		return "dashboard";
 	}
 
 	@Secured("ROLE_USER")
