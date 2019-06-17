@@ -30,6 +30,8 @@ public class JourneyModel {
 	@DateTimeFormat(pattern = "dd.MM.yyyy")
 	@NotNull(message = "Date cannot be null")
 	private LocalDate departureDate;
+	
+	
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private JourneyDestinationModel journeyDestination;
