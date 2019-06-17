@@ -125,7 +125,15 @@ public class PlacesController {
 
 		UserModel user = userRepository.getOne(changedUserModel.getId());
 		CountryModel country = countryRepository.getOne(cid);
-
+		
+		if(changedUserModel.getUsername() != user.getUsername()) {
+			if(userRepository.findFirstByUsername(changedUserModel.getUsername()) != null) {
+				model.addAttribute("error", "Username is already in use, sorry!");
+				return "dashboard";
+			}
+			return "logout";
+		}
+		
 		// Change the attributes		
 		user.setUsername(changedUserModel.getUsername());
 		user.setFirstName(changedUserModel.getFirstName());
@@ -138,8 +146,9 @@ public class PlacesController {
 
 		// Save a message for the web page
 		model.addAttribute("message", "Changed user " + changedUserModel.getId());
-
+		
 		return "dashboard";
+		
 	}
 
 	@Secured("ROLE_USER")

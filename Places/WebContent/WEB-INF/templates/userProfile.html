@@ -154,9 +154,11 @@
 											<!--  ----------------  username ---------------- -->
 											<div class="col-md-3 px-1">
 												<div class="form-group">
-													<label for="inputUsername">Username</label> <input
+													<label for="inputUsername">Username</label>
+													 <input
 														type="text" class="form-control" placeholder="Username"
 														name="username" th:value="${user} ? ${user.username}">
+													<small>You will need to log in again if you decide to change this.</small>
 												</div>
 											</div>
 											<!--  ----------------  Email ---------------- -->
@@ -188,9 +190,9 @@
 											</div></div>
 											<div class="row">
 											<!--  ----------------  Country  ---------------- -->
-											<div class="col-md-8">
+											<div class="col-md-6">
 											<div class="form-group">
-													<label for="countryId">Country</label>
+													<label for="countryId">Country</label><br/>
 												<select name="countryId">
 													<option th:each="country:${#request.getAttribute('countries')}"
                												th:value="${country.id}"
@@ -199,10 +201,12 @@
                										</option>
                									</select></div>
 											</div>	
-											<div class="col-md-4">
-												<input name="noShow" type="radio" value="true" th:checked="${user.isPrivate()}">Display my profile publicly.<br/>
-												<input name="noShow" type="radio" value="false" th:checked="${!user.isPrivate()}">Don't display my profile publicly.<br/>
-											</div>																													
+											<div class="col-md-6">
+											<div class="form-group">
+											<label for="noShow">Profile Visibility</label><br/>
+												<input name="noShow" type="radio" value="false" th:checked="${!user.isPrivate()}">Display my profile publicly.<br/>
+												<input name="noShow" type="radio" value="true" th:checked="${user.isPrivate()}">Don't display my profile publicly.<br/>
+											</div></div>																													
 										</div>
 										<button type="submit" class="btn btn-info btn-fill pull-right">Update
 											Profile</button>
