@@ -119,15 +119,16 @@
 	<script>
 		// Initialize and add the map
 		function initMap() {
-			// The location of Uluru
+			// The location of Barcelona
 			var uluru = {
 				lat : 41.3851,
 				lng : 2.1734
 			};
-			// The map, centered at Uluru
+			// The map, centered at Barcelona
 			var map = new google.maps.Map(document.getElementById('map'), {
 				zoom : 10,
-				center : uluru
+				center : uluru,
+				disableDefaultUI: true
 			});
 		}
 	</script>
