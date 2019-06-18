@@ -90,7 +90,7 @@ input[name=mail] {
   	top: -120px;
 }
 
-select[name=country] {
+select[name=countryId] {
   	top: -140px;
 }
 

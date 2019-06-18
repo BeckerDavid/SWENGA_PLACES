@@ -63,64 +63,27 @@ public class UserModel {
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private Set<RecommendationModel> recommendations;
-
-	public UserModel() {}
 	
-	public UserModel(String username, String password, String firstName, String lastName, String mail,
-			CountryModel country, Set<UserCategoryModel> cat, boolean enabled) {
-		super();
-		this.username = username;
-		this.password = password;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.mail = mail;
-		this.country = country;
-		this.category = cat;
-		this.enabled = enabled;
-	}
+	private boolean isPrivate;
 	
-	public UserModel(String username, String firstName, String lastName, String mail,
-			CountryModel country) {
-		super();
-		this.username = username;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.mail = mail;
-		this.country = country;
-	}
+	@ManyToMany
+	private Set<PlaceModel> favoritePlaces;
 	
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	public byte[] getProfilePicture() {
-		return profilePicture;
-	}
-
-	public void setProfilePicture(byte[] profilePicture) {
-		this.profilePicture = profilePicture;
-	}
-
-	public Set<UserCategoryModel> getCategory() {
-		return category;
-	}
-
-	public void setCategory(Set<UserCategoryModel> category) {
-		this.category = category;
-	}
-
-	public Set<RecommendationModel> getRecommendations() {
-		return recommendations;
-	}
-
-	public void setRecommendations(Set<RecommendationModel> recommendations) {
-		this.recommendations = recommendations;
-	}
-
+	@OneToMany(mappedBy="users")
+	private Set<JourneyModel> journeys;
+	
+	@ManyToMany
+	private Set<CountryModel> favoriteCountries;
+	
+	@ManyToMany
+	private Set<RecommendationModel> favRecommendations;
+	
+	@ManyToMany
+	private Set<UserModel> favUsers;
+	
+	@ManyToMany
+	private Set<UserModel> favoritedUsers;
+	
 	public int getId() {
 		return id;
 	}
@@ -143,6 +106,14 @@ public class UserModel {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	public String getFirstName() {
@@ -169,6 +140,14 @@ public class UserModel {
 		this.mail = mail;
 	}
 
+	public byte[] getProfilePicture() {
+		return profilePicture;
+	}
+
+	public void setProfilePicture(byte[] profilePicture) {
+		this.profilePicture = profilePicture;
+	}
+
 	public CountryModel getCountry() {
 		return country;
 	}
@@ -177,11 +156,87 @@ public class UserModel {
 		this.country = country;
 	}
 
+	public Set<UserCategoryModel> getCategory() {
+		return category;
+	}
+
+	public void setCategory(Set<UserCategoryModel> category) {
+		this.category = category;
+	}
+
+	public Set<RecommendationModel> getRecommendations() {
+		return recommendations;
+	}
+
+	public void setRecommendations(Set<RecommendationModel> recommendations) {
+		this.recommendations = recommendations;
+	}
+
+	public boolean isPrivate() {
+		return isPrivate;
+	}
+
+	public void setPrivate(boolean isPrivate) {
+		this.isPrivate = isPrivate;
+	}
+
+	public Set<PlaceModel> getFavoritePlaces() {
+		return favoritePlaces;
+	}
+
+	public void setFavoritePlaces(Set<PlaceModel> favoritePlaces) {
+		this.favoritePlaces = favoritePlaces;
+	}
+
+	public Set<JourneyModel> getJourneys() {
+		return journeys;
+	}
+
+	public void setJourneys(Set<JourneyModel> journeys) {
+		this.journeys = journeys;
+	}
+
+	public Set<CountryModel> getFavoriteCountries() {
+		return favoriteCountries;
+	}
+
+	public void setFavoriteCountries(Set<CountryModel> favoriteCountries) {
+		this.favoriteCountries = favoriteCountries;
+	}
+
+	public Set<RecommendationModel> getFavReccomendations() {
+		return favRecommendations;
+	}
+
+	public void setFavReccomendations(Set<RecommendationModel> favReccomendations) {
+		this.favRecommendations = favReccomendations;
+	}
+
+	public Set<UserModel> getFavUsers() {
+		return favUsers;
+	}
+
+	public void setFavUsers(Set<UserModel> favUsers) {
+		this.favUsers = favUsers;
+	}
+
+	public Set<UserModel> getFavoritedUsers() {
+		return favoritedUsers;
+	}
+
+	public void setFavoritedUsers(Set<UserModel> favoritedUsers) {
+		this.favoritedUsers = favoritedUsers;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + id;
+		result = prime * result + ((journeys == null) ? 0 : journeys.hashCode());
+		result = prime * result + ((mail == null) ? 0 : mail.hashCode());
+		result = prime * result + ((recommendations == null) ? 0 : recommendations.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
 
@@ -196,17 +251,40 @@ public class UserModel {
 		UserModel other = (UserModel) obj;
 		if (id != other.id)
 			return false;
+		if (journeys == null) {
+			if (other.journeys != null)
+				return false;
+		} else if (!journeys.equals(other.journeys))
+			return false;
+		if (mail == null) {
+			if (other.mail != null)
+				return false;
+		} else if (!mail.equals(other.mail))
+			return false;
+		if (recommendations == null) {
+			if (other.recommendations != null)
+				return false;
+		} else if (!recommendations.equals(other.recommendations))
+			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "UserModel [id=" + id + ", username=" + username + ", password=" + password + ", firstName=" + firstName
-				+ ", lastName=" + lastName + ", mail=" + mail + ", country=" + country + ", profilePicture="
-				+ Arrays.toString(profilePicture) + ", category=" + category
-				+ ", recommendations=" + recommendations + "]";
+		return "UserModel [id=" + id + ", username=" + username + ", password=" + password + ", enabled=" + enabled
+				+ ", firstName=" + firstName + ", lastName=" + lastName + ", mail=" + mail + ", profilePicture="
+				+ Arrays.toString(profilePicture) + ", country=" + country + ", category=" + category
+				+ ", recommendations=" + recommendations + ", isPrivate=" + isPrivate + ", favoritePlaces="
+				+ favoritePlaces + ", journeys=" + journeys + ", favoriteCountries=" + favoriteCountries
+				+ ", favReccomendations=" + favRecommendations + ", favUsers=" + favUsers + ", favoritedUsers="
+				+ favoritedUsers + "]";
 	}
-	
+
 	public void addUserCategory(UserCategoryModel cat) {
 		if(category==null) category = new HashSet<UserCategoryModel>();
 		category.add(cat);
@@ -217,4 +295,35 @@ public class UserModel {
 		password = passwordEncoder.encode(password);		
 	}
 
+	public UserModel(String username, String password, String firstName, String lastName, String mail,
+			CountryModel country, boolean isPrivate) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.mail = mail;
+		this.country = country;
+		this.isPrivate = isPrivate;
+	}
+
+	public UserModel() {
+		super();
+	}
+
+	public UserModel(String username, String password, boolean enabled, String firstName, String lastName, String mail,
+			CountryModel country, boolean isPrivate) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.mail = mail;
+		this.country = country;
+		this.isPrivate = isPrivate;
+	}
+
+	
+	
 }

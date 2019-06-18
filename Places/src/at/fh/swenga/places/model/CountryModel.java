@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -27,24 +28,13 @@ public class CountryModel {
 	private String countryName;
 	
 	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
-	private Set<RecommendationModel> recommendations;
-
-	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
-	private Set<DestinationModel> destinations;
-	
-	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
 	private Set<UserModel> users;
-
-	public CountryModel() {
-		super();
-	}
-
-	public CountryModel(String countryShortCut, String countryName) {
-		super();
-		this.countryShortCut = countryShortCut;
-		this.countryName = countryName;
-	}
-
+	
+	@ManyToMany(mappedBy="favoriteCountries")
+	private Set<UserModel> favUsers;
+	
+	@ManyToMany(mappedBy="countries")
+	private Set<JourneyModel> journeys;
 
 	public int getId() {
 		return id;
@@ -70,26 +60,28 @@ public class CountryModel {
 		this.countryName = countryName;
 	}
 
-	public Set<RecommendationModel> getRecommendations() {
-		return recommendations;
+	public Set<UserModel> getUsers() {
+		return users;
 	}
 
-	public void setRecommendations(Set<RecommendationModel> recommendations) {
-		this.recommendations = recommendations;
+	public void setUsers(Set<UserModel> users) {
+		this.users = users;
 	}
 
-	public Set<DestinationModel> getDestinations() {
-		return destinations;
+	public Set<UserModel> getFavUsers() {
+		return favUsers;
 	}
 
-	public void setDestinations(Set<DestinationModel> destinations) {
-		this.destinations = destinations;
+	public void setFavUsers(Set<UserModel> favUsers) {
+		this.favUsers = favUsers;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((countryName == null) ? 0 : countryName.hashCode());
+		result = prime * result + ((countryShortCut == null) ? 0 : countryShortCut.hashCode());
 		result = prime * result + id;
 		return result;
 	}
@@ -103,6 +95,16 @@ public class CountryModel {
 		if (getClass() != obj.getClass())
 			return false;
 		CountryModel other = (CountryModel) obj;
+		if (countryName == null) {
+			if (other.countryName != null)
+				return false;
+		} else if (!countryName.equals(other.countryName))
+			return false;
+		if (countryShortCut == null) {
+			if (other.countryShortCut != null)
+				return false;
+		} else if (!countryShortCut.equals(other.countryShortCut))
+			return false;
 		if (id != other.id)
 			return false;
 		return true;
@@ -111,7 +113,19 @@ public class CountryModel {
 	@Override
 	public String toString() {
 		return "CountryModel [id=" + id + ", countryShortCut=" + countryShortCut + ", countryName=" + countryName
-				+ ", recommendations=" + recommendations + ", destinations=" + destinations + "]";
+				+ ", users=" + users + ", favUsers=" + favUsers + "]";
 	}
+
+	public CountryModel(String countryShortCut, String countryName) {
+		super();
+		this.countryShortCut = countryShortCut;
+		this.countryName = countryName;
+	}
+
+	public CountryModel() {
+		super();
+	}
+
+	
 
 }

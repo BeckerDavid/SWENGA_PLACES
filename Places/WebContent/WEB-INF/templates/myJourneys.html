@@ -14,21 +14,30 @@
 			<div th:include="~{includes/fragments :: nav}" th:remove="tag" />
 			<div class="content">
 				<div class="container-fluid">
-					<div class="section">
+					<div class="row">
 						<div class="col-md-12">
 							<div class="card">
 								<div class="card-header">
-									<h1>Welcome to Places!</h1>
-									<h2>Your travel companion on the Internet.</h2>
+									<h4 class="card-title">My Journeys</h4>
 								</div>
-								<div class="card-body">You can register with the link in
-									the upper right corner. You might also be interested in
-									checking out the items on the left.</div>
+								<th:block th:each="journey:${#request.getAttribute('journeys')}">
+									<div class="card-body">
+										<h1 th:text="${journey.zip1 + ' ' + journey.city1}"></h1>
+										<h2 th:if="${journey.city2 == null}">Additional Place:</h2><p th:text="${journey.city2}"></p>
+										<h2>Arrival Date:</h2><p th:text="${#calendars.format(journey.arrivalDate,'dd.MM.yyyy')}"></p>
+										<h2>Departure Date:</h2><p th:text="${#calendars.format(journey.departureDate,'dd.MM.yyyy')}"></p>
+										<h2>Budget:</h2><p th:text="${journey.budget}"></p>
+										<h3 th:if="${journey.description == null}">Description:</h3><p th:text="${journey.description}"></p>
+									</div><br/>
+								</th:block>
 							</div>
 						</div>
+
+
 					</div>
 				</div>
 			</div>
+
 			<footer class="footer">
 				<div class="container-fluid">
 					<nav>
@@ -43,11 +52,10 @@
 					</nav>
 				</div>
 			</footer>
-
 		</div>
 	</div>
+
 </body>
 
 <div th:include="~{includes/fragments :: bootstrapJS}" th:remove="tag" />
-
 </html>

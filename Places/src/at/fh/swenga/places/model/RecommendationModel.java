@@ -1,6 +1,8 @@
 package at.fh.swenga.places.model;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -10,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -25,56 +28,29 @@ public class RecommendationModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false, length = 140)
 	private String title;
-
-	@Column(length = 30)
-	private String city;
+	
+	@ManyToOne
+	private PlaceModel place;
 
 	@Column(length = 500)
 	private String description;
 
-	@DateTimeFormat(pattern = "dd.MM.yyyy")
-	@NotNull(message = "Date cannot be null")
-	private LocalDate startDate;
-
-	@DateTimeFormat(pattern = "dd.MM.yyyy")
-	@NotNull(message = "Date cannot be null")
-	private LocalDate endDate;
-
-	@OneToMany(mappedBy = "recommendation", fetch = FetchType.LAZY)
-	private Set<PictureModel> pictures;
-
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	private CountryModel country;
-
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private UserModel user;
-
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	private RatingModel rating;
-
-	public RecommendationModel(String title, String city, String description,
-			@NotNull(message = "Date cannot be null") LocalDate startDate,
-			@NotNull(message = "Date cannot be null") LocalDate endDate, CountryModel country, UserModel user,
-			RatingModel rating) {
-		super();
-		this.title = title;
-		this.city = city;
-		this.description = description;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.country = country;
-		this.user = user;
-		this.rating = rating;
-	}
 	
+	private boolean approved;
 	
-
-	public RecommendationModel() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	private byte[] recommendationImage;
+	
+	private int rating;
+	
+	@Column(length = 30)
+	private String season;
+	
+	@ManyToMany(mappedBy="favRecommendations")
+	private Set<UserModel> favUsers;
 
 	public int getId() {
 		return id;
@@ -91,13 +67,21 @@ public class RecommendationModel {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
-	public String getCity() {
-		return city;
+	
+	public PlaceModel getPlace() {
+		return place;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
+	public void setPlace(PlaceModel place) {
+		this.place = place;
+	}
+
+	public Set<UserModel> getFavUsers() {
+		return favUsers;
+	}
+
+	public void setFavUsers(Set<UserModel> favUsers) {
+		this.favUsers = favUsers;
 	}
 
 	public String getDescription() {
@@ -108,38 +92,6 @@ public class RecommendationModel {
 		this.description = description;
 	}
 
-	public LocalDate getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(LocalDate startDate) {
-		this.startDate = startDate;
-	}
-
-	public LocalDate getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
-	}
-
-	public Set<PictureModel> getPictures() {
-		return pictures;
-	}
-
-	public void setPictures(Set<PictureModel> pictures) {
-		this.pictures = pictures;
-	}
-
-	public CountryModel getCountry() {
-		return country;
-	}
-
-	public void setCountry(CountryModel country) {
-		this.country = country;
-	}
-
 	public UserModel getUser() {
 		return user;
 	}
@@ -148,19 +100,47 @@ public class RecommendationModel {
 		this.user = user;
 	}
 
-	public RatingModel getRating() {
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
+
+	public byte[] getRecommendationImage() {
+		return recommendationImage;
+	}
+
+	public void setRecommendationImage(byte[] recommendationImage) {
+		this.recommendationImage = recommendationImage;
+	}
+
+	public int getRating() {
 		return rating;
 	}
 
-	public void setRating(RatingModel rating) {
+	public void setRating(int rating) {
 		this.rating = rating;
+	}
+
+	public String getSeason() {
+		return season;
+	}
+
+	public void setSeason(String season) {
+		this.season = season;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + id;
+		result = prime * result + ((place == null) ? 0 : place.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
 
@@ -173,16 +153,70 @@ public class RecommendationModel {
 		if (getClass() != obj.getClass())
 			return false;
 		RecommendationModel other = (RecommendationModel) obj;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
 		if (id != other.id)
+			return false;
+		if (place == null) {
+			if (other.place != null)
+				return false;
+		} else if (!place.equals(other.place))
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "RecommendationModel [id=" + id + ", title=" + title + ", city=" + city
-				+ ", description=" + description + ", startDate=" + startDate + ", endDate=" + endDate + ", pictures="
-				+ pictures + ", country=" + country + ", user=" + user + ", rating=" + rating + "]";
+		return "RecommendationModel [id=" + id + ", title=" + title + ", place=" + place + ", description="
+				+ description + ", user=" + user + ", approved=" + approved + ", recommendationImage="
+				+ Arrays.toString(recommendationImage) + ", rating=" + rating + ", season=" + season + "]";
 	}
+
+	public RecommendationModel(String title, PlaceModel place, String description, UserModel user,
+			byte[] recommendationImage, String season) {
+		super();
+		this.title = title;
+		this.place = place;
+		this.description = description;
+		this.user = user;
+		this.recommendationImage = recommendationImage;
+		this.season = season;
+	}
+
+	public RecommendationModel() {
+		super();
+	}
+
+	public RecommendationModel(String title, PlaceModel place, String description, UserModel user) {
+		super();
+		this.title = title;
+		this.place = place;
+		this.description = description;
+		this.user = user;
+	}
+
+	public RecommendationModel(String title, PlaceModel place, UserModel user, boolean approved, int rating) {
+		super();
+		this.title = title;
+		this.place = place;
+		this.user = user;
+		this.approved = approved;
+		this.rating = rating;
+	}
+	
+	
 
 }

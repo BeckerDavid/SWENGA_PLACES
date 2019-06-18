@@ -2,38 +2,36 @@ package at.fh.swenga.places.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Rating")
-public class RatingModel {
+@Table(name = "Place")
+public class PlaceModel {
+
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
-	@OneToMany(mappedBy = "rating", fetch = FetchType.LAZY)
-	private Set<RecommendationModel> recommendations;
-
-	@Column(nullable = false, length = 30)
-	private String ratingLevel;
-
-	public RatingModel(String ratingLevel) {
-		super();
-		this.ratingLevel = ratingLevel;
-	}
-
-	public RatingModel() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	
+	@OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
+	@Column(length = 30)
+	private Set<RecommendationModel> recPlace;
+	
+	@ManyToMany(mappedBy = "favoritePlaces")
+	private Set<UserModel> users;
+	
+	@Column(nullable=false)
+	private String name;
 
 	public int getId() {
 		return id;
@@ -43,20 +41,20 @@ public class RatingModel {
 		this.id = id;
 	}
 
-	public Set<RecommendationModel> getRecommendations() {
-		return recommendations;
+	public Set<RecommendationModel> getRecPlace() {
+		return recPlace;
 	}
 
-	public void setRecommendations(Set<RecommendationModel> recommendations) {
-		this.recommendations = recommendations;
+	public void setRecPlace(Set<RecommendationModel> recPlace) {
+		this.recPlace = recPlace;
 	}
 
-	public String getRatingLevel() {
-		return ratingLevel;
+	public Set<UserModel> getUsers() {
+		return users;
 	}
 
-	public void setRatingLevel(String ratingLevel) {
-		this.ratingLevel = ratingLevel;
+	public void setUsers(Set<UserModel> users) {
+		this.users = users;
 	}
 
 	@Override
@@ -75,15 +73,21 @@ public class RatingModel {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		RatingModel other = (RatingModel) obj;
+		PlaceModel other = (PlaceModel) obj;
 		if (id != other.id)
 			return false;
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "RatingModel [id=" + id + ", recommendations=" + recommendations + ", ratingLevel=" + ratingLevel + "]";
+	public PlaceModel(String name) {
+		super();
+		this.name = name;
 	}
+
+	public PlaceModel() {
+		super();
+	}
+	
+	
 
 }

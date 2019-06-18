@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import at.fh.swenga.places.dao.CountryRepository;
-import at.fh.swenga.places.dao.RatingRepository;
+import at.fh.swenga.places.dao.PlaceRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserCategoryRepository;
 import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
-import at.fh.swenga.places.model.RatingModel;
+import at.fh.swenga.places.model.PlaceModel;
 import at.fh.swenga.places.model.RecommendationModel;
 import at.fh.swenga.places.model.UserCategoryModel;
 import at.fh.swenga.places.model.UserModel;
@@ -43,7 +43,7 @@ public class InitController {
 	RecommendationRepository recommendationRepository;
 	
 	@Autowired
-	RatingRepository ratingRepository;
+	PlaceRepository placeRepo;
 
 	@RequestMapping("/")
 	public String loadIndex() {
@@ -412,6 +412,7 @@ public class InitController {
 		countryRepository.save(country111);
 		countryRepository.save(country112);
 		countryRepository.save(country113);
+		countryRepository.save(countryK);
 		countryRepository.save(country114);
 		countryRepository.save(country115);
 		countryRepository.save(country116);
@@ -536,7 +537,6 @@ public class InitController {
 		countryRepository.save(country235);
 		countryRepository.save(country236);
 		countryRepository.save(country237);
-		countryRepository.save(countryK);
 
 
 		UserCategoryModel admin = new UserCategoryModel("ROLE_ADMIN");
@@ -546,47 +546,57 @@ public class InitController {
 		userCatRepo.save(admin);
 		userCatRepo.save(user);
 		userCatRepo.save(viewer);
-		
-		RatingModel rating1 = new RatingModel("very good");
-		RatingModel rating2 = new RatingModel("good");
-		RatingModel rating3 = new RatingModel("ok");
-		RatingModel rating4 = new RatingModel("sufficient");
-		RatingModel rating5 = new RatingModel("not good");
-		
-		ratingRepository.save(rating1);
-		ratingRepository.save(rating2);
-		ratingRepository.save(rating3);
-		ratingRepository.save(rating4);
-		ratingRepository.save(rating5);
 
-
-
-		UserModel admin1 = new UserModel("admin", "password", "Robert", "Admin", "robert.admin@boop.fh", country44, null, true);
+		UserModel admin1 = new UserModel("admin", "password", true, "Robert", "Admin", "robert.admin@boop.fh", country44, false);
 		admin1.encryptPassword();
 		admin1.addUserCategory(admin);
 		admin1.addUserCategory(user);
 		admin1.addUserCategory(viewer);
-		userRepository.save(admin1);
 		
-
-		UserModel user1 = new UserModel("user", "password", "Alexander", "User", "alex.ei@nischl.fh", country222, null, true);
+		UserModel user1 = new UserModel("user", "password", true, "Alexander", "User", "alex.ei@nischl.fh", country222, false);
 		user1.encryptPassword();
 		user1.addUserCategory(user);
 		user1.addUserCategory(viewer);
-		userRepository.save(user1);
 		
-		UserModel defaultUser1 = new UserModel("default", "default", "default", "default", "default@default", country1, null, true);
+		UserModel defaultUser1 = new UserModel("default", "default", true, "default", "default", "default@default", country1, false);
 		defaultUser1.encryptPassword();
 		defaultUser1.addUserCategory(viewer);
+		
+		userRepository.save(admin1);
 		userRepository.save(defaultUser1);
+		userRepository.save(user1);
+		
+		PlaceModel bangkok = new PlaceModel("Bangkok");
+		PlaceModel place1 = new PlaceModel("FH Joanneum");
+		PlaceModel place2 = new PlaceModel("Mount Everest");
+		PlaceModel place3 = new PlaceModel("Atlantis");
+		PlaceModel place4 = new PlaceModel("Pentagon");
+		PlaceModel place5 = new PlaceModel("Olymp");
+		
+		placeRepo.save(bangkok);
+		placeRepo.save(place1);
+		placeRepo.save(place2);
+		placeRepo.save(place3);
+		placeRepo.save(place4);
+		placeRepo.save(place5);
+		
+		RecommendationModel recommendation1 = new RecommendationModel("Travelling in Thailand", bangkok, "Enjoy a trip in one of the most intresting cities in the world!",user1);
+		RecommendationModel rec2 = new RecommendationModel("Raum 45 - Geburtsst�tte von Places", place1, "Durch die Entwicklung von Places ist dieser Ort heutzutage eine beliebte Pilgerst�tte f�r Fans.", admin1);
+		RecommendationModel rec3 = new RecommendationModel("Gipfelst�rmung", place2, "Von hier oben sieht alles so klein aus #fancy", admin1);
+		RecommendationModel rec4 = new RecommendationModel("Tauchgang", place3, "Kaum zu glauben, dass hier fr�her Menschen gelebt haben. Heutzutage w�rde es einen guten Drehort f�r \"Findet Nemo\" abgeben.", admin1);
+		RecommendationModel rec5 = new RecommendationModel("Trumps Lieblingstoilette", place4, "Beim Besuch hat es noch ein wenig gemuffelt. lol", admin1);
+		RecommendationModel rec6 = new RecommendationModel("Zeus beim Blitzschleudern", place5, "Heute konnten wir den Gott der G�tter beim Blitze schie�en beobachten. Aber Vorsicht: Zwischen Dienstag und Sonntag trinken die G�tter Ambrosia und verwechseln euch vielleicht mit Zielscheiben.", admin1);
+		
+		recommendationRepository.save(recommendation1);
+		recommendationRepository.save(rec2);
+		recommendationRepository.save(rec3);
+		recommendationRepository.save(rec4);
+		recommendationRepository.save(rec5);
+		recommendationRepository.save(rec6);
 
 		
-		LocalDate startDate1 = LocalDate.of(2015, Month.OCTOBER, 15);
-		LocalDate endDate1 = LocalDate.of(2015, Month.OCTOBER, 30);
-		
-		RecommendationModel recommendation1 = new RecommendationModel("Travelling in Thailand","Bangkok","Enjoy a trip in one of the most intresting cities in the world!",startDate1,endDate1,country211,user1,rating1);
 	
-		recommendationRepository.save(recommendation1);
+		
 		
 
 		return "login";
