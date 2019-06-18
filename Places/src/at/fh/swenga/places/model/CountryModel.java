@@ -35,6 +35,9 @@ public class CountryModel {
 	
 	@ManyToMany(mappedBy="favoriteCountries")
 	private Set<UserModel> favUsers;
+	
+	@ManyToMany(mappedBy="countries")
+	private Set<JourneyModel> journeys;
 
 	public int getId() {
 		return id;

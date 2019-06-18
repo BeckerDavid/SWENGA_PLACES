@@ -156,43 +156,30 @@
 						<div class="col-md-4">
 							<div class="card ">
 								<div class="card-header ">
-									<h4 class="card-title">Email Statistics</h4>
-									<p class="card-category">Last Campaign Performance</p>
+									<h4 class="card-title">User Data</h4>
+									<p class="card-category">This is the data we have on file for you. Please keep it up to date.</p>
 								</div>
-								<div class="card-body ">
-									<div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
-									<div class="legend">
-										<i class="fa fa-circle text-info"></i> Open <i
-											class="fa fa-circle text-danger"></i> Bounce <i
-											class="fa fa-circle text-warning"></i> Unsubscribe
-									</div>
-									<hr>
-									<div class="stats">
-										<i class="fa fa-clock-o"></i> Campaign sent 2 days ago
-									</div>
+								<div class="card-body">
+									<label for="username">Username:</label>
+									<p th:text="${user.username}" name="username"></p>
+									<label for="username">First Name:</label>
+									<p th:text="${user.firstName}" name="username"></p>
+									<label for="username">Last Name:</label>
+									<p th:text="${user.lastName}" name="username"></p>
+									<label for="username">Email:</label>
+									<p th:text="${user.mail}" name="username"></p>
 								</div>
 							</div>
 						</div>
 						<div class="col-md-8">
 							<div class="card ">
 								<div class="card-header ">
-									<h4 class="card-title">Users Behavior</h4>
-									<p class="card-category">24 Hours performance</p>
+									<h4 class="card-title">My favorite Places</h4>
+									<p class="card-category">Places you want to travel to.</p>
 								</div>
 								<div class="card-body ">
-									<div id="chartHours" class="ct-chart"></div>
-								</div>
-								<div class="card-footer ">
-									<div class="legend">
-										<i class="fa fa-circle text-info"></i> Open <i
-											class="fa fa-circle text-danger"></i> Click <i
-											class="fa fa-circle text-warning"></i> Click Second Time
+								
 									</div>
-									<hr>
-									<div class="stats">
-										<i class="fa fa-history"></i> Updated 3 minutes ago
-									</div>
-								</div>
 							</div>
 						</div>
 					</div>

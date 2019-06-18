@@ -69,7 +69,7 @@ public class UserModel {
 	@ManyToMany
 	private Set<PlaceModel> favoritePlaces;
 	
-	@ManyToMany
+	@OneToMany(mappedBy="users")
 	private Set<JourneyModel> journeys;
 	
 	@ManyToMany

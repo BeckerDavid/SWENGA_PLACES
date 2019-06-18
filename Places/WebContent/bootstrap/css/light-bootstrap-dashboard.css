@@ -446,6 +446,15 @@ body>.navbar-collapse .nav li .nav-link:hover {
 	display:none;
 }
 
+.drop{
+	cursor: pointer;
+}
+
+.droppy{
+	list-style-type: none;
+	cursor: pointer;
+}
+
 .drop:hover .dropdowny {
 	display:block;
 }

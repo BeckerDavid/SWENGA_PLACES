@@ -1,5 +1,9 @@
 package at.fh.swenga.places.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,11 +31,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import at.fh.swenga.places.dao.CountryRepository;
+import at.fh.swenga.places.dao.JourneyRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserCategoryDao;
 import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
+import at.fh.swenga.places.model.JourneyModel;
 import at.fh.swenga.places.model.RecommendationModel;
 import at.fh.swenga.places.model.UserCategoryModel;
 import at.fh.swenga.places.model.UserModel;
@@ -54,6 +60,9 @@ public class PlacesController {
 	
 	@Autowired
 	UserDao userDao;
+	
+	@Autowired
+	JourneyRepository journeyRepo;
 
 	@Secured("ROLE_USER")
 	@GetMapping("/achievements")
@@ -173,8 +182,45 @@ public class PlacesController {
 	@Transactional
 	public String getJourney(Model model) {
 
+		List<CountryModel> countries = countryRepository.findAll();
+		model.addAttribute("countries", countries);
+		
 		return "journey";
 
+	}
+	
+	@Secured("ROLE_USER")
+	@PostMapping("/addJourney")
+	@Transactional
+	public String addJourney(JourneyModel journey, Model model, @RequestParam(value="countryId") int cid, @RequestParam(value="countryId2") int cid2,
+			@RequestParam(value="departureDateS") String depD, @RequestParam(value="arrivalDateS") String arD, Authentication auth) throws ParseException {
+		
+		Set<CountryModel> countries = new HashSet<CountryModel>();
+		CountryModel country = countryRepository.getOne(cid);
+		countries.add(country);
+		if (cid2 != 999) {
+			CountryModel country2 = countryRepository.getOne(cid2);
+			countries.add(country2);
+		}
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date dateD = sdf.parse(depD);
+		Calendar calD = Calendar.getInstance();
+		calD.setTime(dateD);
+		Date dateS = sdf.parse(arD);
+		Calendar calS = Calendar.getInstance();
+		calS.setTime(dateS);
+		
+		journey.setCountries(countries);
+		journey.setDepartureDate(calD);
+		journey.setArrivalDate(calS);
+		
+		UserModel user = userRepository.findByUsername(auth.getName());
+		journey.setUsers(user);
+		
+		journeyRepo.save(journey);
+		
+		return "myJourneys";
 	}
 
 	@Secured("ROLE_USER")
@@ -320,6 +366,12 @@ public class PlacesController {
 		return"userProfile";
 	}
 
+	
+	@Secured({"ROLE_USER"})
+	@GetMapping(value="/journeys")
+	public String showJourneys(Authentication auth) {
+		return "myJourneys";
+	}
 	
 
 	@ExceptionHandler(Exception.class)

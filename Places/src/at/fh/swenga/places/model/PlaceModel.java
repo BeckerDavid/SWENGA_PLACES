@@ -29,9 +29,6 @@ public class PlaceModel {
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private CountryModel country;
-
-	@ManyToMany
-	private Set<JourneyModel> destinationJourney;
 	
 	@ManyToMany(mappedBy = "favoritePlaces")
 	private Set<UserModel> users;
@@ -61,14 +58,6 @@ public class PlaceModel {
 
 	public void setCountry(CountryModel country) {
 		this.country = country;
-	}
-
-	public Set<JourneyModel> getDestinationJourney() {
-		return destinationJourney;
-	}
-
-	public void setDestinationJourney(Set<JourneyModel> destinationJourney) {
-		this.destinationJourney = destinationJourney;
 	}
 
 	public Set<UserModel> getUsers() {
@@ -115,13 +104,6 @@ public class PlaceModel {
 
 	public PlaceModel() {
 		super();
-	}
-
-	public PlaceModel(CountryModel country, Set<JourneyModel> destinationJourney, String name) {
-		super();
-		this.country = country;
-		this.destinationJourney = destinationJourney;
-		this.name = name;
 	}
 	
 	
