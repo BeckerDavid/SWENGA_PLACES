@@ -349,29 +349,42 @@ public class PlacesController {
 
 	@Secured({ "ROLE_USER" })
 	@PostMapping(value = "/changePassword")
-	public String changePassword(@RequestParam(value = "username") String username,
-			@RequestParam(value = "password") String password, Model model, Authentication authentication) {
+	public String changePassword(@RequestParam(value = "oldPassword") String oldPassword, @RequestParam(value = "newPassword") String passwordNew, 
+			@RequestParam(value = "usernameHidden") String username, Model model, Authentication authentication) {
 
-		UserModel user = userRepository.getDefaultUser("default");
+		UserModel user = userRepository.findByUsername(authentication.getName());
 
-		if (user != null && user.isEnabled()) {
+		if(user != null && user.isEnabled()) {
 			if ((user.getUsername().equalsIgnoreCase(authentication.getName())
 					|| authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))) {
-
-				user.setPassword(password);
+				String passwAkt = user.getPassword();
+				user.setPassword(oldPassword);
 				user.encryptPassword();
-				userRepository.save(user);
-
-				model.addAttribute("message", "Password successfully changed for User: " + username);
-				return "userProfile";
-
-			} else {
-				model.addAttribute("warningMessage", "Error while reading User data!");
-				return "error";
+				
+				if(passwAkt == user.getPassword()) {
+					userRepository.save(user);
+					System.out.println("PW correcot");
+					model.addAttribute("message", "Password successfully changed for User: " + username);					
+					
+					model.addAttribute("user", user);
+					
+					return"userProfile";
+					
+				}else {
+					user.setPassword(passwAkt);
+					user.encryptPassword();
+					userRepository.save(user);
+					System.out.println("PW not correct");
+					model.addAttribute("warningMessage", "Error while reading User data!");					
+									
+					model.addAttribute("user", user);
+					
+					return "userProfile";
+				}
 			}
 		}
-
-		return "userProfile";
+		
+		return"error";
 	}
 
 	@Secured({ "ROLE_USER" })
