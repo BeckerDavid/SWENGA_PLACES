@@ -552,26 +552,26 @@ public class InitController {
 		admin1.addUserCategory(admin);
 		admin1.addUserCategory(user);
 		admin1.addUserCategory(viewer);
-		userRepository.save(admin1);
 		
-
 		UserModel user1 = new UserModel("user", "password", true, "Alexander", "User", "alex.ei@nischl.fh", country222, false);
 		user1.encryptPassword();
 		user1.addUserCategory(user);
 		user1.addUserCategory(viewer);
-		userRepository.save(user1);
 		
 		UserModel defaultUser1 = new UserModel("default", "default", true, "default", "default", "default@default", country1, false);
 		defaultUser1.encryptPassword();
 		defaultUser1.addUserCategory(viewer);
-		userRepository.save(defaultUser1);
 		
-		PlaceModel bangkok = new PlaceModel(country211, "Bangkok");
-		PlaceModel place1 = new PlaceModel(country14, "FH Joanneum");
-		PlaceModel place2 = new PlaceModel(country149, "Mount Everest");
-		PlaceModel place3 = new PlaceModel(country233, "Atlantis");
-		PlaceModel place4 = new PlaceModel(country226, "Pentagon");
-		PlaceModel place5 = new PlaceModel(country84, "Olymp");
+		userRepository.save(defaultUser1);
+		userRepository.save(admin1);
+		userRepository.save(user1);
+		
+		PlaceModel bangkok = new PlaceModel("Bangkok");
+		PlaceModel place1 = new PlaceModel("FH Joanneum");
+		PlaceModel place2 = new PlaceModel("Mount Everest");
+		PlaceModel place3 = new PlaceModel("Atlantis");
+		PlaceModel place4 = new PlaceModel("Pentagon");
+		PlaceModel place5 = new PlaceModel("Olymp");
 		
 		placeRepo.save(bangkok);
 		placeRepo.save(place1);
@@ -580,23 +580,23 @@ public class InitController {
 		placeRepo.save(place4);
 		placeRepo.save(place5);
 		
-		//RecommendationModel rec1 = new RecommendationModel("Travelling in Thailand","Bangkok","Enjoy a trip in one of the most intresting cities in the world!",startDate1,endDate1,country211,user1,rating1);
+		RecommendationModel recommendation1 = new RecommendationModel("Travelling in Thailand", bangkok, "Enjoy a trip in one of the most intresting cities in the world!",user1);
 		RecommendationModel rec2 = new RecommendationModel("Raum 45 - Geburtsst�tte von Places", place1, "Durch die Entwicklung von Places ist dieser Ort heutzutage eine beliebte Pilgerst�tte f�r Fans.", admin1);
 		RecommendationModel rec3 = new RecommendationModel("Gipfelst�rmung", place2, "Von hier oben sieht alles so klein aus #fancy", admin1);
 		RecommendationModel rec4 = new RecommendationModel("Tauchgang", place3, "Kaum zu glauben, dass hier fr�her Menschen gelebt haben. Heutzutage w�rde es einen guten Drehort f�r \"Findet Nemo\" abgeben.", admin1);
 		RecommendationModel rec5 = new RecommendationModel("Trumps Lieblingstoilette", place4, "Beim Besuch hat es noch ein wenig gemuffelt. lol", admin1);
 		RecommendationModel rec6 = new RecommendationModel("Zeus beim Blitzschleudern", place5, "Heute konnten wir den Gott der G�tter beim Blitze schie�en beobachten. Aber Vorsicht: Zwischen Dienstag und Sonntag trinken die G�tter Ambrosia und verwechseln euch vielleicht mit Zielscheiben.", admin1);
 		
-		//recommendationRepository.save(rec1);
+		recommendationRepository.save(recommendation1);
 		recommendationRepository.save(rec2);
 		recommendationRepository.save(rec3);
 		recommendationRepository.save(rec4);
 		recommendationRepository.save(rec5);
 		recommendationRepository.save(rec6);
 
-		RecommendationModel recommendation1 = new RecommendationModel("Travelling in Thailand", bangkok, "Enjoy a trip in one of the most intresting cities in the world!",user1);
+		
 	
-		recommendationRepository.save(recommendation1);
+		
 		
 
 		return "login";

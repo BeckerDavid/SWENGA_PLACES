@@ -2,6 +2,7 @@ package at.fh.swenga.places.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -212,15 +213,15 @@ public class PlacesController {
 		calS.setTime(dateS);
 		
 		journey.setCountries(countries);
-		journey.setDepartureDate(calD);
-		journey.setArrivalDate(calS);
+		journey.setDepartureDate(calS);
+		journey.setArrivalDate(calD);
 		
 		UserModel user = userRepository.findByUsername(auth.getName());
 		journey.setUsers(user);
 		
 		journeyRepo.save(journey);
 		
-		return "myJourneys";
+		return "dashboard";
 	}
 
 	@Secured("ROLE_USER")
@@ -369,7 +370,14 @@ public class PlacesController {
 	
 	@Secured({"ROLE_USER"})
 	@GetMapping(value="/journeys")
-	public String showJourneys(Authentication auth) {
+	@Transactional
+	public String showJourneys(Model model, Authentication auth) {
+		
+		UserModel current = userRepository.findByUsername(auth.getName());
+		ArrayList<JourneyModel> journeys = journeyRepo.findByUsersId(current.getId());
+		
+		model.addAttribute("journeys", journeys);
+		
 		return "myJourneys";
 	}
 	

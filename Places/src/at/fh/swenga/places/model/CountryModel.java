@@ -26,9 +26,6 @@ public class CountryModel {
 
 	@Column(nullable = false, length = 100)
 	private String countryName;
-
-	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
-	private Set<PlaceModel> destinations;
 	
 	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
 	private Set<UserModel> users;
@@ -63,14 +60,6 @@ public class CountryModel {
 		this.countryName = countryName;
 	}
 
-	public Set<PlaceModel> getDestinations() {
-		return destinations;
-	}
-
-	public void setDestinations(Set<PlaceModel> destinations) {
-		this.destinations = destinations;
-	}
-
 	public Set<UserModel> getUsers() {
 		return users;
 	}
@@ -93,7 +82,6 @@ public class CountryModel {
 		int result = 1;
 		result = prime * result + ((countryName == null) ? 0 : countryName.hashCode());
 		result = prime * result + ((countryShortCut == null) ? 0 : countryShortCut.hashCode());
-		result = prime * result + ((destinations == null) ? 0 : destinations.hashCode());
 		result = prime * result + id;
 		return result;
 	}
@@ -117,11 +105,6 @@ public class CountryModel {
 				return false;
 		} else if (!countryShortCut.equals(other.countryShortCut))
 			return false;
-		if (destinations == null) {
-			if (other.destinations != null)
-				return false;
-		} else if (!destinations.equals(other.destinations))
-			return false;
 		if (id != other.id)
 			return false;
 		return true;
@@ -130,7 +113,7 @@ public class CountryModel {
 	@Override
 	public String toString() {
 		return "CountryModel [id=" + id + ", countryShortCut=" + countryShortCut + ", countryName=" + countryName
-				+ ", destinations=" + destinations + ", users=" + users + ", favUsers=" + favUsers + "]";
+				+ ", users=" + users + ", favUsers=" + favUsers + "]";
 	}
 
 	public CountryModel(String countryShortCut, String countryName) {

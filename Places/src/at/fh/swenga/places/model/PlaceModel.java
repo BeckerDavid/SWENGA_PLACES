@@ -26,9 +26,6 @@ public class PlaceModel {
 	@OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
 	@Column(length = 30)
 	private Set<RecommendationModel> recPlace;
-
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	private CountryModel country;
 	
 	@ManyToMany(mappedBy = "favoritePlaces")
 	private Set<UserModel> users;
@@ -52,14 +49,6 @@ public class PlaceModel {
 		this.recPlace = recPlace;
 	}
 
-	public CountryModel getCountry() {
-		return country;
-	}
-
-	public void setCountry(CountryModel country) {
-		this.country = country;
-	}
-
 	public Set<UserModel> getUsers() {
 		return users;
 	}
@@ -72,7 +61,6 @@ public class PlaceModel {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + id;
 		return result;
 	}
@@ -86,19 +74,13 @@ public class PlaceModel {
 		if (getClass() != obj.getClass())
 			return false;
 		PlaceModel other = (PlaceModel) obj;
-		if (country == null) {
-			if (other.country != null)
-				return false;
-		} else if (!country.equals(other.country))
-			return false;
 		if (id != other.id)
 			return false;
 		return true;
 	}
 
-	public PlaceModel(CountryModel country, String name) {
+	public PlaceModel(String name) {
 		super();
-		this.country = country;
 		this.name = name;
 	}
 
