@@ -1,5 +1,4 @@
-<html
-	xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
@@ -11,22 +10,33 @@
 <body>
 	<div class="formstyle">
 		<h1>Login</h1>
-		<form th:action="@{/perform_login}" class="loginform" id="login-form" method="post">
-		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		
-		<div th:if="${param.error}" class="alert alert-danger">Invalid username and password.</div>
+		<form th:action="@{/perform_login}" class="loginform" id="login-form"
+			method="post">
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
 
-			<input type="text" name="username" id="username" placeholder="Username" required autofocus>
-			<input type="password" name="password" id="password" placeholder="Password"
+			<div th:if="${param.error}" class="alert alert-danger">Invalid
+				username and password.</div>
+
+			<input type="text" name="username" id="username"
+				placeholder="Username" required autofocus> <input
+				type="password" name="password" id="password" placeholder="Password"
 				required>
-		<div class="buttons">
-			<button type="submit" name="button1" class="btn">Login</button>
-		</div>
+			<div class="buttons">
+				<button type="submit" name="button1" class="btn">Login</button>
+			</div>
 		</form>
 		<div class="sign-vis">
-			<a href="register"><button type="button" name="button2" class="btn2">Sign Up</button></a>
-			<a href="visitor"><button type="button" name="button3" class="btn2">Visitor</button></a>
+			<a href="register"><button type="button" name="button2"
+					class="btn2">Sign Up</button></a> <a href="visitor"><button
+					type="button" name="button3" class="btn2">Visitor</button></a>
 		</div>
 	</div>
 </body>
+<script>
+	var url = window.location.href;
+	if (url.includes("?logout") && document.referrer.includes("userProfile")) {
+		alert("You need to log in again.");
+	}
+</script>
 </html>

@@ -149,7 +149,6 @@ public class PlacesController {
 				model.addAttribute("error", "Username is already in use, sorry!");
 				return "dashboard";
 			}
-			return "logout";
 		}
 
 		// Change the attributes
@@ -162,10 +161,7 @@ public class PlacesController {
 
 		userRepository.save(user);
 
-		// Save a message for the web page
-		model.addAttribute("message", "Changed user " + changedUserModel.getId());
-
-		return "dashboard";
+		return "redirect:/logout";
 
 	}
 
@@ -239,7 +235,7 @@ public class PlacesController {
 	}
 
 	@Secured("ROLE_USER")
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	@RequestMapping(value = "/logout")
 	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth != null) {
@@ -271,7 +267,7 @@ public class PlacesController {
 	@PostMapping("/register")
 	@Transactional
 	public String registerUser(@Valid UserModel user, BindingResult res, Model model, Authentication auth,
-			@RequestParam(value = "countryId") int cid, @RequestParam(value = "noShow") boolean no) {
+			@RequestParam(value = "countryId") int cid) {
 		if (userRepository.findFirstByUsername(user.getUsername()) != null) {
 			model.addAttribute("error", "Username is already in use, sorry!");
 		} else {
@@ -282,9 +278,7 @@ public class PlacesController {
 			roles.add(catU);
 
 			CountryModel country = countryRepository.getOne(cid);
-			System.out.println(no);
-			if (no)
-				user.setPrivate(true);
+			user.setPrivate(false);
 			user.encryptPassword();
 			user.setCategory(roles);
 			user.setEnabled(true);
@@ -294,7 +288,7 @@ public class PlacesController {
 			model.addAttribute("message", "Welcome" + user.getUsername());
 		}
 		model.addAttribute("user", user);
-		return "dashboard";
+		return "redirect:/login";
 	}
 
 	@Secured("ROLE_USER")
@@ -391,6 +385,11 @@ public class PlacesController {
 		model.addAttribute("journeys", journeys);
 
 		return "myJourneys";
+	}
+	
+	@RequestMapping(value="maps")
+	public String showMap() {
+		return "maps";
 	}
 
 	@ExceptionHandler(Exception.class)

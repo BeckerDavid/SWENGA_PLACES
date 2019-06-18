@@ -22,6 +22,8 @@
 							<div class="card">
 								<div class="card-header">
 									<h4 class="card-title">Edit Profile</h4>
+									<small>You will need to log in again if you decide to
+										change stuff.</small>
 								</div>
 								<div class="card-body">
 									<form class="form-horizontal" method="post"
@@ -41,8 +43,6 @@
 													<label for="inputUsername">Username</label> <input
 														type="text" class="form-control" placeholder="Username"
 														name="username" th:value="${user} ? ${user.username}">
-													<small>You will need to log in again if you decide
-														to change this.</small>
 												</div>
 											</div>
 											<!--  ----------------  Email ---------------- -->
@@ -156,7 +156,6 @@
 			</footer>
 
 		</div>
-
 	</div>
 
 </body>
