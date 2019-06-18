@@ -562,8 +562,8 @@ public class InitController {
 		defaultUser1.encryptPassword();
 		defaultUser1.addUserCategory(viewer);
 		
-		userRepository.save(defaultUser1);
 		userRepository.save(admin1);
+		userRepository.save(defaultUser1);
 		userRepository.save(user1);
 		
 		PlaceModel bangkok = new PlaceModel("Bangkok");
