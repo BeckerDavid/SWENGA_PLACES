@@ -58,10 +58,10 @@ public class PlacesController {
 
 	@Autowired
 	RecommendationRepository recommendationRepository;
-	
+
 	@Autowired
 	UserDao userDao;
-	
+
 	@Autowired
 	JourneyRepository journeyRepo;
 
@@ -118,7 +118,9 @@ public class PlacesController {
 	@Secured("ROLE_USER")
 	@PostMapping("/editUser")
 	@Transactional
-	public String editUser(@Valid UserModel changedUserModel, @RequestParam(value="countryId") int cid, @RequestParam(value="noShow") boolean no, BindingResult bindingResult, Model model) {
+	public String editUser(@Valid UserModel changedUserModel, @RequestParam(value = "countryId") int cid,
+			@RequestParam(value = "noShow") boolean no, BindingResult bindingResult, Model model,
+			Authentication authentication) {
 
 		List<CountryModel> countries = countryRepository.findAll();
 		model.addAttribute("countries", countries);
@@ -135,29 +137,36 @@ public class PlacesController {
 
 		UserModel user = userRepository.getOne(changedUserModel.getId());
 		CountryModel country = countryRepository.getOne(cid);
-		
-		/* FOR SOME REASON THIS ALWAYS TRIGGERS AND LETS NO CHANGES THROUGH
-		 * if(changedUserModel.getUsername() != user.getUsername()) {
-		 * if(userRepository.findFirstByUsername(changedUserModel.getUsername()) !=
-		 * null) { model.addAttribute("error", "Username is already in use, sorry!");
-		 * return "dashboard"; } return "logout"; }
-		 */
-		
-		// Change the attributes		
+		UserModel user1 = userRepository.findFirstByUsername(authentication.getName());
+
+		if (user1 != null && user1.isEnabled()) {
+
+			model.addAttribute("user", user1);
+		}
+
+		if (!changedUserModel.getUsername().equals(user.getUsername())) {
+			if (userRepository.findFirstByUsername(changedUserModel.getUsername()) != null) {
+				model.addAttribute("error", "Username is already in use, sorry!");
+				return "dashboard";
+			}
+			return "logout";
+		}
+
+		// Change the attributes
 		user.setUsername(changedUserModel.getUsername());
 		user.setFirstName(changedUserModel.getFirstName());
 		user.setLastName(changedUserModel.getLastName());
 		user.setMail(changedUserModel.getMail());
 		user.setCountry(country);
 		user.setPrivate(no);
-		
+
 		userRepository.save(user);
 
 		// Save a message for the web page
 		model.addAttribute("message", "Changed user " + changedUserModel.getId());
-		
+
 		return "dashboard";
-		
+
 	}
 
 	@Secured("ROLE_USER")
@@ -184,17 +193,18 @@ public class PlacesController {
 
 		List<CountryModel> countries = countryRepository.findAll();
 		model.addAttribute("countries", countries);
-		
+
 		return "journey";
 
 	}
-	
+
 	@Secured("ROLE_USER")
 	@PostMapping("/addJourney")
 	@Transactional
-	public String addJourney(JourneyModel journey, Model model, @RequestParam(value="countryId") int cid, @RequestParam(value="countryId2") int cid2,
-			@RequestParam(value="departureDateS") String depD, @RequestParam(value="arrivalDateS") String arD, Authentication auth) throws ParseException {
-		
+	public String addJourney(JourneyModel journey, Model model, @RequestParam(value = "countryId") int cid,
+			@RequestParam(value = "countryId2") int cid2, @RequestParam(value = "departureDateS") String depD,
+			@RequestParam(value = "arrivalDateS") String arD, Authentication auth) throws ParseException {
+
 		Set<CountryModel> countries = new HashSet<CountryModel>();
 		CountryModel country = countryRepository.getOne(cid);
 		countries.add(country);
@@ -202,7 +212,7 @@ public class PlacesController {
 			CountryModel country2 = countryRepository.getOne(cid2);
 			countries.add(country2);
 		}
-		
+
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date dateD = sdf.parse(depD);
 		Calendar calD = Calendar.getInstance();
@@ -210,16 +220,21 @@ public class PlacesController {
 		Date dateS = sdf.parse(arD);
 		Calendar calS = Calendar.getInstance();
 		calS.setTime(dateS);
-		
+
 		journey.setCountries(countries);
 		journey.setDepartureDate(calS);
 		journey.setArrivalDate(calD);
-		
+
 		UserModel user = userRepository.findByUsername(auth.getName());
 		journey.setUsers(user);
-		
+
 		journeyRepo.save(journey);
-		
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
+
 		return "dashboard";
 	}
 
@@ -255,7 +270,8 @@ public class PlacesController {
 
 	@PostMapping("/register")
 	@Transactional
-	public String registerUser(@Valid UserModel user, BindingResult res, Model model, Authentication auth, @RequestParam(value = "countryId") int cid, @RequestParam(value="noShow") boolean no) {
+	public String registerUser(@Valid UserModel user, BindingResult res, Model model, Authentication auth,
+			@RequestParam(value = "countryId") int cid, @RequestParam(value = "noShow") boolean no) {
 		if (userRepository.findFirstByUsername(user.getUsername()) != null) {
 			model.addAttribute("error", "Username is already in use, sorry!");
 		} else {
@@ -264,10 +280,11 @@ public class PlacesController {
 			UserCategoryModel catU = userCatDao.getRole("ROLE_USER");
 			roles.add(catV);
 			roles.add(catU);
-			
+
 			CountryModel country = countryRepository.getOne(cid);
 			System.out.println(no);
-			if(no) user.setPrivate(true);
+			if (no)
+				user.setPrivate(true);
 			user.encryptPassword();
 			user.setCategory(roles);
 			user.setEnabled(true);
@@ -276,7 +293,7 @@ public class PlacesController {
 
 			model.addAttribute("message", "Welcome" + user.getUsername());
 		}
-
+		model.addAttribute("user", user);
 		return "dashboard";
 	}
 
@@ -287,7 +304,7 @@ public class PlacesController {
 
 		List<CountryModel> countries = countryRepository.findAll();
 		model.addAttribute("countries", countries);
-	
+
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
 
 		if (user != null && user.isEnabled()) {
@@ -313,36 +330,33 @@ public class PlacesController {
 		return "index";
 
 	}
-	
-	
-	/*@Secured({ "ROLE_ADMIN" })
-	@GetMapping(value = "/changeUserRole")
-	public String changeUserRole(@RequestParam("username") String username, Model model,
-			Authentication authentication) {
 
-		UserModel user = userRepository.findFirstByUsername(username);
-
-		if (user != null && user.isEnabled()) {
-
-			if (user.getUsername().equalsIgnoreCase(authentication.getName())) {
-				model.addAttribute("warningMessage", "You cannot change your own user role!");
-				return showUserManagement(model, authentication);
-			}
-
-			model.addAttribute("user", user);
-			return "changeUserRole";
-		} else {
-			model.addAttribute("errorMessage", "Error while reading User data! Either dissabled or does not exist");
-			return showUserManagement(model, authentication);
-		}
-}*/
-
-
+	/*
+	 * @Secured({ "ROLE_ADMIN" })
+	 * 
+	 * @GetMapping(value = "/changeUserRole") public String
+	 * changeUserRole(@RequestParam("username") String username, Model model,
+	 * Authentication authentication) {
+	 * 
+	 * UserModel user = userRepository.findFirstByUsername(username);
+	 * 
+	 * if (user != null && user.isEnabled()) {
+	 * 
+	 * if (user.getUsername().equalsIgnoreCase(authentication.getName())) {
+	 * model.addAttribute("warningMessage",
+	 * "You cannot change your own user role!"); return showUserManagement(model,
+	 * authentication); }
+	 * 
+	 * model.addAttribute("user", user); return "changeUserRole"; } else {
+	 * model.addAttribute("errorMessage",
+	 * "Error while reading User data! Either dissabled or does not exist"); return
+	 * showUserManagement(model, authentication); } }
+	 */
 
 	@Secured({ "ROLE_USER" })
 	@PostMapping(value = "/changePassword")
-	public String changePassword(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password, 
-			Model model, Authentication authentication) {
+	public String changePassword(@RequestParam(value = "username") String username,
+			@RequestParam(value = "password") String password, Model model, Authentication authentication) {
 
 		UserModel user = userRepository.getDefaultUser("default");
 
@@ -355,31 +369,29 @@ public class PlacesController {
 				userRepository.save(user);
 
 				model.addAttribute("message", "Password successfully changed for User: " + username);
-				return"userProfile";
-				
+				return "userProfile";
+
 			} else {
 				model.addAttribute("warningMessage", "Error while reading User data!");
-				return"error";
+				return "error";
 			}
-		} 
-		
-		return"userProfile";
+		}
+
+		return "userProfile";
 	}
 
-	
-	@Secured({"ROLE_USER"})
-	@GetMapping(value="/journeys")
+	@Secured({ "ROLE_USER" })
+	@GetMapping(value = "/journeys")
 	@Transactional
 	public String showJourneys(Model model, Authentication auth) {
-		
+
 		UserModel current = userRepository.findByUsername(auth.getName());
 		ArrayList<JourneyModel> journeys = journeyRepo.findByUsersId(current.getId());
-		
+
 		model.addAttribute("journeys", journeys);
-		
+
 		return "myJourneys";
 	}
-	
 
 	@ExceptionHandler(Exception.class)
 	public String handleAllException(Exception ex) {
