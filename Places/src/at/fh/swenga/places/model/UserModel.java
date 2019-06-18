@@ -1,7 +1,8 @@
 package at.fh.swenga.places.model;
 
-import java.time.LocalDate;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,9 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
-import org.springframework.format.annotation.DateTimeFormat;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -294,6 +293,21 @@ public class UserModel {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		password = passwordEncoder.encode(password);		
 	}
+	
+	public String getPicturePNG() throws UnsupportedEncodingException {
+		if (profilePicture == null) {
+			return "bootstrap/img/default-avatar.png";
+		}
+		else {
+			try {
+				return "data:image/png;base64," + new String(Base64.getDecoder().decode(new String(profilePicture).getBytes("UTF-8")));
+			} catch (UnsupportedEncodingException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	            return "bootstrap/img/default-avatar.png";
+	        }
+		}
+	}
 
 	public UserModel(String username, String password, String firstName, String lastName, String mail,
 			CountryModel country, boolean isPrivate) {
@@ -324,6 +338,18 @@ public class UserModel {
 		this.isPrivate = isPrivate;
 	}
 
-	
+	public UserModel(String username, String password, boolean enabled, String firstName, String lastName, String mail,
+			CountryModel country, boolean isPrivate, String profilePicture) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.mail = mail;
+		this.country = country;
+		this.isPrivate = isPrivate;
+		this.profilePicture = Base64.getEncoder().encode(profilePicture.getBytes());
+	}
 	
 }

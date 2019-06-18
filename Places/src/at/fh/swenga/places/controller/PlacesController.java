@@ -400,6 +400,19 @@ public class PlacesController {
 		return "myJourneys";
 	}
 	
+//	@Secured("ROLE_USER")
+//	@GetMapping("/getPicturePNG")
+//	@Transactional
+//	public String getPicturePNG(Model model) {
+//		model.addAttribute(model)
+//		if (profilePicture == null) {
+//			return "bootstrap/img/default-avatar.png";
+//		}
+//		else {
+//			return "data:image/png;base64," + profilePicture;
+//		}
+//	}
+	
 	@RequestMapping(value="maps")
 	public String showMap() {
 		return "maps";
