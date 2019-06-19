@@ -3227,6 +3227,11 @@ tbody.collapse.show {
 	float: none
 }
 
+.navbar-image {
+	width: 45px;
+	height: 45px
+}
+
 .navbar-text {
 	display: inline-block;
 	padding-top: .5rem;

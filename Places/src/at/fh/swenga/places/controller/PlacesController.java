@@ -68,8 +68,14 @@ public class PlacesController {
 	@Secured("ROLE_USER")
 	@GetMapping("/achievements")
 	@Transactional
-	public String getAchievments(Model model) {
+	public String getAchievments(Model model, Authentication authentication) {
 
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
 		return "achievements";
 
 	}
@@ -77,8 +83,15 @@ public class PlacesController {
 	@Secured("ROLE_USER")
 	@RequestMapping("/browse")
 	@Transactional
-	public String fillRecommendations(Model model) {
+	public String fillRecommendations(Model model, Authentication authentication) {
 
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
+		
 		List<RecommendationModel> allModels = recommendationRepository.findAll();
 		RecommendationModel defaultModel = new RecommendationModel();
 
@@ -94,8 +107,14 @@ public class PlacesController {
 	@Secured("ROLE_USER")
 	@GetMapping("/contacts")
 	@Transactional
-	public String getContacts(Model model) {
+	public String getContacts(Model model, Authentication authentication) {
 
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
 		return "contacts";
 
 	}
@@ -168,8 +187,14 @@ public class PlacesController {
 	@Secured("ROLE_USER")
 	@GetMapping("/following")
 	@Transactional
-	public String getFollowing(Model model) {
+	public String getFollowing(Model model, Authentication authentication) {
 
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
 		return "following";
 
 	}
@@ -185,8 +210,15 @@ public class PlacesController {
 	@Secured("ROLE_USER")
 	@GetMapping("/journey")
 	@Transactional
-	public String getJourney(Model model) {
+	public String getJourney(Model model, Authentication authentication) {
 
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
+		
 		List<CountryModel> countries = countryRepository.findAll();
 		model.addAttribute("countries", countries);
 
@@ -247,8 +279,15 @@ public class PlacesController {
 	@Secured("ROLE_USER")
 	@GetMapping("/recommendations")
 	@Transactional
-	public String getRecommendations(Model model) {
+	public String getRecommendations(Model model, Authentication authentication) {
 
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
+		
 		return "recommendations";
 
 	}
@@ -349,29 +388,42 @@ public class PlacesController {
 
 	@Secured({ "ROLE_USER" })
 	@PostMapping(value = "/changePassword")
-	public String changePassword(@RequestParam(value = "username") String username,
-			@RequestParam(value = "password") String password, Model model, Authentication authentication) {
+	public String changePassword(@RequestParam(value = "oldPassword") String oldPassword, @RequestParam(value = "newPassword") String passwordNew, 
+			@RequestParam(value = "usernameHidden") String username, Model model, Authentication authentication) {
 
-		UserModel user = userRepository.getDefaultUser("default");
+		UserModel user = userRepository.findByUsername(authentication.getName());
 
-		if (user != null && user.isEnabled()) {
+		if(user != null && user.isEnabled()) {
 			if ((user.getUsername().equalsIgnoreCase(authentication.getName())
 					|| authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))) {
-
-				user.setPassword(password);
+				String passwAkt = user.getPassword();
+				user.setPassword(oldPassword);
 				user.encryptPassword();
-				userRepository.save(user);
-
-				model.addAttribute("message", "Password successfully changed for User: " + username);
-				return "userProfile";
-
-			} else {
-				model.addAttribute("warningMessage", "Error while reading User data!");
-				return "error";
+				
+				if(passwAkt == user.getPassword()) {
+					userRepository.save(user);
+					System.out.println("PW correcot");
+					model.addAttribute("message", "Password successfully changed for User: " + username);					
+					
+					model.addAttribute("user", user);
+					
+					return"userProfile";
+					
+				}else {
+					user.setPassword(passwAkt);
+					user.encryptPassword();
+					userRepository.save(user);
+					System.out.println("PW not correct");
+					model.addAttribute("warningMessage", "Error while reading User data!");					
+									
+					model.addAttribute("user", user);
+					
+					return "userProfile";
+				}
 			}
 		}
-
-		return "userProfile";
+		
+		return"error";
 	}
 
 	@Secured({ "ROLE_USER" })
@@ -382,13 +434,37 @@ public class PlacesController {
 		UserModel current = userRepository.findByUsername(auth.getName());
 		ArrayList<JourneyModel> journeys = journeyRepo.findByUsersId(current.getId());
 
+		if (current != null && current.isEnabled()) {
+
+			model.addAttribute("user", current);
+		}
 		model.addAttribute("journeys", journeys);
 
 		return "myJourneys";
 	}
 	
+//	@Secured("ROLE_USER")
+//	@GetMapping("/getPicturePNG")
+//	@Transactional
+//	public String getPicturePNG(Model model) {
+//		model.addAttribute(model)
+//		if (profilePicture == null) {
+//			return "bootstrap/img/default-avatar.png";
+//		}
+//		else {
+//			return "data:image/png;base64," + profilePicture;
+//		}
+//	}
+	
 	@RequestMapping(value="maps")
-	public String showMap() {
+	public String showMap(Model model, Authentication authentication) {
+		
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
 		return "maps";
 	}
 
