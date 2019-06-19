@@ -4,10 +4,10 @@ IMA17 Projekt - SWENGA - Webentwicklung
 
 
 Team Members:
-  * David Becker: "BeckerDavid"
-  * Viktoria Gradwohl: "Accalia44"
-  * Michael Derler: "YellowIcicle"
-  * Ardian Qerimi: "ardianq"
+  * David Becker: @BeckerDavid
+  * Viktoria Gradwohl: @Accalia44
+  * Michael Derler: @YellowIcicle
+  * Ardian Qerimi: @ardianq
   
 Workload distribution:
   * David Becker
