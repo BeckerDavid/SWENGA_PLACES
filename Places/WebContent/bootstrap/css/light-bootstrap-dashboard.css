@@ -621,7 +621,7 @@ body>.navbar-collapse:after {
 .sidebar.has-image:after,
 body>.navbar-collapse[data-image]:after,
 body>.navbar-collapse.has-image:after {
-    opacity: 1;
+    opacity: 0.3;
 }
 
 .sidebar[data-color="black"]:after,
@@ -644,7 +644,7 @@ body>.navbar-collapse[data-color="blue"]:after {
     background: -o-linear-gradient(top, #1F77D0 0%, #533ce1 100%);
     background: -ms-linear-gradient(top, #1F77D0 0%, #533ce1 100%);
     background: linear-gradient(to bottom, #1F77D0 0%, #533ce1 100%);
-    background-size: 0% 0%;
+    background-size: 150% 150%;
 }
 
 .sidebar[data-color="azure"]:after,
