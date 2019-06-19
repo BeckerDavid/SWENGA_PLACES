@@ -3595,11 +3595,35 @@ tbody.collapse.show {
 	margin-top: 10px;
 }
 
+.card-body-rec {
+	-ms-flex: 1 1 auto;
+	flex: 1 1 auto;
+	padding: 0.01rem;
+	margin-top: 0px;
+}
+
+.card-body-rec-content {
+	-ms-flex: 1 1 auto;
+	flex: 1 1 auto;
+	padding: .25rem 1.25rem 1.25rem 1.25rem;
+}
+
 .card-recPic {
-/* 	width: auto; */
-	width: 200px;
-	height: 200px
-	
+    position: relative
+}
+
+.card-recPic img {
+	display: block;
+}
+
+.card-recPic span {
+    background-color: silver;
+    background-color: hsla(0, 0%, 100%, 0.7);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    line-height: 2em;
+    text-align: center;
 }
 
 .boopsi {
@@ -3612,6 +3636,10 @@ tbody.collapse.show {
 
 .card-title {
 	margin-bottom: .75rem
+}
+
+.card-title-author {
+/* 	font-color: blue; */
 }
 
 .card-subtitle {

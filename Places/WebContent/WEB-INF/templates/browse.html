@@ -20,18 +20,28 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-md-12">
+							<div class="card">
+								<div class="card-head">
+									<h class="card-title">Filter</h>
+								</div>
+							</div>
 						</div>
 						<div class="col-md-6">
 							<table data-toggle="table" class="table" th:each="recommendation : ${recommendations}">
 								<tbody>
 									<tr>
 										<div class="card">
-											<div class="card-body">
-												<div class="card-recPic" >
+											<div class="card-body-rec">
+												<div class="card-recPic">
 													<img class="boopsi" th:src="${recommendation.getPictureJPG()}" />
+													<span th:text="${recommendation.title}"></span>
 												</div>
-												<h class="card-title" th:text="${recommendation.title}"></h>
-												<small th:text="${recommendation.getDescription()}"></small>
+												<div class="card-body-rec-content">
+													by <a href="#" class="card-title-author" th:text="${recommendation.getUser().getUsername()}" />
+													<div>
+														<small th:text="${recommendation.getDescription()}"></small>
+													</div>
+												</div>
 											</div>
 										</div>
 									</tr>
