@@ -35,6 +35,9 @@ public class CountryModel {
 	
 	@ManyToMany(mappedBy="countries")
 	private Set<JourneyModel> journeys;
+	
+	@OneToMany(mappedBy="country", fetch = FetchType.LAZY)
+	private Set<PlaceModel> places;
 
 	public int getId() {
 		return id;

@@ -286,7 +286,7 @@ public class InitController {
 		CountryModel country223 = new CountryModel("UA", "UKRAINE");
 		CountryModel country224 = new CountryModel("AE", "UNITED ARAB EMIRATES");
 		CountryModel country225 = new CountryModel("GB", "UNITED KINGDOM");
-		CountryModel country226 = new CountryModel("US", "UNITED STATES");
+		CountryModel country226 = new CountryModel("US", "UNITED STATES OF AMERICA");
 		CountryModel country227 = new CountryModel("UM", "UNITED STATES MINOR OUTLYING ISLANDS");
 		CountryModel country228 = new CountryModel("UY", "URUGUAY");
 		CountryModel country229 = new CountryModel("UZ", "UZBEKISTAN");
@@ -575,12 +575,12 @@ public class InitController {
 		userRepository.save(user1);
 		userRepository.save(user2);
 		
-		PlaceModel bangkok = new PlaceModel("Bangkok");
-		PlaceModel place1 = new PlaceModel("FH Joanneum");
-		PlaceModel place2 = new PlaceModel("Mount Everest");
-		PlaceModel place3 = new PlaceModel("Atlantis");
-		PlaceModel place4 = new PlaceModel("Pentagon");
-		PlaceModel place5 = new PlaceModel("Olymp");
+		PlaceModel bangkok = new PlaceModel("Bangkok", country211);
+		PlaceModel place1 = new PlaceModel("FH Joanneum", country14);
+		PlaceModel place2 = new PlaceModel("Mount Everest", country149);
+		PlaceModel place3 = new PlaceModel("Atlantis", country223);
+		PlaceModel place4 = new PlaceModel("Pentagon", country226);
+		PlaceModel place5 = new PlaceModel("Olymp", country84);
 		
 		placeRepo.save(bangkok);
 		placeRepo.save(place1);
@@ -590,11 +590,11 @@ public class InitController {
 		placeRepo.save(place5);
 		
 		RecommendationModel recommendation1 = new RecommendationModel("Travelling in Thailand", bangkok, "Enjoy a trip in one of the most intresting cities in the world!",user1);
-		RecommendationModel rec2 = new RecommendationModel("Raum 45 - Geburtsstätte von Places", place1, "Durch die Entwicklung von Places ist dieser Ort heutzutage eine beliebte Pilgerstätte für Fans.", admin1);
-		RecommendationModel rec3 = new RecommendationModel("Gipfelstürmung", place2, "Von hier oben sieht alles so klein aus #fancy", admin1);
-		RecommendationModel rec4 = new RecommendationModel("Tauchgang", place3, "Kaum zu glauben, dass hier früher Menschen gelebt haben. Heutzutage würde es einen guten Drehort für \"Findet Nemo\" abgeben.", admin1);
+		RecommendationModel rec2 = new RecommendationModel("Raum 45 - GeburtsstÃ¤tte von Places", place1, "Durch die Entwicklung von Places ist dieser Ort heutzutage eine beliebte Pilgerstï¿½tte fï¿½r Fans.", admin1);
+		RecommendationModel rec3 = new RecommendationModel("Gipfelstï¿½rmung", place2, "Von hier oben sieht alles so klein aus #fancy", admin1);
+		RecommendationModel rec4 = new RecommendationModel("Tauchgang", place3, "Kaum zu glauben, dass hier frï¿½her Menschen gelebt haben. Heutzutage wï¿½rde es einen guten Drehort fï¿½r \"Findet Nemo\" abgeben.", admin1);
 		RecommendationModel rec5 = new RecommendationModel("Trumps Lieblingstoilette", place4, "Beim Besuch hat es noch ein wenig gemuffelt. lol", admin1);
-		RecommendationModel rec6 = new RecommendationModel("Zeus beim Blitzschleudern", place5, "Heute konnten wir den Gott der Götter beim Blitze schießen beobachten. Aber Vorsicht: Zwischen Dienstag und Sonntag trinken die Götter Ambrosia und verwechseln euch vielleicht mit Zielscheiben.", admin1);
+		RecommendationModel rec6 = new RecommendationModel("Zeus beim Blitzschleudern", place5, "Heute konnten wir den Gott der Gï¿½tter beim Blitze schieï¿½en beobachten. Aber Vorsicht: Zwischen Dienstag und Sonntag trinken die Gï¿½tter Ambrosia und verwechseln euch vielleicht mit Zielscheiben.", admin1);
 		
 		recommendationRepository.save(recommendation1);
 		recommendationRepository.save(rec2);

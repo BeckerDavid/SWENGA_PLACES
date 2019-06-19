@@ -1,5 +1,6 @@
 package at.fh.swenga.places.controller;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,15 +32,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import at.fh.swenga.places.dao.CountryRepository;
 import at.fh.swenga.places.dao.JourneyRepository;
+import at.fh.swenga.places.dao.PlaceRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserCategoryDao;
 import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
 import at.fh.swenga.places.model.JourneyModel;
+import at.fh.swenga.places.model.PlaceModel;
 import at.fh.swenga.places.model.RecommendationModel;
 import at.fh.swenga.places.model.UserCategoryModel;
 import at.fh.swenga.places.model.UserModel;
@@ -58,6 +63,9 @@ public class PlacesController {
 
 	@Autowired
 	RecommendationRepository recommendationRepository;
+
+	@Autowired
+	PlaceRepository placeRepo;
 
 	@Autowired
 	UserDao userDao;
@@ -91,7 +99,7 @@ public class PlacesController {
 
 			model.addAttribute("user", user);
 		}
-		
+
 		List<RecommendationModel> allModels = recommendationRepository.findAll();
 		RecommendationModel defaultModel = new RecommendationModel();
 
@@ -218,7 +226,7 @@ public class PlacesController {
 
 			model.addAttribute("user", user);
 		}
-		
+
 		List<CountryModel> countries = countryRepository.findAll();
 		model.addAttribute("countries", countries);
 
@@ -282,14 +290,53 @@ public class PlacesController {
 	public String getRecommendations(Model model, Authentication authentication) {
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+		List<CountryModel> countries = countryRepository.findAll();
+
+		model.addAttribute("countries", countries);
 
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
 		}
-		
+
 		return "recommendations";
 
+	}
+
+	@Secured("ROLE_USER")
+	@PostMapping("/addRecommendation")
+	@Transactional
+	public String addRecommendation(@Valid RecommendationModel rec, Authentication auth,
+			@RequestParam("placeName") String placeName, @RequestParam("countryId") int countryId, @RequestParam(value = "recommendationImage", required=false) MultipartFile imageFile) {
+		
+		UserModel user = userRepository.findByUsername(auth.getName());
+		
+		PlaceModel place = placeRepo.findByName(placeName);
+		Optional<CountryModel> countryOpt = countryRepository.findById(countryId);
+		CountryModel country = countryOpt.get();
+
+		if (place == null) {
+			place = new PlaceModel(placeName, country);
+			placeRepo.save(place);
+		} else if (place.getCountry() != country) {
+			place = new PlaceModel(placeName, country);
+			placeRepo.save(place);
+		}
+		if (imageFile != null) {
+			try {
+				rec.setRecommendationImage(imageFile.getBytes());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		rec.setApproved(false);
+		rec.setPlace(place);
+		rec.setRating(0);
+		rec.setUser(user);
+		recommendationRepository.save(rec);
+
+		return "redirect:/recommendations";
 	}
 
 	@GetMapping("/register")
@@ -388,42 +435,43 @@ public class PlacesController {
 
 	@Secured({ "ROLE_USER" })
 	@PostMapping(value = "/changePassword")
-	public String changePassword(@RequestParam(value = "oldPassword") String oldPassword, @RequestParam(value = "newPassword") String passwordNew, 
+	public String changePassword(@RequestParam(value = "oldPassword") String oldPassword,
+			@RequestParam(value = "newPassword") String passwordNew,
 			@RequestParam(value = "usernameHidden") String username, Model model, Authentication authentication) {
 
 		UserModel user = userRepository.findByUsername(authentication.getName());
 
-		if(user != null && user.isEnabled()) {
+		if (user != null && user.isEnabled()) {
 			if ((user.getUsername().equalsIgnoreCase(authentication.getName())
 					|| authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))) {
 				String passwAkt = user.getPassword();
 				user.setPassword(oldPassword);
 				user.encryptPassword();
-				
-				if(passwAkt == user.getPassword()) {
+
+				if (passwAkt == user.getPassword()) {
 					userRepository.save(user);
 					System.out.println("PW correcot");
-					model.addAttribute("message", "Password successfully changed for User: " + username);					
-					
+					model.addAttribute("message", "Password successfully changed for User: " + username);
+
 					model.addAttribute("user", user);
-					
-					return"userProfile";
-					
-				}else {
+
+					return "userProfile";
+
+				} else {
 					user.setPassword(passwAkt);
 					user.encryptPassword();
 					userRepository.save(user);
 					System.out.println("PW not correct");
-					model.addAttribute("warningMessage", "Error while reading User data!");					
-									
+					model.addAttribute("warningMessage", "Error while reading User data!");
+
 					model.addAttribute("user", user);
-					
+
 					return "userProfile";
 				}
 			}
 		}
-		
-		return"error";
+
+		return "error";
 	}
 
 	@Secured({ "ROLE_USER" })
@@ -442,7 +490,7 @@ public class PlacesController {
 
 		return "myJourneys";
 	}
-	
+
 //	@Secured("ROLE_USER")
 //	@GetMapping("/getPicturePNG")
 //	@Transactional
@@ -455,10 +503,10 @@ public class PlacesController {
 //			return "data:image/png;base64," + profilePicture;
 //		}
 //	}
-	
-	@RequestMapping(value="maps")
+
+	@RequestMapping(value = "maps")
 	public String showMap(Model model, Authentication authentication) {
-		
+
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
 
 		if (user != null && user.isEnabled()) {

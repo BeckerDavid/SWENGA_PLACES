@@ -10,4 +10,6 @@ import at.fh.swenga.places.model.PlaceModel;
 @Transactional
 public interface PlaceRepository extends JpaRepository<PlaceModel, Integer> {
 
+	PlaceModel findByName(String place);
+
 }

@@ -30,6 +30,9 @@ public class PlaceModel {
 	@ManyToMany(mappedBy = "favoritePlaces")
 	private Set<UserModel> users;
 	
+	@ManyToOne
+	private CountryModel country;
+	
 	@Column(nullable=false)
 	private String name;
 
@@ -57,11 +60,29 @@ public class PlaceModel {
 		this.users = users;
 	}
 
+	public CountryModel getCountry() {
+		return country;
+	}
+
+	public void setCountry(CountryModel country) {
+		this.country = country;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + id;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
 
@@ -74,14 +95,25 @@ public class PlaceModel {
 		if (getClass() != obj.getClass())
 			return false;
 		PlaceModel other = (PlaceModel) obj;
+		if (country == null) {
+			if (other.country != null)
+				return false;
+		} else if (!country.equals(other.country))
+			return false;
 		if (id != other.id)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
 			return false;
 		return true;
 	}
 
-	public PlaceModel(String name) {
+	public PlaceModel(String name, CountryModel country) {
 		super();
 		this.name = name;
+		this.country = country;
 	}
 
 	public PlaceModel() {
