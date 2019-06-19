@@ -169,8 +169,9 @@ public class PlacesController {
 	  case"query5":
 		   recommendations = recommendationRepository.listByUsername();
 	   break;
+	  case "query6":
+		  recommendations = recommendationRepository.findByTitle(searchString);
 	   
-
 	  default:
 		  recommendations = recommendationRepository.findAll();
 	  }

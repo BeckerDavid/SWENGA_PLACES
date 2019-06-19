@@ -76,10 +76,10 @@ public class UserModel {
 	private Set<RecommendationModel> favRecommendations;
 	
 	@ManyToMany
-	private Set<UserModel> favUsers;
+	private Set<UserModel> followers;
 	
 	@ManyToMany
-	private Set<UserModel> favoritedUsers;
+	private Set<UserModel> following;
 	
 	public int getId() {
 		return id;
@@ -219,19 +219,19 @@ public class UserModel {
 	}
 
 	public Set<UserModel> getFavUsers() {
-		return favUsers;
+		return followers;
 	}
 
 	public void setFavUsers(Set<UserModel> favUsers) {
-		this.favUsers = favUsers;
+		this.followers = favUsers;
 	}
 
 	public Set<UserModel> getFavoritedUsers() {
-		return favoritedUsers;
+		return following;
 	}
 
 	public void setFavoritedUsers(Set<UserModel> favoritedUsers) {
-		this.favoritedUsers = favoritedUsers;
+		this.following = favoritedUsers;
 	}
 
 	@Override
@@ -290,8 +290,8 @@ public class UserModel {
 				+ Arrays.toString(profilePicture) + ", country=" + country + ", category=" + category
 				+ ", recommendations=" + recommendations + ", isPrivate=" + isPrivate + ", favoritePlaces="
 				+ favoritePlaces + ", journeys=" + journeys + ", favoriteCountries=" + favoriteCountries
-				+ ", favRecommendations=" + favRecommendations + ", favUsers=" + favUsers + ", favoritedUsers="
-				+ favoritedUsers + "]";
+				+ ", favRecommendations=" + favRecommendations + ", favUsers=" + followers + ", favoritedUsers="
+				+ following + "]";
 	}
 
 	public void addUserCategory(UserCategoryModel cat) {
