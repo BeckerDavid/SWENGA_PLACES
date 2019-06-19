@@ -3229,7 +3229,8 @@ tbody.collapse.show {
 
 .navbar-image {
 	width: 45px;
-	height: 45px
+	height: 45px;
+	border-radius: 22px
 }
 
 .navbar-text {
@@ -3590,7 +3591,23 @@ tbody.collapse.show {
 .card-body {
 	-ms-flex: 1 1 auto;
 	flex: 1 1 auto;
-	padding: 1.25rem
+	padding: 1.25rem;
+	margin-top: 10px;
+}
+
+.card-recPic {
+/* 	width: auto; */
+	width: 200px;
+	height: 200px
+	
+}
+
+.boopsi {
+	position: inline-block;
+/* 	left: 50%; */
+	width: 100%;
+	height: 100%;
+    margin: auto;
 }
 
 .card-title {

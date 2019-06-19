@@ -310,7 +310,7 @@ public class UserModel {
 		}
 		else {
 			try {
-				return "data:image/png;base64," + new String(Base64.getDecoder().decode(new String(profilePicture).getBytes("UTF-8")));
+				return "data:image/jpg;base64," + new String(Base64.getDecoder().decode(new String(profilePicture).getBytes("UTF-8")));
 			} catch (UnsupportedEncodingException e) {
 	            // TODO Auto-generated catch block
 	            e.printStackTrace();
