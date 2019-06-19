@@ -6,7 +6,6 @@ import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
@@ -51,8 +49,8 @@ public class UserModel {
 	private String mail;
 
 	@Lob
-	@Basic(fetch = FetchType.LAZY)
 	private byte[] profilePicture;
+ 
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private CountryModel country;
@@ -139,12 +137,13 @@ public class UserModel {
 		this.mail = mail;
 	}
 
-	public byte[] getProfilePicture() {
-		return profilePicture;
+
+	public Set<RecommendationModel> getFavRecommendations() {
+		return favRecommendations;
 	}
 
-	public void setProfilePicture(byte[] profilePicture) {
-		this.profilePicture = profilePicture;
+	public void setFavRecommendations(Set<RecommendationModel> favRecommendations) {
+		this.favRecommendations = favRecommendations;
 	}
 
 	public CountryModel getCountry() {
@@ -273,6 +272,9 @@ public class UserModel {
 		return true;
 	}
 
+
+
+
 	@Override
 	public String toString() {
 		return "UserModel [id=" + id + ", username=" + username + ", password=" + password + ", enabled=" + enabled
@@ -280,7 +282,7 @@ public class UserModel {
 				+ Arrays.toString(profilePicture) + ", country=" + country + ", category=" + category
 				+ ", recommendations=" + recommendations + ", isPrivate=" + isPrivate + ", favoritePlaces="
 				+ favoritePlaces + ", journeys=" + journeys + ", favoriteCountries=" + favoriteCountries
-				+ ", favReccomendations=" + favRecommendations + ", favUsers=" + favUsers + ", favoritedUsers="
+				+ ", favRecommendations=" + favRecommendations + ", favUsers=" + favUsers + ", favoritedUsers="
 				+ favoritedUsers + "]";
 	}
 

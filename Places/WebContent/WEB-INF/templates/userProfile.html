@@ -96,8 +96,7 @@
 											<a class="btn btn-info btn-fill pull-left" data-toggle="modal" data-target="#myModal1" href="#pablo">Change Password</a>
 											<button type="submit" class="btn btn-info btn-fill pull-right">Update Profile</button>		
 											<div class="clearfix"></div>							
-									</form>
-									
+									</form>								
 								</div>
 							</div>
 							<!-- Mini Modal -->
@@ -143,10 +142,19 @@
 								</div>
 								<div class="card-body">
 									<div class="author">
-										<a href="#"> <img class="avatar border-gray"
-											src="../assets/img/faces/face-3.jpg" alt="...">
+									<img th:src="${user.document.content}" onerror="images/no-user-image-square.jpg" name="userProfilePicture"/>
+											<br>
+											<br>
+										<a th:href="@{uploadProfilePicture(id=${user.id})}">
+											<button type="button" class="btn btn-info btn-fill pull-right">
+												<span aria-hidden="true"></span>
+												Upload Profile Picture
+											</button>
+											<br>
+										</a>
 											<h5 class="title" th:text="${user} ? ${user.firstName}"></h5>
 										</a>
+										<br>
 										<p class="description" th:text="${user} ? ${user.username}"></p>
 									</div>
 

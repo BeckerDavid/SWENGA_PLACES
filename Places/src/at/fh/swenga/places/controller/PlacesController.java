@@ -3,6 +3,7 @@ package at.fh.swenga.places.controller;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -110,6 +111,43 @@ public class PlacesController {
 
 		return "browse";
 	}
+	
+	 @RequestMapping(value = {"/find"})
+	 public String find(Model model, @RequestParam String searchString, @RequestParam String searchType) {
+	  List<RecommendationModel> recommendations = null;
+	  int count = 0;
+
+	  switch (searchType) {
+	  case"query1":
+	   recommendations = recommendationRepository.findAll();
+	   break;
+	  case"query2":
+	   recommendations = recommendationRepository.listByPlaces();
+	   break;
+	  case"query3":
+		   recommendations = recommendationRepository.listBySeason();
+	   break;	   
+	  case"query4":
+		   recommendations = recommendationRepository.searchBySeason(searchString);
+	   break;
+	  case"query5":
+		   recommendations = recommendationRepository.listByUsername();
+	   break;
+	   
+
+	  default:
+		  recommendations = recommendationRepository.findAll();
+	  }
+	  
+	  model.addAttribute("recommendations", recommendations);
+
+	  if (recommendations != null) {
+	   model.addAttribute("count", recommendations.size());
+	  } else {
+	   model.addAttribute("count", count);
+	  }
+	  return"forward:/test";
+	 }
 
 	@Secured("ROLE_USER")
 	@GetMapping("/contacts")

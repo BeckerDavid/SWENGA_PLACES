@@ -46,6 +46,7 @@ public class RecommendationModel {
 	
 	@ManyToMany(mappedBy="favRecommendations")
 	private Set<UserModel> favUsers;
+	
 
 	public int getId() {
 		return id;
