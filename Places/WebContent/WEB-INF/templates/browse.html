@@ -20,29 +20,23 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-md-12">
-							<div class="card striped-tabled-with-hover">
-								<div class="card-header "></div>
-								<div class="card-body table-full-width table-responsive">
-									<table data-toggle="table"
-										class="table table-hover table-striped"
-										th:each="recommendation : ${recommendations}">
-<!-- 										<tbody> -->
-<!-- 											 list all items ----------------------------------------------------------- -->
-<!-- 											<tr> -->
-<!-- 												<td th:text="${recommendation.id}"></td> -->
-<!-- 												<td th:text="${recommendation.name}"></td> -->
-<!-- 												<td th:text="${recommendation.colour}"></td> -->
-<!-- 												<td th:text="${recommendation.price}"></td> -->
-<!-- 												<td th:text="${recommendation.producer.brandName}"></td> -->
-<!-- 												<td th:text="${recommendation.rating}"></td> -->
-<!-- 												<td th:text="${recommendation.expirationDate}"></td> -->
-<!-- 											</tr> -->
-<!-- 											 list all items ----------------------------------------------------------- -->
-
-<!-- 										</tbody> -->
-									</table>
-								</div>
-							</div>
+						</div>
+						<div class="col-md-6">
+							<table data-toggle="table" class="table" th:each="recommendation : ${recommendations}">
+								<tbody>
+									<tr>
+										<div class="card">
+											<div class="card-body">
+												<div class="card-recPic" >
+													<img class="boopsi" th:src="${recommendation.getPictureJPG()}" />
+												</div>
+												<h class="card-title" th:text="${recommendation.title}"></h>
+												<small th:text="${recommendation.getDescription()}"></small>
+											</div>
+										</div>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>

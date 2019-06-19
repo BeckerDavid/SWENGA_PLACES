@@ -1,6 +1,8 @@
 package at.fh.swenga.places.model;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -180,6 +182,21 @@ public class RecommendationModel {
 				+ description + ", user=" + user + ", approved=" + approved + ", recommendationImage="
 				+ Arrays.toString(recommendationImage) + ", rating=" + rating + ", season=" + season + "]";
 	}
+	
+	public String getPictureJPG() throws UnsupportedEncodingException {
+		if (recommendationImage == null) {
+			return "bootstrap/img/default-avatar.png";
+		}
+		else {
+			try {
+				return "data:image/jpg;base64," + new String(Base64.getDecoder().decode(new String(recommendationImage).getBytes("UTF-8")));
+			} catch (UnsupportedEncodingException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	            return "bootstrap/img/default-avatar.png";
+	        }
+		}
+	}
 
 	public RecommendationModel(String title, PlaceModel place, String description, UserModel user,
 			byte[] recommendationImage, String season) {
@@ -204,6 +221,16 @@ public class RecommendationModel {
 		this.user = user;
 	}
 
+	public RecommendationModel(String title, PlaceModel place, String description, UserModel user, String recommendationImage) {
+		super();
+		this.title = title;
+		this.place = place;
+		this.description = description;
+		this.user = user;
+		this.recommendationImage = Base64.getEncoder().encode(recommendationImage.getBytes());
+		//this.recommendationImage = recommendationImage.getBytes();
+	}
+	
 	public RecommendationModel(String title, PlaceModel place, UserModel user, boolean approved, int rating) {
 		super();
 		this.title = title;
@@ -212,7 +239,5 @@ public class RecommendationModel {
 		this.approved = approved;
 		this.rating = rating;
 	}
-	
-	
 
 }
