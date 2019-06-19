@@ -138,6 +138,14 @@ public class UserModel {
 	}
 
 
+	public byte[] getProfilePicture() {
+		return profilePicture;
+	}
+
+	public void setProfilePicture(byte[] profilePicture) {
+		this.profilePicture = profilePicture;
+	}
+
 	public Set<RecommendationModel> getFavRecommendations() {
 		return favRecommendations;
 	}

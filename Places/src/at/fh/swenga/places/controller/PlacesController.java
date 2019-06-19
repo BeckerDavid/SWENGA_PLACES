@@ -112,6 +112,42 @@ public class PlacesController {
 		return "browse";
 	}
 	
+	@Secured({ "ROLE_USER" })
+	@PostMapping("/changeProfilePicture")
+	public String uploadProfilePicture(Model model, Authentication authentication,
+			@RequestParam("username") String username, @RequestParam("imageFile") MultipartFile imageFile) {
+
+		try {
+			UserModel user = userRepository.findByUsername(username);
+			
+			if (!"image/jpeg".equals(imageFile.getContentType()))
+			{
+				model.addAttribute("errorMessage", "Just JPG Files allowed!");
+				return getProfile(model, authentication);
+			}
+
+			// Load lazy ProfilePicutre and check if there is one already!
+			byte[] currPic = user.getProfilePicture();
+			// Already a Profile Picture available -> delete it
+			if (currPic != null) {
+				user.setProfilePicture(null);
+				userRepository.save(user);
+			}
+			// Create a new document and set all available infos
+
+			user.setProfilePicture(imageFile.getBytes());
+			userRepository.save(user);
+
+			model.addAttribute("message", "Profile Picture successfully uploaded.");
+
+		} catch (Exception e) {
+
+			model.addAttribute("errorMessage", "Error:" + e.getMessage());
+		}
+
+		return getProfile(model, authentication);
+}
+	
 	 @RequestMapping(value = {"/find"})
 	 public String find(Model model, @RequestParam String searchString, @RequestParam String searchType) {
 	  List<RecommendationModel> recommendations = null;

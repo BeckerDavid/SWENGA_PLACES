@@ -135,44 +135,67 @@
 						</div>
 						<div class="col-md-4">
 							<div class="card card-user">
+							<form class="form-horizontal" method="post"
+								  th:action="${user} ? @{/uploadProfilePicture(id=${user.id})}">
 								<div class="card-image">
+								
 									<img
 										src="https://ununsplash.imgix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400"
 										alt="...">
 								</div>
 								<div class="card-body">
 									<div class="author">
-									<img th:src="${user.document.content}" onerror="images/no-user-image-square.jpg" name="userProfilePicture"/>
+										<div >
+										<img class="avatar border-gray" th:src="${user.getPicturePNG()}" data-toggle="modal" data-target="#myModal2"/>
+										</div>
 											<br>
 											<br>
-										<a th:href="@{uploadProfilePicture(id=${user.id})}">
-											<button type="button" class="btn btn-info btn-fill pull-right">
+										<h5 class="title" th:text="${user} ? ${user.firstName}"></h5>
+											<br>
+										<p class="description" th:text="${user} ? ${user.username}"></p>	
+											<br>									
+											
+												<button type="button" class="btn btn-info btn-fill pull-middle" data-toggle="modal" data-target="#myModal2">
 												<span aria-hidden="true"></span>
 												Upload Profile Picture
-											</button>
+												</button>
 											<br>
-										</a>
-											<h5 class="title" th:text="${user} ? ${user.firstName}"></h5>
-										</a>
-										<br>
-										<p class="description" th:text="${user} ? ${user.username}"></p>
-									</div>
+											
+										</div>
 
-								</div>
-								<hr>
-								<div class="button-container mr-auto ml-auto">
-									<button href="#" class="btn btn-simple btn-link btn-icon">
-										<i class="fa fa-facebook-square"></i>
-									</button>
-									<button href="#" class="btn btn-simple btn-link btn-icon">
-										<i class="fa fa-twitter"></i>
-									</button>
-									<button href="#" class="btn btn-simple btn-link btn-icon">
-										<i class="fa fa-google-plus-square"></i>
-									</button>
-								</div>
+									</div>
+								</form>
+								</div>							
 							</div>
-						</div>
+								<!-- Mini Modal 2 -->
+                    	<div class="modal fade modal-mini modal-primary" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+                        	<div class="modal-dialog">
+                            	<div class="modal-content">
+                            	<form class="form-horizontal" method="post"
+								th:action="${user} ? @{/changeProfilePicture(id=${user.id})}" enctype="multipart/form-data">
+                                	<div class="modal-header justify-content-center">
+                                    	<div class="avatar border-gray" >
+                                       	 	<img th:src="${user.getPicturePNG()}"></img>
+                                   	 	</div>
+                                	</div>
+
+                               	 	<div class="modal-body text-center">
+                                    	<p>Change Profile Picture</p>
+                                    	<input type="hidden" id="username" th:value="${user} ? ${user.username}" name="usernameHidden">
+                                    	<div class="form-group">
+   			 								<input class="form-control" id="inputFile" type="file" name="myFile" placeholder="Select File">
+                                    	</div>
+                                	</div>
+                                	
+                                	<div class="modal-footer">
+                                    	<button type="submit"  class="btn btn-link btn-simple">Confirm</button>
+                                    	<button type="button" class="btn btn-link btn-simple" data-dismiss="modal">Cancel</button>
+                                	</div>
+								</form>
+                            	</div>
+                        	</div>
+                    	</div>
+                    <!--  End Modal2 -->
 					</div>
 				</div>
 			</div>
