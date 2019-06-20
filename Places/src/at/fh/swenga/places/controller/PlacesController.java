@@ -74,7 +74,7 @@ public class PlacesController {
 
 	@Autowired
 	JourneyRepository journeyRepo;
-	
+
 	@Autowired
 	PictureRepository pictureRepository;
 
@@ -114,30 +114,29 @@ public class PlacesController {
 
 		return "browse";
 	}
-	
+
 	@GetMapping("uploadProfilePicture")
-	public String uploadProfilePicture (Model model, @RequestParam("id") int id) {
+	public String uploadProfilePicture(Model model, @RequestParam("id") int id) {
 		model.addAttribute("id", id);
 		return "uploadPicture";
 	}
-	
+
 	@PostMapping(value = "upload")
-	public String uploadDocument(Model model, @RequestParam("id") int id,
-			@RequestParam("myFile") MultipartFile file) {
- 
+	public String uploadDocument(Model model, @RequestParam("id") int id, @RequestParam("myFile") MultipartFile file) {
+
 		try {
- 
+
 			UserModel user = userRepository.findById(id);
- 
+
 			// Already a document available -> delete it
 			if (user.getProfilePicture() != null) {
-				pictureRepository.delete(user.getProfilePicture());
+				// FB löscht a kane Bilder
 				// Don't forget to remove the relationship too
 				user.setProfilePicture(null);
 			}
- 
+
 			// Create a new document and set all available infos
- 
+
 			PictureModel picture = new PictureModel();
 			picture.setContent(file.getBytes());
 			picture.setContentType(file.getContentType());
@@ -149,47 +148,47 @@ public class PlacesController {
 		} catch (Exception e) {
 			model.addAttribute("errorMessage", "Error:" + e.getMessage());
 		}
- 
+
 		return "redirect:/userProfile";
 	}
-	
-	 @RequestMapping(value = {"/find"})
-	 public String find(Model model, @RequestParam String searchString, @RequestParam String searchType) {
-	  List<RecommendationModel> recommendations = null;
-	  int count = 0;
 
-	  switch (searchType) {
-	  case"query1":
-	   recommendations = recommendationRepository.findAll();
-	   break;
-	  case"query2":
-	   recommendations = recommendationRepository.listByPlaces();
-	   break;
-	  case"query3":
-		   recommendations = recommendationRepository.listBySeason();
-	   break;	   
-	  case"query4":
-		   recommendations = recommendationRepository.searchBySeason(searchString);
-	   break;
-	  case"query5":
-		   recommendations = recommendationRepository.listByUsername();
-	   break;
-	  case "query6":
-		  recommendations = recommendationRepository.findByTitle(searchString);
-	   
-	  default:
-		  recommendations = recommendationRepository.findAll();
-	  }
-	  
-	  model.addAttribute("recommendations", recommendations);
+	@RequestMapping(value = { "/find" })
+	public String find(Model model, @RequestParam String searchString, @RequestParam String searchType) {
+		List<RecommendationModel> recommendations = null;
+		int count = 0;
 
-	  if (recommendations != null) {
-	   model.addAttribute("count", recommendations.size());
-	  } else {
-	   model.addAttribute("count", count);
-	  }
-	  return"forward:/test";
-	 }
+		switch (searchType) {
+		case "query1":
+			recommendations = recommendationRepository.findAll();
+			break;
+		case "query2":
+			recommendations = recommendationRepository.listByPlaces();
+			break;
+		case "query3":
+			recommendations = recommendationRepository.listBySeason();
+			break;
+		case "query4":
+			recommendations = recommendationRepository.searchBySeason(searchString);
+			break;
+		case "query5":
+			recommendations = recommendationRepository.listByUsername();
+			break;
+		case "query6":
+			recommendations = recommendationRepository.findByTitle(searchString);
+
+		default:
+			recommendations = recommendationRepository.findAll();
+		}
+
+		model.addAttribute("recommendations", recommendations);
+
+		if (recommendations != null) {
+			model.addAttribute("count", recommendations.size());
+		} else {
+			model.addAttribute("count", count);
+		}
+		return "forward:/test";
+	}
 
 	@Secured("ROLE_USER")
 	@GetMapping("/contacts")
@@ -464,10 +463,11 @@ public class PlacesController {
 	@PostMapping("/addRecommendation")
 	@Transactional
 	public String addRecommendation(@Valid RecommendationModel rec, Authentication auth,
-			@RequestParam("placeName") String placeName, @RequestParam("countryId") int countryId, @RequestParam(value = "recommendationImage", required=false) MultipartFile imageFile) {
-		
+			@RequestParam("placeName") String placeName, @RequestParam("countryId") int countryId,
+			@RequestParam(value = "recommendationImage", required = false) MultipartFile imageFile) {
+
 		UserModel user = userRepository.findByUsername(auth.getName());
-		
+
 		PlaceModel place = placeRepo.findByName(placeName);
 		Optional<CountryModel> countryOpt = countryRepository.findById(countryId);
 		CountryModel country = countryOpt.get();
@@ -546,15 +546,13 @@ public class PlacesController {
 		}
 		return "redirect:/login";
 	}
-	
+
 	@RequestMapping("/forgotPassword")
 	@Transactional
 	public String forgotPassword() {
-			
-		
-		return("forward:/forgotPassword");
+
+		return ("forward:/forgotPassword");
 	}
-	
 
 	@Secured("ROLE_USER")
 	@GetMapping("/userProfile")
@@ -648,15 +646,15 @@ public class PlacesController {
 		if (user != null && user.isEnabled()) {
 			if ((user.getUsername().equalsIgnoreCase(authentication.getName())
 					|| authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))) {
-				
+
 				user.setPassword(passwordNew);
 				user.encryptPassword();
 				userRepository.save(user);
 				System.out.println("PW correcot");
 				model.addAttribute("message", "Password successfully changed for User: " + username);
-				
+
 				model.addAttribute("user", user);
-                
+
 			}
 			return "redirect:logout";
 		}
