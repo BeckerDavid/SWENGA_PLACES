@@ -3095,6 +3095,22 @@ tbody.collapse.show {
 	list-style: none
 }
 
+.fav-link {
+	font-weight: bold;
+	color: red;
+}
+
+#heart {
+	font-size: 2em;
+	color: #000000;
+}
+
+#heart.red {
+	font-size: 3em;
+	color: red;
+}
+
+
 .nav-link {
 	display: block;
 	padding: .5rem 1rem

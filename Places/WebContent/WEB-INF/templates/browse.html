@@ -63,8 +63,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-sm-8 col-md-6 col-lg-6"
-							th:each="recommendation : ${recommendations}">
+						
+						<div class="col-sm-12 col-md-6 col-lg-6" th:each="recommendation : ${recommendations}">
 							<div class="card">
 								<div class="card-body-rec">
 									<div class="card-recPic">
@@ -79,20 +79,21 @@
 												by <a href="#" class="card-title-author" th:text="${recommendation.getUser().getUsername()}" />
 											</div>
 											<div class="col-1 col-sm-1 col-md-1 col-lg-1">
-
-											<a href="#" class="nav-link" data-toggle="dropdown">
-			                                    <i class="nc-icon nc-favourite-28"></i>
-			                                    <span class="d-lg-none"></span>
-			                                </a>
-<!-- 											<div class="form-check"> -->
-<!-- 											    <label class="form-check-label"> -->
-<!-- 											        <input class="form-check-input" type="checkbox" value=""> -->
-<!-- 											        <span class="form-check-sign"></span> -->
-<!-- 											    </label> -->
-<!-- 											</div> -->
+							
+<!-- 											<a href="#" class="fav-link" data-toggle="dropdown"> -->
+<!-- 			                                    <i class="fas fa-heart" id="heart"></i> -->
+<!-- 			                                    <span class="d-none d-sm-none">Fav</span> -->
+<!-- 			                                </a> -->
+											<div class="form-check">
+											<p th:text="${recommendation.getId()}"></p>
+												<form>
+											    <a th:href="@{/like(uId=${user.id},rId=${recommendation.id})}" class="btn btn-danger">Delete</a>
+											    </form>
+											</div>
 <!-- 								        	<div class="btn-group-toggle" data-toggle="buttons"> -->
 <!-- 												<label class="btn btn-secondary active"> -->
-<!-- 											    	<input type="checkbox" checked autocomplete="off"> Checked -->
+<!-- 											    	<input type="checkbox" checked autocomplete="off"> -->
+<!-- 											    	 <i class="nc-icon nc-favourite-28"></i> -->
 <!-- 												</label> -->
 <!-- 											</div> -->
 										        

@@ -36,6 +36,10 @@ public interface UserRepository extends JpaRepository<UserModel, Integer> {
 	@Query("Update UserModel SET enabled = 1 WHERE id = :id")
 	void enableUser(@Param("id") int id);
 	
+	@Transactional
+	@Modifying
+	@Query("INSERT into users_Recommendations VALUES(:uId, :rId")
+	void addFavRec(@Param("uId") int uId, @Param("rId") int rId);
 	
 	/*@Query("UPDATE UserModel "
 			+ "JOIN CountryModel ON "

@@ -843,7 +843,24 @@ public class PlacesController {
 
 		return "forward:fillUsers";
 	}
+	
+	@Secured("ROLE_USER")
+	@RequestMapping("/like")
+	public String likeRec(Model model, Authentication authentication, @RequestParam int uId, @RequestParam int rId) {
 
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+		userRepository.addFavRec(uId,rId);
+		
+		//RecommendationModel rec = recommendationRepository.findById(rId);
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
+		
+		return "forward:fillUsers";
+	}
+	
 	/*
 	 * @Secured({ "ROLE_ADMIN" })
 	 * 
