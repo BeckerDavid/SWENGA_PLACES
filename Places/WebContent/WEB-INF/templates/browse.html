@@ -3,12 +3,12 @@
 <!-- <html xmlns="http://www.w3.org/1999/xhtml" 	xmlns:th="http://www.thymeleaf.org"> -->
 
 <head>
-    <meta charset="utf-8" />
+<meta charset="utf-8" />
 <!--     <link rel="apple-touch-icon" sizes="76x76" href="../bootstrap/img/apple-icon.png"> -->
 <!-- 	<link rel="icon" type="image/png" href="../bootstrap/img/favicon.ico"> -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>Browse</title>
-   <div th:include="~{includes/fragments :: bootstrapCSS}" th:remove="tag" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Browse</title>
+<div th:include="~{includes/fragments :: bootstrapCSS}" th:remove="tag" />
 </head>
 
 <body>
@@ -26,25 +26,28 @@
 										<h class="card-title">Filter</h>
 										<form method="post" action="find">
 											<div class="form-row">
-												<div class="form-group col-sm-3 col-lg-4">
-													<label>Search</label> <input type="text" name="searchString"
-														class="form-control" placeholder="Search">
+												<div class="form-group col-sm-4">
+													<label>Search</label> <input type="text"
+														name="searchString" class="form-control"
+														placeholder="Search">
 												</div>
-												<div class="form-group col-sm-3">
-													<label for="countryId">COUNTRY</label><br />
-													<select class="form-control form-control-sm" name="countryId">
-														<option value="allCountries" selected="selected" th:value="0"></option>
+												<div class="form-group col-sm-4">
+													<label for="countryId">COUNTRY</label><br /> <select
+														class="form-control form-control-sm" name="countryId">
+														<option value="allCountries" selected="selected"
+															th:value="0"></option>
 														<option
 															th:each="country:${#request.getAttribute('countries')}"
 															th:value="${country.id}" th:text="${country.countryName}">
 														</option>
 													</select>
 												</div>
-												<div class="form-group col-sm-3">
-													<label for="searchType">SORT</label>
-													<select id="searchType" class="form-control" name="searchType">
-														<option value="query1">Show All</option>	
-														<option value="query2" selected="selected">Show Latest</option>							
+												<div class="form-group col-sm-4">
+													<label for="searchType">SORT</label> <select
+														id="searchType" class="form-control" name="searchType">
+														<option value="query1">Show All</option>
+														<option value="query2" selected="selected">Show
+															Latest</option>
 														<option value="query3">Sort By Places</option>
 														<option value="query4">Sort By Seasons</option>
 														<option value="query5">Sort By User</option>
@@ -61,12 +64,15 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-sm-8 col-md-6 col-lg-6" th:each="recommendation : ${recommendations}">
+						<div class="col-sm-8 col-md-6 col-lg-6"
+							th:each="recommendation : ${recommendations}">
 							<div class="card">
 								<div class="card-body-rec">
 									<div class="card-recPic">
-										<img class="boopsi" th:src="${recommendation.getPictureJPG()}" />
-										<span th:text="${recommendation.title}"></span>
+										<img class="boopsi"
+											th:src="${recommendation.getPicture()}"
+											alt="The recommendation's picture" /> <span
+											th:text="${recommendation.title}"></span>
 									</div>
 									<div class="card-body-rec-content">
 										<div class="row">
@@ -103,7 +109,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<footer class="footer">
 				<div class="container-fluid">
 					<nav>
@@ -118,7 +124,7 @@
 					</nav>
 				</div>
 			</footer>
-			
+
 		</div>
 	</div>
 

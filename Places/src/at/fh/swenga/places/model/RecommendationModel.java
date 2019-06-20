@@ -1,8 +1,6 @@
 package at.fh.swenga.places.model;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,10 +9,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.apache.commons.codec.binary.Base64;
 
 @Entity
 @Table(name = "Recommendations")
@@ -38,8 +38,8 @@ public class RecommendationModel {
 	
 	private boolean approved;
 	
-	@Lob
-	private byte[] recommendationImage;
+	@OneToOne(cascade=CascadeType.ALL)
+	private PictureModel recommendationPicture;
 	
 	private int rating;
 	
@@ -106,14 +106,6 @@ public class RecommendationModel {
 		this.approved = approved;
 	}
 
-	public byte[] getRecommendationImage() {
-		return recommendationImage;
-	}
-
-	public void setRecommendationImage(byte[] recommendationImage) {
-		this.recommendationImage = recommendationImage;
-	}
-
 	public int getRating() {
 		return rating;
 	}
@@ -176,37 +168,32 @@ public class RecommendationModel {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "RecommendationModel [id=" + id + ", title=" + title + ", place=" + place + ", description="
-				+ description + ", user=" + user + ", approved=" + approved + ", recommendationImage="
-				+ Arrays.toString(recommendationImage) + ", rating=" + rating + ", season=" + season + "]";
-	}
 	
-	public String getPictureJPG() throws UnsupportedEncodingException {
-		if (recommendationImage == null) {
-			return "bootstrap/img/globe.jpg";
-		}
-		else {
-			try {
-				return "data:image/jpg;base64," + new String(Base64.getDecoder().decode(new String(recommendationImage).getBytes("UTF-8")));
-			} catch (UnsupportedEncodingException e) {
-	            // TODO Auto-generated catch block
-	            e.printStackTrace();
-	            return "bootstrap/img/globe.jpg";
-	        }
-		}
-	}
 
 	public RecommendationModel(String title, PlaceModel place, String description, UserModel user,
-			byte[] recommendationImage, String season) {
+			PictureModel recommendationPicture, String season) {
 		super();
 		this.title = title;
 		this.place = place;
 		this.description = description;
 		this.user = user;
-		this.recommendationImage = recommendationImage;
+		this.recommendationPicture = recommendationPicture;
 		this.season = season;
+	}
+
+	@Override
+	public String toString() {
+		return "RecommendationModel [id=" + id + ", title=" + title + ", place=" + place + ", description="
+				+ description + ", user=" + user + ", approved=" + approved + ", recommendationPicture="
+				+ recommendationPicture + ", rating=" + rating + ", season=" + season + ", favUsers=" + favUsers + "]";
+	}
+
+	public PictureModel getRecommendationPicture() {
+		return recommendationPicture;
+	}
+
+	public void setRecommendationPicture(PictureModel recommendationPicture) {
+		this.recommendationPicture = recommendationPicture;
 	}
 
 	public RecommendationModel() {
@@ -221,15 +208,7 @@ public class RecommendationModel {
 		this.user = user;
 	}
 
-	public RecommendationModel(String title, PlaceModel place, String description, UserModel user, String recommendationImage) {
-		super();
-		this.title = title;
-		this.place = place;
-		this.description = description;
-		this.user = user;
-		this.recommendationImage = Base64.getEncoder().encode(recommendationImage.getBytes());
-		//this.recommendationImage = recommendationImage.getBytes();
-	}
+
 	
 	public RecommendationModel(String title, PlaceModel place, UserModel user, boolean approved, int rating) {
 		super();
@@ -238,6 +217,21 @@ public class RecommendationModel {
 		this.user = user;
 		this.approved = approved;
 		this.rating = rating;
+	}
+	
+	public String getPicture() throws UnsupportedEncodingException {
+		if (recommendationPicture == null) {
+			return "bootstrap/img/globe.jpg";
+		}
+		else {
+			try {
+				return "data:image/jpg;base64," + new String(Base64.encodeBase64(recommendationPicture.getContent()));
+			} catch (Exception e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	            return "bootstrap/img/globe.jpg";
+	        }
+		}
 	}
 
 }

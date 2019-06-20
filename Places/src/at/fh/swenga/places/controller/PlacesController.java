@@ -78,7 +78,7 @@ public class PlacesController {
 
 	@Autowired
 	JourneyRepository journeyRepo;
-	
+
 	@Autowired
 	PictureRepository pictureRepository;
 
@@ -111,9 +111,9 @@ public class PlacesController {
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
 		List<CountryModel> countries = countryRepository.findAll();
-		
+
 		model.addAttribute("countries", countries);
-		
+
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
@@ -143,30 +143,29 @@ public class PlacesController {
 
 		return "browse";
 	}
-	
+
 	@GetMapping("uploadProfilePicture")
-	public String uploadProfilePicture (Model model, @RequestParam("id") int id) {
+	public String uploadProfilePicture(Model model, @RequestParam("id") int id) {
 		model.addAttribute("id", id);
 		return "uploadPicture";
 	}
-	
+
 	@PostMapping(value = "upload")
-	public String uploadDocument(Model model, @RequestParam("id") int id,
-			@RequestParam("myFile") MultipartFile file) {
- 
+	public String uploadDocument(Model model, @RequestParam("id") int id, @RequestParam("myFile") MultipartFile file) {
+
 		try {
- 
+
 			UserModel user = userRepository.findById(id);
- 
+
 			// Already a document available -> delete it
 			if (user.getProfilePicture() != null) {
-				pictureRepository.delete(user.getProfilePicture());
+				// FB löscht a kane Bilder
 				// Don't forget to remove the relationship too
 				user.setProfilePicture(null);
 			}
- 
+
 			// Create a new document and set all available infos
- 
+
 			PictureModel picture = new PictureModel();
 			picture.setContent(file.getBytes());
 			picture.setContentType(file.getContentType());
@@ -178,7 +177,7 @@ public class PlacesController {
 		} catch (Exception e) {
 			model.addAttribute("errorMessage", "Error:" + e.getMessage());
 		}
- 
+
 		return "redirect:/userProfile";
 	}
 	
@@ -304,19 +303,6 @@ public class PlacesController {
 		if (user1 != null && user1.isEnabled()) {
 
 			model.addAttribute("user", user1);
-			if (user.getProfilePicture() != null) {
-
-				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
-				PictureModel pp = ppOpt.get();
-				byte[] profilePicture = pp.getContent();
-
-				StringBuilder sb = new StringBuilder();
-				sb.append("data:image/jpeg;base64,");
-				sb.append(Base64.encodeBase64String(profilePicture));
-				String image = sb.toString();
-
-				model.addAttribute("image", image);
-			}
 		}
 
 		if (!changedUserModel.getUsername().equals(user.getUsername())) {
@@ -505,11 +491,26 @@ public class PlacesController {
 	@Secured("ROLE_USER")
 	@PostMapping("/addRecommendation")
 	@Transactional
-	public String addRecommendation(@Valid RecommendationModel rec, Authentication auth,
-			@RequestParam("placeName") String placeName, @RequestParam("countryId") int countryId, @RequestParam(value = "recommendationImage", required=false) MultipartFile imageFile) {
-		
+	public String addRecommendation(Model model, @Valid RecommendationModel rec, Authentication auth,
+			@RequestParam("placeName") String placeName, @RequestParam("countryId") int countryId,
+			@RequestParam(value = "recommendationImage", required = false) MultipartFile imageFile) {
+
 		UserModel user = userRepository.findByUsername(auth.getName());
-		
+
+		if (imageFile != null) {
+			try {
+				PictureModel picture = new PictureModel();
+				picture.setContent(imageFile.getBytes());
+				picture.setContentType(imageFile.getContentType());
+				picture.setCreated(new Date());
+				picture.setFilename(imageFile.getOriginalFilename());
+				picture.setName(imageFile.getName());
+				rec.setRecommendationPicture(picture);
+			} catch (Exception e) {
+				model.addAttribute("errorMessage", "Error:" + e.getMessage());
+			}
+		}
+
 		PlaceModel place = placeRepo.findByName(placeName);
 		Optional<CountryModel> countryOpt = countryRepository.findById(countryId);
 		CountryModel country = countryOpt.get();
@@ -520,13 +521,6 @@ public class PlacesController {
 		} else if (place.getCountry() != country) {
 			place = new PlaceModel(placeName, country);
 			placeRepo.save(place);
-		}
-		if (imageFile != null) {
-			try {
-				rec.setRecommendationImage(imageFile.getBytes());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 
 		rec.setApproved(false);
@@ -591,8 +585,8 @@ public class PlacesController {
 		}
 		return "redirect:/login";
 	}
-	
 
+   
 	@Secured("ROLE_USER")
 	@GetMapping("/forgotPassword")
 	@Transactional
@@ -676,7 +670,6 @@ public class PlacesController {
 		return "login";
 }
 	
-
 	@Secured("ROLE_USER")
 	@GetMapping("/userProfile")
 	@Transactional
@@ -737,7 +730,6 @@ public class PlacesController {
 
 	}
 
-	
 	@Secured("ROLE_ADMIN")
 	@GetMapping("/admin_userlist")
 	@Transactional
@@ -752,8 +744,7 @@ public class PlacesController {
 		return "admin_userlist";
 
 	}
-	
-	
+
 	@RequestMapping("/fillUsers")
 	@Secured("ROLE_ADMIN")
 	@Transactional
@@ -765,21 +756,20 @@ public class PlacesController {
 
 			model.addAttribute("user", user);
 		}
-		
+
 		List<UserModel> users = userRepository.findAll();
-		
-		
+
 		model.addAttribute("users", users);
 		model.addAttribute("count", users.size());
-		
-		//CountryModel country1 = new CountryModel("asf","asfd");
-		
-		//UserModel user1 = new UserModel("test", "test", "test", "e", "asraerw",
-		//		country1, false);
-	
+
+		// CountryModel country1 = new CountryModel("asf","asfd");
+
+		// UserModel user1 = new UserModel("test", "test", "test", "e", "asraerw",
+		// country1, false);
+
 		return "/admin_userlist";
 	}
-	
+
 	@Secured("ROLE_ADMIN")
 	@RequestMapping("/delete")
 	public String deleteData(Model model, Authentication authentication, @RequestParam int id) {
@@ -791,10 +781,10 @@ public class PlacesController {
 
 			model.addAttribute("user", user);
 		}
-		
+
 		return "forward:fillUsers";
 	}
-	
+
 	@Secured("ROLE_ADMIN")
 	@RequestMapping("/enable")
 	public String enableData(Model model, Authentication authentication, @RequestParam int id) {
@@ -806,11 +796,10 @@ public class PlacesController {
 
 			model.addAttribute("user", user);
 		}
-		
+
 		return "forward:fillUsers";
 	}
-	
-	
+
 	/*
 	 * @Secured({ "ROLE_ADMIN" })
 	 * 
@@ -843,15 +832,15 @@ public class PlacesController {
 		if (user != null && user.isEnabled()) {
 			if ((user.getUsername().equalsIgnoreCase(authentication.getName())
 					|| authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))) {
-				
+
 				user.setPassword(passwordNew);
 				user.encryptPassword();
 				userRepository.save(user);
 				System.out.println("PW correcot");
 				model.addAttribute("message", "Password successfully changed for User: " + username);
-				
+
 				model.addAttribute("user", user);
-                
+
 			}
 			return "redirect:logout";
 		}

@@ -1,48 +1,73 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-<div th:replace="~{includes/bootstrap :: bootstrapMeta}" />
-<title>Pokedex</title>
-<div th:replace="~{includes/bootstrap :: bootstrapCSS}" />
+<meta charset="utf-8" />
+<!--     <link rel="apple-touch-icon" sizes="76x76" href="../bootstrap/img/apple-icon.png"> -->
+<!-- 	<link rel="icon" type="image/png" href="../bootstrap/img/favicon.ico"> -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Upload Picture</title>
+<div th:include="~{includes/fragments :: bootstrapCSS}" th:remove="tag" />
 </head>
 <body>
-	<div class="container" role="main">
+	<div class="wrapper">
+		<div th:include="~{includes/fragments :: side}" th:remove="tag" />
+		<div class="main-panel">
+			<div th:include="~{includes/fragments :: nav}" th:remove="tag" />
+			<div class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-8">
+							<div class="card">
+								<div class="card-header">
+									<h4 class="card-title">Upload a picture.</h4>
+									<small>&#128526;&#127796;&#128248;</small>
+								</div>
+								<div class="card-body">
+									<form class="form-horizontal" enctype="multipart/form-data"
+										method="post" action="upload">
+										<fieldset>
 
-		<div class="row">
-			<div class="col-md-8 col-md-offset-2">
-				<form class="form-horizontal" enctype="multipart/form-data"
-					method="post" action="upload">
-					<fieldset>
-						<legend th:text="'Upload Document for User ' + ${id}"></legend>
+											<input type="hidden" name="id" th:value="${id}">
 
-						<input type="hidden" name="id" th:value="${id}">
+											<div class="form-group">
+												<label for="inputFile" class="col-md-2 control-label">Picture:</label>
+												<div class="col-md-10">
+													<input class="form-control" id="inputFile" type="file"
+														name="myFile" accept=".jpg, .jpeg">
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="col-md-10 col-md-offset-2">
+													<button type="submit" class="btn btn-primary">Upload</button>
+													<a href="userProfile">
+														<button type="button" class="btn btn-default">Cancel</button>
+													</a>
+												</div>
+											</div>
 
-						<div class="form-group">
-							<label for="inputFile" class="col-md-2 control-label">Picture:</label>
-							<div class="col-md-10">
-								<input class="form-control" id="inputFile" type="file"
-									name="myFile">
+										</fieldset>
+									</form>
+								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<div class="col-md-10 col-md-offset-2">
-								<button type="submit" class="btn btn-primary">Upload</button>
-								<a href="userProfile">
-									<button type="button" class="btn btn-default">Cancel</button>
-								</a>
-							</div>
-						</div>
-
-					</fieldset>
-				</form>
+					</div>
+				</div>
 			</div>
-		</div>
+			<footer class="footer">
+				<div class="container-fluid">
+					<nav>
+						<p class="copyright text-center">
 
+							<a href="http://www.creative-tim.com">Creative Ardian</a>, made
+							with love for a better SWENGA project
+						</p>
+					</nav>
+				</div>
+			</footer>
+		</div>
 	</div>
 	<!--  End of container -->
-	<div th:replace="~{includes/bootstrap :: bootstrapJS}" />
-
 </body>
+<div th:replace="~{includes/bootstrap :: bootstrapJS}" />
 </html>
