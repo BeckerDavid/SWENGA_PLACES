@@ -262,6 +262,7 @@ public class PlacesController {
 	public String getDashboard(Model model, Authentication authentication) {
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+		ArrayList<RecommendationModel> recommendations = recommendationRepository.findByUserId(user.getId());
 
 		if (user != null && user.isEnabled()) {
 
@@ -279,6 +280,7 @@ public class PlacesController {
 
 				model.addAttribute("image", image);
 			}
+			model.addAttribute("recommendations", recommendations);
 		}
 		return "dashboard";
 
@@ -586,6 +588,14 @@ public class PlacesController {
 		recommendationRepository.removeById(id);
 		
 		return"redirect:/myRecommendations";
+	}
+	
+	@GetMapping("/deleteRecommendationD")
+	public String deleteRec(Model model, @RequestParam int id) {
+
+		recommendationRepository.removeById(id);
+		
+		return"redirect:/dashboard";
 	}
 	
 	@Secured("ROLE_VIEWER")

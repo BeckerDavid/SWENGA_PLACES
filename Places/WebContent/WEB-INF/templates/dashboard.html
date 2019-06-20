@@ -3,11 +3,11 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="utf-8" />
+<meta charset="utf-8" />
 <!--     <link rel="apple-touch-icon" sizes="76x76" href="../bootstrap/img/apple-icon.png"> -->
 <!-- 	<link rel="icon" type="image/png" href="../bootstrap/img/favicon.ico"> -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>Dashboard</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Dashboard</title>
 <div th:include="~{includes/fragments :: bootstrapCSS}" th:remove="tag" />
 </head>
 
@@ -19,40 +19,8 @@
 			<div class="content">
 				<div class="container-fluid" sec:authorize="hasRole('ROLE_USER')">
 					<div class="row">
-						<div class="col-md-4">
-							<div class="card ">
-								<div class="card-header ">
-									<h4 class="card-title">User Data</h4>
-									<p class="card-category">This is the data we have on file for you. Please keep it up to date.</p>
-								</div>
-								
-								<div class="card-body">
-									<label for="username">Username:</label>
-									<p th:text="${user.username}" name="username"></p>
-									<label for="username">First Name:</label>
-									<p th:text="${user.firstName}" name="username"></p>
-									<label for="username">Last Name:</label>
-									<p th:text="${user.lastName}" name="username"></p>
-									<label for="username">Email:</label>
-									<p th:text="${user.mail}" name="username"></p>
-								</div>
-								
-							</div>
-							
-						</div>
 
-						<div class="col-md-8">
-							<div class="card ">
-								<div class="card-header ">
-									<h4 class="card-title">My favorite Places</h4>
-									<p class="card-category">Places you want to travel to.</p>
-								</div>
-								<div class="card-body ">
-								
-									</div>
-							</div>
-						</div>
-									<div class="col-md-4">
+						<div class="col-md-4">
 							<div class="card card-user">
 								<div class="card-image">
 									<img
@@ -68,10 +36,20 @@
 											src="bootstrap/img/default-avatar.png"
 											alt="The user's profile picture">
 											<h5 class="title" th:text="${user} ? ${user.firstName}"></h5>
+
 										</a>
 										<p class="description" th:text="${user} ? ${user.username}"></p>
+										<p class="card-category">This is the data we have on file
+											for you. Please keep it up to date.</p>
 									</div>
-
+									<label for="username">Username:</label>
+									<p th:text="${user.username}" name="username"></p>
+									<label for="username">First Name:</label>
+									<p th:text="${user.firstName}" name="username"></p>
+									<label for="username">Last Name:</label>
+									<p th:text="${user.lastName}" name="username"></p>
+									<label for="username">Email:</label>
+									<p th:text="${user.mail}" name="username"></p>
 								</div>
 								<hr>
 								<div class="button-container mr-auto ml-auto">
@@ -84,6 +62,55 @@
 									<button href="#" class="btn btn-simple btn-link btn-icon">
 										<i class="fa fa-google-plus-square"></i>
 									</button>
+								</div>
+							</div>
+						</div>
+						<div class="card col-md-8">
+							<div class="card-header ">
+								<h4 class="card-title">My Recommendations</h4>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-6"
+										th:each="recommendation : ${#request.getAttribute('recommendations')}">
+										<div class="card">
+											<div class="card-body-rec">
+												<div class="card-recPic">
+													<img class="boopsi" th:src="${recommendation.getPicture()}" />
+													<span th:text="${recommendation.title}"></span>
+												</div>
+												<div class="card-body-rec-content">
+													<div class="row">
+														<div class="col-10 col-sm-10 col-md-10 col-lg-10">
+															by <a href="#" class="card-title-author"
+																th:text="${recommendation.getUser().getUsername()}" />
+														</div>
+														<div class="col-1 col-sm-1 col-md-1 col-lg-1">
+
+															<a href="#" class="nav-link" data-toggle="dropdown">
+																<i class="nc-icon nc-favourite-28"></i> <span
+																class="d-lg-none"></span>
+															</a>
+
+														</div>
+													</div>
+													<div>
+														<small th:text="${recommendation.getDescription()}"></small>
+													</div>
+												</div>
+												<a
+													th:href="@{/deleteRecommendationD(id=${recommendation.id})}"
+													class="btn btn-xs btn-danger"> <span
+													class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+													Delete
+												</a>
+											</div>
+										</div>
+									</div>
+									<div
+										th:if="${#request.getAttribute('recommendations').size() == 0}">
+										<p>You need to write a recommendation first.</p>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -267,7 +294,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<footer class="footer">
 				<div class="container-fluid">
 					<nav>
@@ -282,10 +309,10 @@
 					</nav>
 				</div>
 			</footer>
-			
+
 		</div>
 	</div>
-	
+
 </body>
 <div th:include="~{includes/fragments :: bootstrapJS}" th:remove="tag" />
 </html>
