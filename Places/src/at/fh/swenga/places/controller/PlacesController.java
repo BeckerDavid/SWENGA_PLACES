@@ -274,19 +274,6 @@ public class PlacesController {
 		if (user1 != null && user1.isEnabled()) {
 
 			model.addAttribute("user", user1);
-			if (user.getProfilePicture() != null) {
-
-				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
-				PictureModel pp = ppOpt.get();
-				byte[] profilePicture = pp.getContent();
-
-				StringBuilder sb = new StringBuilder();
-				sb.append("data:image/jpeg;base64,");
-				sb.append(Base64.encodeBase64String(profilePicture));
-				String image = sb.toString();
-
-				model.addAttribute("image", image);
-			}
 		}
 
 		if (!changedUserModel.getUsername().equals(user.getUsername())) {
