@@ -2071,11 +2071,13 @@ a.btn.disabled, fieldset[disabled] a.btn {
 	border-color: #dc3545
 }
 
+
 .btn-danger:hover {
 	color: #fff;
 	background-color: #c82333;
 	border-color: #bd2130
 }
+
 
 .btn-danger.focus, .btn-danger:focus {
 	box-shadow: 0 0 0 3px rgba(220, 53, 69, .5)

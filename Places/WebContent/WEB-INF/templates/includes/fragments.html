@@ -12,6 +12,7 @@
 	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 	<link href="bootstrap/css/light-bootstrap-dashboard.css?v=2.0.0 "
 		rel="stylesheet" />
+	
 </div>
 
 <div th:fragment="side">
@@ -60,9 +61,13 @@
 						class="nc-icon nc-chat-round"></i>
 						<p>Contacts</p>
 				</a></li>
-				<li><a class="nav-link" href="userProfile"> <i
+				<li sec:authorize="hasRole('ROLE_ADMIN')"><a class="nav-link" href="userProfile"> <i
 						class="nc-icon nc-globe-2"></i>
 						<p>Public Profile</p>
+				</a></li>
+				<li sec:authorize="hasRole('ROLE_ADMIN')"><a class="nav-link" href="fillUsers"> <i
+						class="nc-icon nc-globe-2"></i>
+						<p>Users</p>
 				</a></li>
 			</ul>
 		</div>

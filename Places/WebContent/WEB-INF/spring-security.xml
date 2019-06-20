@@ -17,6 +17,7 @@
 		<intercept-url pattern="/visitor" access="permitAll" />		
 		<intercept-url pattern="/**" access="authenticated" />
 		<intercept-url pattern="/delete" access="hasRole('ADMIN')" />
+		<intercept-url pattern="/admin_userlist" access="hasRole('ADMIN')" />
 		
 
 
