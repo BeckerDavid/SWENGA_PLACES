@@ -68,14 +68,13 @@
 							<div class="card">
 								<div class="card-body-rec">
 									<div class="card-recPic">
-										<img class="boopsi"
-											th:src="${recommendation.getPicture()}"
-											alt="The recommendation's picture" /> <span
-											th:text="${recommendation.title}"></span>
+										<img class="boopsi" th:src="${recommendation.getPicture()}"	alt="The recommendation's picture" />
+											<span class="rec-title" th:text="${recommendation.getPlace().getName()}"></span>
 									</div>
 									<div class="card-body-rec-content">
 										<div class="row">
-											<div class="col-10 col-sm-10 col-md-10 col-lg-10">
+											<div class="col-9 col-sm-9 col-md-9 col-lg-9">
+												<h5 class="card-title" th:text="${recommendation.getTitle()}"></h5>
 												by <a href="#" class="card-title-author" th:text="${recommendation.getUser().getUsername()}" />
 											</div>
 											<div class="col-1 col-sm-1 col-md-1 col-lg-1">
@@ -84,12 +83,12 @@
 <!-- 			                                    <i class="fas fa-heart" id="heart"></i> -->
 <!-- 			                                    <span class="d-none d-sm-none">Fav</span> -->
 <!-- 			                                </a> -->
-											<div class="form-check">
-											<p th:text="${recommendation.getId()}"></p>
-												<form>
-											    <a th:href="@{/like(uId=${user.id},rId=${recommendation.id})}" class="btn btn-danger">Delete</a>
-											    </form>
-											</div>
+												<div class="form-check">
+	<!-- 											<p th:text="${recommendation.getId()}"></p> -->
+													<form>
+												    <a th:href="@{/like(uId=${user.id},rId=${recommendation.id})}" class="btn btn-danger">Like</a>
+												    </form>
+												</div>
 <!-- 								        	<div class="btn-group-toggle" data-toggle="buttons"> -->
 <!-- 												<label class="btn btn-secondary active"> -->
 <!-- 											    	<input type="checkbox" checked autocomplete="off"> -->

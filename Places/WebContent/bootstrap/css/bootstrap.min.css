@@ -3656,6 +3656,10 @@ tbody.collapse.show {
     margin: auto;
 }
 
+.rec-title {
+	font-size: 20px;
+}
+
 .card-title {
 	margin-bottom: .75rem
 }
