@@ -44,7 +44,7 @@ public interface RecommendationRepository extends JpaRepository<RecommendationMo
 			public List<RecommendationModel> listByPlaces(
 					@Param("countryId") int countryId,
 					@Param("searchString") String searchString);
-			
+	//Query4		
 			@Query("SELECT r "
 			+ "FROM  RecommendationModel AS r "
 			+ "JOIN r.place AS p "
@@ -57,7 +57,7 @@ public interface RecommendationRepository extends JpaRepository<RecommendationMo
 			public List<RecommendationModel> listBySeason(
 					@Param("countryId") int countryId,
 					@Param("searchString") String searchString);
-			
+	//Query5		
 			@Query("SELECT r "
 			+ "FROM  RecommendationModel AS r "
 			+ "JOIN r.place AS p "
@@ -71,6 +71,28 @@ public interface RecommendationRepository extends JpaRepository<RecommendationMo
 					@Param("countryId") int countryId,
 					@Param("searchString") String searchString);
 			
-
+	//Query6
+			/*
+			 * SELECT r.title, c.countryName
+			FROM IMA17_gradwohl_SWENGA_project_2.Recommendations AS r
+			JOIN IMA17_gradwohl_SWENGA_project_2.Place AS p ON r.place_id = p.id
+			JOIN IMA17_gradwohl_SWENGA_project_2.Country AS c ON p.country_id = c.id
+			JOIN IMA17_gradwohl_SWENGA_project_2.Journey_Country AS jc ON c.id = jc.countries_id
+			JOIN IMA17_gradwohl_SWENGA_project_2.Journey AS j ON jc.journeys_id = j.id 
+			JOIN IMA17_gradwohl_SWENGA_project_2.users AS u ON j.users_id
+			ORDER BY c.countryName;
+			
+			@Query("SELECT r "
+			+ "FROM  RecommendationModel AS r "
+			+ "JOIN r.place AS p "
+			+ "JOIN p.country AS c "
+			+ "JOIN c.journey_country AS jc "
+			+ "JOIN jc.journey AS j 
+			+ "JOIN j.users AS u "
+			+ "WHERE  "	
+			+ "ORDER BY r.user.username ")
+			public List<RecommendationModel> listByJourneyCountry();
+			
+*/
 			public List<RecommendationModel> removeById(int id);
 }

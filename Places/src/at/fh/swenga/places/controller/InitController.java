@@ -18,6 +18,7 @@ import at.fh.swenga.places.dao.UserCategoryRepository;
 import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
+import at.fh.swenga.places.model.JourneyModel;
 import at.fh.swenga.places.model.PlaceModel;
 import at.fh.swenga.places.model.RecommendationModel;
 import at.fh.swenga.places.model.UserCategoryModel;
@@ -627,7 +628,7 @@ public class InitController {
 		recommendationRepository.save(rec4);
 		recommendationRepository.save(rec5);
 		recommendationRepository.save(rec6);
-
+		
 		return "login";
 	}
 
