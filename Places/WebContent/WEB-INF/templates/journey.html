@@ -58,15 +58,13 @@
 										</div>
 										<div class="row">
 											<div class="col-md-12 pr-1">
-												<div class="form-group">
-													<label for="countryId">Country</label><br /> <select
-														name="countryId">
-														<option
-															th:each="country:${#request.getAttribute('countries')}"
-															th:value="${country.id}" th:text="${country.countryName}">
-														</option>
-													</select>
-												</div>
+											<label for="inputCountry">Country</label>
+												<select name="countryId"  class="form-control" id="country">
+													<option th:each="country:${#request.getAttribute('countries')}"
+               												th:value="${country.id}"
+               												th:text="${country.countryName}">
+               										</option>
+               									</select>
 											</div>
 										</div>
 										<div class="row">
@@ -86,14 +84,14 @@
 										<div class="row">
 											<div class="col-md-12 pr-1">
 												<div class="form-group">
-													<label for="countryId2">Additional Country</label><br /> <select
-														name="countryId2">
-														<option value="999" selected>NO COUNTRY</option>
-														<option
-															th:each="country:${#request.getAttribute('countries')}"
-															th:value="${country.id}" th:text="${country.countryName}">
-														</option>
-													</select>
+											<label for="inputCountry">Additional Country</label>
+												<select name="countryId"  class="form-control" id="country">
+												<option value="999" selected>NO COUNTRY</option>
+													<option th:each="country:${#request.getAttribute('countries')}"
+               												th:value="${country.id}"
+               												th:text="${country.countryName}">
+               										</option>
+               									</select>
 												</div>
 											</div>
 										</div>
