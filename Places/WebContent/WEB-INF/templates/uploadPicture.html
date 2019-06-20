@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<div th:replace="~{includes/bootstrap :: bootstrapMeta}" />
+<title>Pokedex</title>
+<div th:replace="~{includes/bootstrap :: bootstrapCSS}" />
+</head>
+<body>
+	<div class="container" role="main">
+
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<form class="form-horizontal" enctype="multipart/form-data"
+					method="post" action="upload">
+					<fieldset>
+						<legend th:text="'Upload Document for User ' + ${id}"></legend>
+
+						<input type="hidden" name="id" th:value="${id}">
+
+						<div class="form-group">
+							<label for="inputFile" class="col-md-2 control-label">Picture:</label>
+							<div class="col-md-10">
+								<input class="form-control" id="inputFile" type="file"
+									name="myFile">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-10 col-md-offset-2">
+								<button type="submit" class="btn btn-primary">Upload</button>
+								<a href="userProfile">
+									<button type="button" class="btn btn-default">Cancel</button>
+								</a>
+							</div>
+						</div>
+
+					</fieldset>
+				</form>
+			</div>
+		</div>
+
+	</div>
+	<!--  End of container -->
+	<div th:replace="~{includes/bootstrap :: bootstrapJS}" />
+
+</body>
+</html>

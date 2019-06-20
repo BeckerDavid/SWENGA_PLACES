@@ -13,10 +13,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -47,10 +47,6 @@ public class UserModel {
 
 	@Column(nullable = false, length = 30)
 	private String mail;
-
-	@Lob
-	private byte[] profilePicture;
- 
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private CountryModel country;
@@ -80,6 +76,9 @@ public class UserModel {
 	
 	@ManyToMany
 	private Set<UserModel> following;
+	
+	@OneToOne(cascade=CascadeType.ALL)
+	private PictureModel profilePicture;
 	
 	public int getId() {
 		return id;
@@ -137,12 +136,11 @@ public class UserModel {
 		this.mail = mail;
 	}
 
-
-	public byte[] getProfilePicture() {
+	public PictureModel getProfilePicture() {
 		return profilePicture;
 	}
 
-	public void setProfilePicture(byte[] profilePicture) {
+	public void setProfilePicture(PictureModel profilePicture) {
 		this.profilePicture = profilePicture;
 	}
 
@@ -286,12 +284,11 @@ public class UserModel {
 	@Override
 	public String toString() {
 		return "UserModel [id=" + id + ", username=" + username + ", password=" + password + ", enabled=" + enabled
-				+ ", firstName=" + firstName + ", lastName=" + lastName + ", mail=" + mail + ", profilePicture="
-				+ Arrays.toString(profilePicture) + ", country=" + country + ", category=" + category
-				+ ", recommendations=" + recommendations + ", isPrivate=" + isPrivate + ", favoritePlaces="
-				+ favoritePlaces + ", journeys=" + journeys + ", favoriteCountries=" + favoriteCountries
-				+ ", favRecommendations=" + favRecommendations + ", favUsers=" + followers + ", favoritedUsers="
-				+ following + "]";
+				+ ", firstName=" + firstName + ", lastName=" + lastName + ", mail=" + mail + ", country=" + country
+				+ ", category=" + category + ", recommendations=" + recommendations + ", isPrivate=" + isPrivate
+				+ ", favoritePlaces=" + favoritePlaces + ", journeys=" + journeys + ", favoriteCountries="
+				+ favoriteCountries + ", favRecommendations=" + favRecommendations + ", favUsers=" + favUsers
+				+ ", favoritedUsers=" + favoritedUsers + ", profilePicture=" + profilePicture + "]";
 	}
 
 	public void addUserCategory(UserCategoryModel cat) {
@@ -302,21 +299,6 @@ public class UserModel {
 	public void encryptPassword() {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		password = passwordEncoder.encode(password);		
-	}
-	
-	public String getPicturePNG() throws UnsupportedEncodingException {
-		if (profilePicture == null) {
-			return "bootstrap/img/default-avatar.png";
-		}
-		else {
-			try {
-				return "data:image/jpg;base64," + new String(Base64.getDecoder().decode(new String(profilePicture).getBytes("UTF-8")));
-			} catch (UnsupportedEncodingException e) {
-	            // TODO Auto-generated catch block
-	            e.printStackTrace();
-	            return "bootstrap/img/default-avatar.png";
-	        }
-		}
 	}
 
 	public UserModel(String username, String password, String firstName, String lastName, String mail,
@@ -349,7 +331,7 @@ public class UserModel {
 	}
 
 	public UserModel(String username, String password, boolean enabled, String firstName, String lastName, String mail,
-			CountryModel country, boolean isPrivate, String profilePicture) {
+			CountryModel country, boolean isPrivate, PictureModel profilePicture) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -359,7 +341,9 @@ public class UserModel {
 		this.mail = mail;
 		this.country = country;
 		this.isPrivate = isPrivate;
-		this.profilePicture = Base64.getEncoder().encode(profilePicture.getBytes());
+		this.profilePicture = profilePicture;
 	}
+	
+	
 	
 }

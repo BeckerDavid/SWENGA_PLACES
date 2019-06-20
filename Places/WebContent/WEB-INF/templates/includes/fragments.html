@@ -95,7 +95,8 @@
 				</ul>
 			</div>
 			<div>
-			<img class="navbar-image" th:src="${user.getPicturePNG()}" />
+			<img class="navbar-image" th:unless="${image} == null" th:src="${image}" />
+			<img class="navbar-image" th:if="${image} == null" src="bootstrap/img/default-avatar.png" />
 			</div>
 		</div>
 	</nav>
