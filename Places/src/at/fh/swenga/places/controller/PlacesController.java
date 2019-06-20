@@ -84,7 +84,10 @@ public class PlacesController {
 	public String fillRecommendations(Model model, Authentication authentication) {
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
-
+		List<CountryModel> countries = countryRepository.findAll();
+		
+		model.addAttribute("countries", countries);
+		
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
