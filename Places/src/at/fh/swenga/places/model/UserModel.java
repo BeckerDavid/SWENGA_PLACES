@@ -72,10 +72,10 @@ public class UserModel {
 	private Set<RecommendationModel> favRecommendations;
 	
 	@ManyToMany
-	private Set<UserModel> favUsers;
+	private Set<UserModel> followers;
 	
 	@ManyToMany
-	private Set<UserModel> favoritedUsers;
+	private Set<UserModel> following;
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	private PictureModel profilePicture;
@@ -217,19 +217,19 @@ public class UserModel {
 	}
 
 	public Set<UserModel> getFavUsers() {
-		return favUsers;
+		return followers;
 	}
 
 	public void setFavUsers(Set<UserModel> favUsers) {
-		this.favUsers = favUsers;
+		this.followers = favUsers;
 	}
 
 	public Set<UserModel> getFavoritedUsers() {
-		return favoritedUsers;
+		return following;
 	}
 
 	public void setFavoritedUsers(Set<UserModel> favoritedUsers) {
-		this.favoritedUsers = favoritedUsers;
+		this.following = favoritedUsers;
 	}
 
 	@Override

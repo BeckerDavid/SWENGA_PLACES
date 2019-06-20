@@ -185,7 +185,7 @@ public class RecommendationModel {
 	
 	public String getPictureJPG() throws UnsupportedEncodingException {
 		if (recommendationImage == null) {
-			return "bootstrap/img/default-avatar.png";
+			return "bootstrap/img/globe.jpg";
 		}
 		else {
 			try {
@@ -193,7 +193,7 @@ public class RecommendationModel {
 			} catch (UnsupportedEncodingException e) {
 	            // TODO Auto-generated catch block
 	            e.printStackTrace();
-	            return "bootstrap/img/default-avatar.png";
+	            return "bootstrap/img/globe.jpg";
 	        }
 		}
 	}

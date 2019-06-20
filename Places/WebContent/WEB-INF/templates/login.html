@@ -13,13 +13,14 @@
 		<form th:action="@{/perform_login}" class="loginform" id="login-form"
 			method="post">
 
-			<div th:if="${param.error}" class="alert alert-danger">Invalid
-				username and password.</div>
+			<div th:if="${param.error}" class="alert alert-danger">Invalid username and password.</div>
 
 			<input type="text" name="username" id="username"
 				placeholder="Username" required autofocus> <input
 				type="password" name="password" id="password" placeholder="Password"
 				required>
+				<br>
+			<a href="forgotPassword" class="forgot">Forgot Password</a>
 			<div class="buttons">
 				<button type="submit" name="button1" class="btn">Login</button>
 			</div>
@@ -36,5 +37,6 @@
 	if (url.includes("?logout") && document.referrer.includes("userProfile")) {
 		alert("You need to log in again.");
 	}
+
 </script>
 </html>

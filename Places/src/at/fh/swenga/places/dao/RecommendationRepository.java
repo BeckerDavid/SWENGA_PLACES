@@ -39,6 +39,12 @@ public interface RecommendationRepository extends JpaRepository<RecommendationMo
 			+ "ORDER BY u.username ")
 			List<RecommendationModel> listByUsername();
 			
+			@Query("SELECT r "
+					+ "FROM RecommendationModel AS r "
+					+ "WHERE LOWER(r.title) LIKE CONCAT('%', LOWER(:searchString), '%') "
+					+ "ORDER BY r.title" )
+			List<RecommendationModel> findByTitle(
+					@Param("searchString") String input);
 			
 			
 			/*				

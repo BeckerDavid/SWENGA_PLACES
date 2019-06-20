@@ -11,7 +11,7 @@ body {
  div.formstyle{
 	margin:0 auto;
 	margin-top: 200px;
-	height: 360px;
+	height: 400px;
 	width: 320px;
     background-color: white;
     opacity: 0.85;
@@ -96,5 +96,14 @@ button {
   	font-weight: bold;
 }
 
+.alert {
+	position: relative;
+	left: 50px;
+}
 
+.forgot {
+	position: relative;
+	left: 100px;
+	top: 20px;
+}
 
