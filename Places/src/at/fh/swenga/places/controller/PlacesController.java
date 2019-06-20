@@ -85,9 +85,9 @@ public class PlacesController {
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
 		List<CountryModel> countries = countryRepository.findAll();
-		
+
 		model.addAttribute("countries", countries);
-		
+
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
@@ -465,11 +465,25 @@ public class PlacesController {
 	@Secured("ROLE_USER")
 	@PostMapping("/addRecommendation")
 	@Transactional
-	public String addRecommendation(@Valid RecommendationModel rec, Authentication auth,
+	public String addRecommendation(Model model, @Valid RecommendationModel rec, Authentication auth,
 			@RequestParam("placeName") String placeName, @RequestParam("countryId") int countryId,
 			@RequestParam(value = "recommendationImage", required = false) MultipartFile imageFile) {
 
 		UserModel user = userRepository.findByUsername(auth.getName());
+
+		if (imageFile != null) {
+			try {
+				PictureModel picture = new PictureModel();
+				picture.setContent(imageFile.getBytes());
+				picture.setContentType(imageFile.getContentType());
+				picture.setCreated(new Date());
+				picture.setFilename(imageFile.getOriginalFilename());
+				picture.setName(imageFile.getName());
+				rec.setRecommendationPicture(picture);
+			} catch (Exception e) {
+				model.addAttribute("errorMessage", "Error:" + e.getMessage());
+			}
+		}
 
 		PlaceModel place = placeRepo.findByName(placeName);
 		Optional<CountryModel> countryOpt = countryRepository.findById(countryId);
@@ -481,13 +495,6 @@ public class PlacesController {
 		} else if (place.getCountry() != country) {
 			place = new PlaceModel(placeName, country);
 			placeRepo.save(place);
-		}
-		if (imageFile != null) {
-			try {
-				rec.setRecommendationImage(imageFile.getBytes());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 
 		rec.setApproved(false);
@@ -617,7 +624,6 @@ public class PlacesController {
 
 	}
 
-	
 	@Secured("ROLE_ADMIN")
 	@GetMapping("/admin_userlist")
 	@Transactional
@@ -632,8 +638,7 @@ public class PlacesController {
 		return "admin_userlist";
 
 	}
-	
-	
+
 	@RequestMapping("/fillUsers")
 	@Secured("ROLE_ADMIN")
 	@Transactional
@@ -645,21 +650,20 @@ public class PlacesController {
 
 			model.addAttribute("user", user);
 		}
-		
+
 		List<UserModel> users = userRepository.findAll();
-		
-		
+
 		model.addAttribute("users", users);
 		model.addAttribute("count", users.size());
-		
-		//CountryModel country1 = new CountryModel("asf","asfd");
-		
-		//UserModel user1 = new UserModel("test", "test", "test", "e", "asraerw",
-		//		country1, false);
-	
+
+		// CountryModel country1 = new CountryModel("asf","asfd");
+
+		// UserModel user1 = new UserModel("test", "test", "test", "e", "asraerw",
+		// country1, false);
+
 		return "/admin_userlist";
 	}
-	
+
 	@Secured("ROLE_ADMIN")
 	@RequestMapping("/delete")
 	public String deleteData(Model model, Authentication authentication, @RequestParam int id) {
@@ -671,10 +675,10 @@ public class PlacesController {
 
 			model.addAttribute("user", user);
 		}
-		
+
 		return "forward:fillUsers";
 	}
-	
+
 	@Secured("ROLE_ADMIN")
 	@RequestMapping("/enable")
 	public String enableData(Model model, Authentication authentication, @RequestParam int id) {
@@ -686,11 +690,10 @@ public class PlacesController {
 
 			model.addAttribute("user", user);
 		}
-		
+
 		return "forward:fillUsers";
 	}
-	
-	
+
 	/*
 	 * @Secured({ "ROLE_ADMIN" })
 	 * 

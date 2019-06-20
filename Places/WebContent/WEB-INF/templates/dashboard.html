@@ -17,7 +17,7 @@
 		<div class="main-panel">
 			<div th:include="~{includes/fragments :: nav}" th:remove="tag" />
 			<div class="content">
-				<div class="container-fluid" sec:authorize="hasRole('ROLE_ADMIN')">
+				<div class="container-fluid" sec:authorize="hasRole('ROLE_USER')">
 					<div class="row">
 						<div class="col-md-4">
 							<div class="card ">
@@ -25,6 +25,7 @@
 									<h4 class="card-title">User Data</h4>
 									<p class="card-category">This is the data we have on file for you. Please keep it up to date.</p>
 								</div>
+								
 								<div class="card-body">
 									<label for="username">Username:</label>
 									<p th:text="${user.username}" name="username"></p>
@@ -35,8 +36,11 @@
 									<label for="username">Email:</label>
 									<p th:text="${user.mail}" name="username"></p>
 								</div>
+								
 							</div>
+							
 						</div>
+
 						<div class="col-md-8">
 							<div class="card ">
 								<div class="card-header ">
@@ -46,6 +50,41 @@
 								<div class="card-body ">
 								
 									</div>
+							</div>
+						</div>
+									<div class="col-md-4">
+							<div class="card card-user">
+								<div class="card-image">
+									<img
+										src="https://ununsplash.imgix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400"
+										alt="...">
+								</div>
+								<div class="card-body">
+									<div class="author">
+										<a th:href="@{uploadProfilePicture(id=${user.id})}"> <img
+											class="avatar border-gray" th:unless="${image} == null"
+											th:src="${image}" alt="The user's profile picture"> <img
+											class="avatar border-gray" th:if="${image} == null"
+											src="bootstrap/img/default-avatar.png"
+											alt="The user's profile picture">
+											<h5 class="title" th:text="${user} ? ${user.firstName}"></h5>
+										</a>
+										<p class="description" th:text="${user} ? ${user.username}"></p>
+									</div>
+
+								</div>
+								<hr>
+								<div class="button-container mr-auto ml-auto">
+									<button href="#" class="btn btn-simple btn-link btn-icon">
+										<i class="fa fa-facebook-square"></i>
+									</button>
+									<button href="#" class="btn btn-simple btn-link btn-icon">
+										<i class="fa fa-twitter"></i>
+									</button>
+									<button href="#" class="btn btn-simple btn-link btn-icon">
+										<i class="fa fa-google-plus-square"></i>
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
