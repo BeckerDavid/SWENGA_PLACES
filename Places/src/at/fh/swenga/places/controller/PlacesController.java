@@ -462,7 +462,7 @@ public class PlacesController {
 			}
 		}
 
-		return "myJourneys";
+		return "redirect:/journeys";
 	}
 
 	@Secured("ROLE_USER")
@@ -587,7 +587,6 @@ public class PlacesController {
 
 	}
 
-	// Spring 4: @RequestMapping(value = "/deleteMakeup", method = RequestMethod.GET)
 	@GetMapping("/deleteRecommendation")
 	public String delete(Model model, @RequestParam int id) {
 
@@ -871,7 +870,7 @@ public class PlacesController {
 			model.addAttribute("user", user);
 		}
 		
-		return "forward:fillUsers";
+		return "forward:admin_userlist";
 	}
 	
 	@Secured("ROLE_ADMIN")
