@@ -26,10 +26,10 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6">
-							<table data-toggle="table" class="table" th:each="recommendation : ${recommendations}">
-								<tbody>
-									<tr>
+						<div class="col-sm-8 col-md-6 col-lg-6" th:each="recommendation : ${recommendations}">
+<!-- 							<table data-toggle="table" class="table" th:each="recommendation : ${recommendations}"> -->
+<!-- 								<tbody> -->
+<!-- 									<tr> -->
 										<div class="card">
 											<div class="card-body-rec">
 												<div class="card-recPic">
@@ -38,15 +38,16 @@
 												</div>
 												<div class="card-body-rec-content">
 													by <a href="#" class="card-title-author" th:text="${recommendation.getUser().getUsername()}" />
+<!-- 													<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-pushpin"></span></a> -->
 													<div>
 														<small th:text="${recommendation.getDescription()}"></small>
 													</div>
 												</div>
 											</div>
 										</div>
-									</tr>
-								</tbody>
-							</table>
+<!-- 									</tr> -->
+<!-- 								</tbody> -->
+<!-- 							</table> -->
 						</div>
 					</div>
 				</div>
