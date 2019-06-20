@@ -45,6 +45,10 @@ public class UserModel {
 	@Column(nullable = false, length = 30)
 	private String mail;
 	
+	@Column(name = "token", nullable = false, unique = true)
+	private String token;
+
+	
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private CountryModel country;
 
@@ -229,54 +233,36 @@ public class UserModel {
 		this.following = favoritedUsers;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		result = prime * result + ((journeys == null) ? 0 : journeys.hashCode());
-		result = prime * result + ((mail == null) ? 0 : mail.hashCode());
-		result = prime * result + ((recommendations == null) ? 0 : recommendations.hashCode());
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
-		return result;
+	public String getToken() {
+		return token;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UserModel other = (UserModel) obj;
-		if (id != other.id)
-			return false;
-		if (journeys == null) {
-			if (other.journeys != null)
-				return false;
-		} else if (!journeys.equals(other.journeys))
-			return false;
-		if (mail == null) {
-			if (other.mail != null)
-				return false;
-		} else if (!mail.equals(other.mail))
-			return false;
-		if (recommendations == null) {
-			if (other.recommendations != null)
-				return false;
-		} else if (!recommendations.equals(other.recommendations))
-			return false;
-		if (username == null) {
-			if (other.username != null)
-				return false;
-		} else if (!username.equals(other.username))
-			return false;
-		return true;
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public Set<UserModel> getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(Set<UserModel> followers) {
+		this.followers = followers;
+	}
+
+	public Set<UserModel> getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(Set<UserModel> following) {
+		this.following = following;
 	}
 
 
 
+	public UserModel() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public String toString() {
@@ -309,9 +295,32 @@ public class UserModel {
 		this.country = country;
 		this.isPrivate = isPrivate;
 	}
+	
 
-	public UserModel() {
+	public UserModel(String username, String password, boolean isPrivate, String mail, String firstName, String lastName, String token, CountryModel country) {
 		super();
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.mail = mail;
+		this.isPrivate = isPrivate;
+		this.token = token;
+		this.country = country;
+	}
+	
+	public UserModel(String username, String password, boolean enabled, String firstName, String lastName, String mail,
+			CountryModel country, String token, boolean isPrivate) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.mail = mail;
+		this.country = country;
+		this.token = token;
+		this.isPrivate = isPrivate;
 	}
 
 	public UserModel(String username, String password, boolean enabled, String firstName, String lastName, String mail,
@@ -326,6 +335,8 @@ public class UserModel {
 		this.country = country;
 		this.isPrivate = isPrivate;
 	}
+	
+	
 
 	public UserModel(String username, String password, boolean enabled, String firstName, String lastName, String mail,
 			CountryModel country, boolean isPrivate, PictureModel profilePicture) {
@@ -339,6 +350,101 @@ public class UserModel {
 		this.country = country;
 		this.isPrivate = isPrivate;
 		this.profilePicture = profilePicture;
+	}
+	
+
+	public UserModel(String username, boolean enabled,  String password, String firstname, String lastname, String eMail, CountryModel country,
+			boolean isPrivate, String token) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.firstName = firstname;
+		this.lastName = lastname;
+		this.mail = eMail;
+		this.enabled = true;
+		this.country = country;
+		this.isPrivate = true;
+		this.token = token;
+}
+	
+	
+	public UserModel(String username, boolean enabled,  String password, String firstname, String lastname, String eMail,
+			String token) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.firstName = firstname;
+		this.lastName = lastname;
+		this.mail = eMail;
+		this.enabled = true;
+		this.token = token;
+}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((category == null) ? 0 : category.hashCode());
+		result = prime * result + ((country == null) ? 0 : country.hashCode());
+		result = prime * result + (enabled ? 1231 : 1237);
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((mail == null) ? 0 : mail.hashCode());
+		result = prime * result + ((token == null) ? 0 : token.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserModel other = (UserModel) obj;
+		if (category == null) {
+			if (other.category != null)
+				return false;
+		} else if (!category.equals(other.category))
+			return false;
+		if (country == null) {
+			if (other.country != null)
+				return false;
+		} else if (!country.equals(other.country))
+			return false;
+		if (enabled != other.enabled)
+			return false;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (id != other.id)
+			return false;
+		if (lastName == null) {
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (mail == null) {
+			if (other.mail != null)
+				return false;
+		} else if (!mail.equals(other.mail))
+			return false;
+		if (token == null) {
+			if (other.token != null)
+				return false;
+		} else if (!token.equals(other.token))
+			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
+		return true;
 	}
 	
 	

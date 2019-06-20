@@ -1617,6 +1617,10 @@ select.form-control:focus::-ms-value {
 	margin-bottom: 1rem
 }
 
+.search-button{
+	margin-top: 1.70rem
+}
+
 .form-text {
 	display: block;
 	margin-top: .25rem

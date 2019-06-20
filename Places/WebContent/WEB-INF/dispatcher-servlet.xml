@@ -123,6 +123,40 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.mailtrap.io" />
+		<property name="port" value="2525" />
+		<property name="username" value="e5efca9bc9074b" />
+		<property name="password" value="922e9e8fafb142" />
+ 
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+			</props>
+		</property>
+	</bean>
+ 
+
+	<bean id="customMailMessage"
+		class="org.springframework.mail.SimpleMailMessage">
+
+		<property name="from" value="office@places.com" />
+		<property name="to" value="test@test.com" />
+		<property name="subject" value="Testing Subject" />
+		<property name="text">
+			<value><![CDATA[Dear %s,
+ 
+%s
+
+%s 
+Regards
+Places Team!
+		]]>
+			</value>
+		</property>
+</bean>
+	
 	<tx:annotation-driven />
 	
 	<bean id="persistenceExceptionTranslationPostProcessor"
