@@ -670,53 +670,8 @@ public class PlacesController {
 				
 				model.addAttribute("user", user);
                 
-				if (passwAkt == user.getPassword()) {
-					userRepository.save(user);
-					System.out.println("PW correcot");
-					model.addAttribute("message", "Password successfully changed for User: " + username);
-
-					model.addAttribute("user", user);
-					if (user.getProfilePicture() != null) {
-
-						Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
-						PictureModel pp = ppOpt.get();
-						byte[] profilePicture = pp.getContent();
-
-						StringBuilder sb = new StringBuilder();
-						sb.append("data:image/jpeg;base64,");
-						sb.append(Base64.encodeBase64String(profilePicture));
-						String image = sb.toString();
-
-						model.addAttribute("image", image);
-					}
-
-					return "userProfile";
-
-				} else {
-					user.setPassword(passwAkt);
-					user.encryptPassword();
-					userRepository.save(user);
-					System.out.println("PW not correct");
-					model.addAttribute("warningMessage", "Error while reading User data!");
-
-					model.addAttribute("user", user);
-					if (user.getProfilePicture() != null) {
-
-						Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
-						PictureModel pp = ppOpt.get();
-						byte[] profilePicture = pp.getContent();
-
-						StringBuilder sb = new StringBuilder();
-						sb.append("data:image/jpeg;base64,");
-						sb.append(Base64.encodeBase64String(profilePicture));
-						String image = sb.toString();
-
-						model.addAttribute("image", image);
-					}
-
-					return "userProfile";
-				}
 			}
+			return "redirect:logout";
 		}
 
 		return "error";

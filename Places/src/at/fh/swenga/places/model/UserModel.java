@@ -1,8 +1,5 @@
 package at.fh.swenga.places.model;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -287,8 +284,8 @@ public class UserModel {
 				+ ", firstName=" + firstName + ", lastName=" + lastName + ", mail=" + mail + ", country=" + country
 				+ ", category=" + category + ", recommendations=" + recommendations + ", isPrivate=" + isPrivate
 				+ ", favoritePlaces=" + favoritePlaces + ", journeys=" + journeys + ", favoriteCountries="
-				+ favoriteCountries + ", favRecommendations=" + favRecommendations + ", favUsers=" + favUsers
-				+ ", favoritedUsers=" + favoritedUsers + ", profilePicture=" + profilePicture + "]";
+				+ favoriteCountries + ", favRecommendations=" + favRecommendations + ", favUsers=" + followers
+				+ ", favoritedUsers=" + following + ", profilePicture=" + profilePicture + "]";
 	}
 
 	public void addUserCategory(UserCategoryModel cat) {
