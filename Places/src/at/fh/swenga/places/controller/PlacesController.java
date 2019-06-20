@@ -450,6 +450,15 @@ public class PlacesController {
 		model.addAttribute("user", user);
 		return "redirect:/login";
 	}
+	
+	@RequestMapping("/forgotPassword")
+	@Transactional
+	public String forgotPassword() {
+			
+		
+		return("forward:/forgotPassword");
+	}
+	
 
 	@Secured("ROLE_USER")
 	@GetMapping("/userProfile")
@@ -509,8 +518,7 @@ public class PlacesController {
 
 	@Secured({ "ROLE_USER" })
 	@PostMapping(value = "/changePassword")
-	public String changePassword(@RequestParam(value = "oldPassword") String oldPassword,
-			@RequestParam(value = "newPassword") String passwordNew,
+	public String changePassword(@RequestParam(value = "newPassword") String passwordNew,
 			@RequestParam(value = "usernameHidden") String username, Model model, Authentication authentication) {
 
 		UserModel user = userRepository.findByUsername(authentication.getName());
@@ -518,30 +526,16 @@ public class PlacesController {
 		if (user != null && user.isEnabled()) {
 			if ((user.getUsername().equalsIgnoreCase(authentication.getName())
 					|| authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))) {
-				String passwAkt = user.getPassword();
-				user.setPassword(oldPassword);
+				
+				user.setPassword(passwordNew);
 				user.encryptPassword();
+				userRepository.save(user);
+				System.out.println("PW correcot");
+				model.addAttribute("message", "Password successfully changed for User: " + username);
+				
+				model.addAttribute("user", user);
 
-				if (passwAkt == user.getPassword()) {
-					userRepository.save(user);
-					System.out.println("PW correcot");
-					model.addAttribute("message", "Password successfully changed for User: " + username);
-
-					model.addAttribute("user", user);
-
-					return "userProfile";
-
-				} else {
-					user.setPassword(passwAkt);
-					user.encryptPassword();
-					userRepository.save(user);
-					System.out.println("PW not correct");
-					model.addAttribute("warningMessage", "Error while reading User data!");
-
-					model.addAttribute("user", user);
-
-					return "userProfile";
-				}
+				return "redirect:/logout";
 			}
 		}
 
