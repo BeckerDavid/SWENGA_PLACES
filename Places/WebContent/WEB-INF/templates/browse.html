@@ -26,11 +26,11 @@
 										<h class="card-title">Filter</h>
 										<form method="post" action="find">
 											<div class="form-row">
-												<div class="form-group col-sm-4">
+												<div class="form-group col-sm-3 col-lg-4">
 													<label>Search</label> <input type="text" name="searchString"
 														class="form-control" placeholder="Search">
 												</div>
-												<div class="form-group col-sm-4">
+												<div class="form-group col-sm-3">
 													<label for="countryId">COUNTRY</label><br />
 													<select class="form-control form-control-sm" name="countryId">
 														<option value="allCountries" selected="selected" th:value="0"></option>
@@ -40,7 +40,7 @@
 														</option>
 													</select>
 												</div>
-												<div class="form-group col-sm-4">
+												<div class="form-group col-sm-3">
 													<label for="searchType">SORT</label>
 													<select id="searchType" class="form-control" name="searchType">
 														<option value="query1">Show All</option>	
@@ -51,6 +51,9 @@
 														<option value="query6">Sort By Places</option>
 														<option value="query7">Sort By Places</option>
 													</select>
+												</div>
+												<div class="form-group col-sm-2 search-button">
+													<button type="submit" value="Do it" class="btn btn-info btn-fill pull-right">SEARCH</button>
 												</div>
 											</div>
 										</form>
@@ -66,8 +69,30 @@
 										<span th:text="${recommendation.title}"></span>
 									</div>
 									<div class="card-body-rec-content">
-										by <a href="#" class="card-title-author" th:text="${recommendation.getUser().getUsername()}" />
-<!-- 										<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-pushpin"></span></a> -->
+										<div class="row">
+											<div class="col-10 col-sm-10 col-md-10 col-lg-10">
+												by <a href="#" class="card-title-author" th:text="${recommendation.getUser().getUsername()}" />
+											</div>
+											<div class="col-1 col-sm-1 col-md-1 col-lg-1">
+
+											<a href="#" class="nav-link" data-toggle="dropdown">
+			                                    <i class="nc-icon nc-favourite-28"></i>
+			                                    <span class="d-lg-none"></span>
+			                                </a>
+<!-- 											<div class="form-check"> -->
+<!-- 											    <label class="form-check-label"> -->
+<!-- 											        <input class="form-check-input" type="checkbox" value=""> -->
+<!-- 											        <span class="form-check-sign"></span> -->
+<!-- 											    </label> -->
+<!-- 											</div> -->
+<!-- 								        	<div class="btn-group-toggle" data-toggle="buttons"> -->
+<!-- 												<label class="btn btn-secondary active"> -->
+<!-- 											    	<input type="checkbox" checked autocomplete="off"> Checked -->
+<!-- 												</label> -->
+<!-- 											</div> -->
+										        
+										    </div>
+									    </div>
 										<div>
 											<small th:text="${recommendation.getDescription()}"></small>
 										</div>
