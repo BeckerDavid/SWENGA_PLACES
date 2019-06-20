@@ -118,5 +118,16 @@
 	</bean>
 	
 	<tx:annotation-driven />
+	
+	<bean id="persistenceExceptionTranslationPostProcessor"
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+	
+	<!-- JSR-303/JSR-349 support will be detected on classpath and enabled automatically -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- one of the several properties available; the maximum file size in 
+			bytes -->
+		<property name="maxUploadSizePerFile" value="15242880" />
+	</bean>
 
 </beans>

@@ -143,8 +143,10 @@
 								</div>
 								<div class="card-body">
 									<div class="author">
-										<a href="#"> <img class="avatar border-gray"
-											th:src="${user.getPicturePNG()}" alt="...">
+										<a th:href="@{uploadProfilePicture(id=${user.id})}"> <img class="avatar border-gray"
+											th:unless="${image} == null" th:src="${image}" alt="The user's profile picture">
+											<img class="avatar border-gray"
+											th:if="${image} == null" src="bootstrap/img/default-avatar.png" alt="The user's profile picture">
 											<h5 class="title" th:text="${user} ? ${user.firstName}"></h5>
 										</a>
 										<p class="description" th:text="${user} ? ${user.username}"></p>
