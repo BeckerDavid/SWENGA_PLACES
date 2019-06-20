@@ -84,7 +84,10 @@ public class PlacesController {
 	public String fillRecommendations(Model model, Authentication authentication) {
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
-
+		List<CountryModel> countries = countryRepository.findAll();
+		
+		model.addAttribute("countries", countries);
+		
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
@@ -614,6 +617,80 @@ public class PlacesController {
 
 	}
 
+	
+	@Secured("ROLE_ADMIN")
+	@GetMapping("/admin_userlist")
+	@Transactional
+	public String getUserList(Model model, Authentication authentication) {
+
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
+		return "admin_userlist";
+
+	}
+	
+	
+	@RequestMapping("/fillUsers")
+	@Secured("ROLE_ADMIN")
+	@Transactional
+	public String fillUsers(Model model, Authentication authentication) {
+
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
+		
+		List<UserModel> users = userRepository.findAll();
+		
+		
+		model.addAttribute("users", users);
+		model.addAttribute("count", users.size());
+		
+		//CountryModel country1 = new CountryModel("asf","asfd");
+		
+		//UserModel user1 = new UserModel("test", "test", "test", "e", "asraerw",
+		//		country1, false);
+	
+		return "/admin_userlist";
+	}
+	
+	@Secured("ROLE_ADMIN")
+	@RequestMapping("/delete")
+	public String deleteData(Model model, Authentication authentication, @RequestParam int id) {
+		userRepository.disableUser(id);
+
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
+		
+		return "forward:fillUsers";
+	}
+	
+	@Secured("ROLE_ADMIN")
+	@RequestMapping("/enable")
+	public String enableData(Model model, Authentication authentication, @RequestParam int id) {
+		userRepository.enableUser(id);
+
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
+		
+		return "forward:fillUsers";
+	}
+	
+	
 	/*
 	 * @Secured({ "ROLE_ADMIN" })
 	 * 
