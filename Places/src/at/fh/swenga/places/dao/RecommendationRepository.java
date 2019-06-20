@@ -19,31 +19,31 @@ public interface RecommendationRepository extends JpaRepository<RecommendationMo
 			+ "FROM  RecommendationModel AS r "
 			+ "JOIN r.place AS p "
 			+ "ORDER BY p.name ")
-			List<RecommendationModel> listByPlaces();
+			public List<RecommendationModel> listByPlaces();
 			
 			@Query("SELECT r "
 			+ "FROM  RecommendationModel AS r "
 			+ "ORDER BY r.season ")
-			List<RecommendationModel> listBySeason();
+			public List<RecommendationModel> listBySeason();
 
 			@Query("SELECT r "
 			+ "FROM  RecommendationModel AS r "
 			+ "WHERE LOWER(r.season) LIKE CONCAT('%', LOWER(:searchString), '%') "					
 			+ "ORDER BY r.season ")
-			List<RecommendationModel> searchBySeason(
+			public List<RecommendationModel> searchBySeason(
 					@Param("searchString") String input);
 
 			@Query("SELECT r "
 			+ "FROM  RecommendationModel AS r "
 			+ "JOIN r.user AS u "				
 			+ "ORDER BY u.username ")
-			List<RecommendationModel> listByUsername();
+			public List<RecommendationModel> listByUsername();
 			
 			@Query("SELECT r "
 					+ "FROM RecommendationModel AS r "
 					+ "WHERE LOWER(r.title) LIKE CONCAT('%', LOWER(:searchString), '%') "
 					+ "ORDER BY r.title" )
-			List<RecommendationModel> findByTitle(
+			public List<RecommendationModel> findByTitle(
 					@Param("searchString") String input);
 			
 			

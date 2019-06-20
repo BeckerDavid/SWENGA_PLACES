@@ -12,6 +12,7 @@
 		<intercept-url pattern="/login" access="permitAll" />
 		<intercept-url pattern="/forgotPassword" access="permitAll" />
 		<intercept-url pattern="/register" access="permitAll" />
+		<intercept-url pattern="/resetPassword" access="permitAll" />		
 		<intercept-url pattern="/bootstrap/**" access="permitAll" />
 		<intercept-url pattern="/images/**" access="permitAll" />
 		<intercept-url pattern="/visitor" access="permitAll" />

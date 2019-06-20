@@ -1,8 +1,7 @@
 package at.fh.swenga.places.controller;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -545,40 +544,53 @@ public class InitController {
 		userCatRepo.save(admin);
 		userCatRepo.save(user);
 		userCatRepo.save(viewer);
+		
+		String token0 = UUID.randomUUID().toString();
+		String token1 = UUID.randomUUID().toString();
+		String token2 = UUID.randomUUID().toString();
+		String token3 = UUID.randomUUID().toString();
+		String token4 = UUID.randomUUID().toString();
 
-		UserModel admin1 = new UserModel("admin", "password", true, "Robert", "Admin", "robert.admin@boop.fh",
-				country44, false);
+
+		UserModel admin1 = new UserModel("admin",  true,"password", "Robert", "Admin", "robert.admin@boop.fh",
+				country44, false, token1);
+
 		admin1.encryptPassword();
 		admin1.addUserCategory(admin);
 		admin1.addUserCategory(user);
 		admin1.addUserCategory(viewer);
 
-		UserModel user1 = new UserModel("user", "password", true, "Alexander", "User", "alex.ei@nischl.fh", country222,
-				false);
+		UserModel user1 = new UserModel("user",  true, "password", "Alexander", "User", "alex.ei@nischl.fh", country222, false, token0);
+
 		user1.encryptPassword();
 		user1.addUserCategory(user);
 		user1.addUserCategory(viewer);
 
-		UserModel user2 = new UserModel("user2", "password", true, "Benjamin", "User2", "bluemchen@ottos.sklave.fh",
-				country14, false);
+		UserModel user2 = new UserModel("user2",  true,"password", "Benjamin", "User2", "bluemchen@ottos.sklave.fh",
+				country14, false, token2);
 		user2.encryptPassword();
 		user2.addUserCategory(user);
 		user2.addUserCategory(viewer);
 
-		/*
-		 * Um Bilder in Base64 zu codieren:
-		 * https://onlinepngtools.com/convert-png-to-base64
-		 */
-
-		UserModel defaultUser1 = new UserModel("default", "default", true, "default", "default", "default@default",
-				country1, false);
+		UserModel defaultUser1 = new UserModel("default", "default", true, "default@default.at","default", "default", token3, country10);
 		defaultUser1.encryptPassword();
 		defaultUser1.addUserCategory(viewer);
 
+		
+		UserModel viki = new UserModel("Viki", true,"password", "Viki","Gradwohl","gradwohl.viktoria@gmx.at", country10, false, token4);
+		viki.encryptPassword();
+		viki.addUserCategory(user);
+		viki.addUserCategory(viewer);
+
+		
 		userRepository.save(admin1);
 		userRepository.save(defaultUser1);
 		userRepository.save(user1);
 		userRepository.save(user2);
+
+
+		userRepository.save(viki);
+		
 
 		PlaceModel bangkok = new PlaceModel("Bangkok", country211);
 		PlaceModel place1 = new PlaceModel("FH Joanneum", country14);
@@ -608,6 +620,7 @@ public class InitController {
 				"Today we could witness the God of gods' famous lightning-throwing ceremony."
 						+ "Note: Tuesday to Sunday the gods drink their Ambrosia and might mistake you for a target. Travel insurance is advisable.",
 				admin1);
+
 		recommendationRepository.save(recommendation1);
 		recommendationRepository.save(rec2);
 		recommendationRepository.save(rec3);

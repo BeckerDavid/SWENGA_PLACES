@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,9 @@ import javax.validation.Valid;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -77,6 +81,28 @@ public class PlacesController {
 	
 	@Autowired
 	PictureRepository pictureRepository;
+
+
+	@Autowired
+	private MailSender mailSender;
+	@Autowired
+	private SimpleMailMessage templateMessage;
+
+	
+	@Secured("ROLE_USER")
+	@GetMapping("/achievements")
+	@Transactional
+	public String getAchievments(Model model, Authentication authentication) {
+
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
+		return "achievements";
+
+	}
 
 	@Secured("ROLE_USER")
 	@RequestMapping("/browse")
@@ -156,7 +182,8 @@ public class PlacesController {
 		return "redirect:/userProfile";
 	}
 	
-	 @RequestMapping(value = {"/find"})
+	@Secured("ROLE_USER")
+	@RequestMapping(value = {"/find"})
 	 public String find(Model model, @RequestParam String searchString, @RequestParam String searchType) {
 	  List<RecommendationModel> recommendations = null;
 	  int count = 0;
@@ -346,7 +373,6 @@ public class PlacesController {
 	public String getIndex(Model model) {
 
 		return "index";
-
 	}
 
 	@Secured("ROLE_USER")
@@ -511,7 +537,8 @@ public class PlacesController {
 
 		return "redirect:/recommendations";
 	}
-
+	
+	@Secured("ROLE_VIEWER")
 	@GetMapping("/register")
 	@Transactional
 	public String getRegister(Model model) {
@@ -523,6 +550,7 @@ public class PlacesController {
 
 	}
 
+	@Secured("ROLE_VIEWER")
 	@PostMapping("/register")
 	@Transactional
 	public String registerUser(@Valid UserModel user, BindingResult res, Model model, Authentication auth,
@@ -542,6 +570,7 @@ public class PlacesController {
 			user.setCategory(roles);
 			user.setEnabled(true);
 			user.setCountry(country);
+			user.setToken(UUID.randomUUID().toString());
 			userDao.persist(user);
 
 			model.addAttribute("message", "Welcome" + user.getUsername());
@@ -563,13 +592,89 @@ public class PlacesController {
 		return "redirect:/login";
 	}
 	
-	@RequestMapping("/forgotPassword")
+
+	@Secured("ROLE_USER")
+	@GetMapping("/forgotPassword")
 	@Transactional
-	public String forgotPassword() {
-			
+	public String getForgotPasswordSite(Model model) {
 		
-		return("forward:/forgotPassword");
+		return ("forgotPassword");
 	}
+	
+	@Secured("ROLE_USER")
+	@PostMapping("/forgotPassword")
+	@Transactional
+	public String getForgotPassword(@RequestParam("username") String username, Model model, Authentication authentication,
+			@RequestParam("mail") String mail) {
+		
+		UserModel user = userRepository.findByUsername(username);
+
+		if (user != null && user.isEnabled() && user.getMail() != null && user.getToken() != null) {
+			sendPasswordResetMail(user);
+			model.addAttribute("message", "Reset Passwort Email for User: " + user.getUsername() + " has been sent.");
+			return "login";
+		} else {
+			model.addAttribute("errorMessage", "Error while reading user data!");
+		return "login";
+		}
+}
+
+	private void sendPasswordResetMail(UserModel user) {
+		
+		String content = "Copy and paste the following link in your browser to reset your password: ";
+		String resetPasswordUrl = "http://localhost:8080/Places/resetPassword?token=" + user.getToken();
+		
+	 
+		// Create a thread safe "copy" of the template message and customize it
+		SimpleMailMessage msg = new SimpleMailMessage(this.templateMessage);
+
+		// You can override default settings from dispatcher-servlet.xml:
+		msg.setTo(user.getMail());
+		msg.setSubject("Password Reset");
+		msg.setText(String.format(msg.getText(), user.getFirstName() + ' ' + user.getLastName(), content,
+				resetPasswordUrl));
+		try {
+			this.mailSender.send(msg);
+		} catch (MailException ex) {
+			ex.printStackTrace();
+		}
+	}	
+	
+	@GetMapping("/resetPassword")
+	@Transactional
+	public String resetPassword(@RequestParam("token") String token, Model model, Authentication authentication) {
+
+		UserModel user = userRepository.findFirstByToken(token);
+		if (user != null && user.isEnabled()) {
+			model.addAttribute("message", "You can now reset the password.");
+			model.addAttribute("token", token);
+			return "resetPassword";
+		} else
+			model.addAttribute("errorMessage", "Error while reading user data!");
+		return "login";
+	}	
+	
+
+	@PostMapping("/resetPassword")	
+	@Transactional
+	public String resetPassword(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password, 
+			@RequestParam(value = "token", required=false) String token, Model model,
+			Authentication authentication) {
+		
+		UserModel user = userRepository.findFirstByUsername(username);
+		UserModel tokenUser = userRepository.findByToken(token);
+		
+		if (user != null && user.isEnabled() && user.equals(tokenUser)) {
+			user.setPassword(password);
+			user.encryptPassword();
+			userRepository.save(user);
+			model.addAttribute("message", "Password successfully reset");
+			return "login";
+		} else {
+			model.addAttribute("errorMessage", "Error while reading user data!");
+		}
+		return "login";
+}
 	
 
 	@Secured("ROLE_USER")

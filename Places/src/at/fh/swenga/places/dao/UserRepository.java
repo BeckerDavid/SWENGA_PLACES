@@ -13,14 +13,18 @@ import at.fh.swenga.places.model.UserModel;
 @Transactional
 public interface UserRepository extends JpaRepository<UserModel, Integer> {
 
-	UserModel findById(int id);
+	public UserModel findById(int id);
 	
-	UserModel findByUsername(String username);
+	public UserModel findByUsername(String username);
 
-	UserModel findFirstByUsername(String username);
+	public UserModel findFirstByUsername(String username);
+	
+	public UserModel findByToken(String token);
+	
+	public UserModel findFirstByToken(String token);
 	
 	@Query("Select u From UserModel u where u.username = :username")
-	UserModel getDefaultUser(@Param("username") String username);
+	public UserModel getDefaultUser(@Param("username") String username);
 	
 	@Transactional
 	@Modifying
