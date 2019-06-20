@@ -44,6 +44,7 @@ import at.fh.swenga.places.dao.PictureRepository;
 import at.fh.swenga.places.dao.PlaceRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserCategoryDao;
+import at.fh.swenga.places.dao.UserCategoryRepository;
 import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
@@ -81,14 +82,15 @@ public class PlacesController {
 
 	@Autowired
 	PictureRepository pictureRepository;
-
+	
+	@Autowired
+	UserCategoryRepository userCategoryRepository;
 
 	@Autowired
 	private MailSender mailSender;
 	@Autowired
 	private SimpleMailMessage templateMessage;
 
-	
 	@Secured("ROLE_USER")
 	@GetMapping("/achievements")
 	@Transactional
@@ -104,10 +106,10 @@ public class PlacesController {
 
 	}
 
-	@Secured("ROLE_USER")
+	@Secured("ROLE_VIEWER")
 	@RequestMapping("/browse")
 	@Transactional
-	public String fillRecommendations(Model model, Authentication authentication) {
+	public String fillRecommendations(Model model,  Authentication authentication) {
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
 		List<CountryModel> countries = countryRepository.findAll();
@@ -131,8 +133,10 @@ public class PlacesController {
 				model.addAttribute("image", image);
 			}
 		}
+		
+		
 
-		List<RecommendationModel> allModels = recommendationRepository.findAll();
+		List<RecommendationModel> allModels = recommendationRepository.listNewest(0, "");
 		RecommendationModel defaultModel = new RecommendationModel();
 
 		if (allModels.size() > 0) {
@@ -144,6 +148,8 @@ public class PlacesController {
 		return "browse";
 	}
 
+
+	@Secured ("ROLE_USER")
 	@GetMapping("uploadProfilePicture")
 	public String uploadProfilePicture(Model model, @RequestParam("id") int id) {
 		model.addAttribute("id", id);
@@ -180,45 +186,47 @@ public class PlacesController {
 
 		return "redirect:/userProfile";
 	}
-	
+
 	@Secured("ROLE_USER")
-	@RequestMapping(value = {"/find"})
-	 public String find(Model model, @RequestParam String searchString, @RequestParam String searchType) {
-	  List<RecommendationModel> recommendations = null;
-	  int count = 0;
+	@RequestMapping(value = { "/find" })
+	public String find(Model model, @RequestParam String searchString, @RequestParam int countryId, @RequestParam String searchType) {
+		
+		List<CountryModel> countries = countryRepository.findAll();
+		List<RecommendationModel> recommendations = null;
+		
+		model.addAttribute("countries", countries);
+		
+		int count = 0;
 
-	  switch (searchType) {
-	  case"query1":
-	   recommendations = recommendationRepository.findAll();
-	   break;
-	  case"query2":
-	   recommendations = recommendationRepository.listByPlaces();
-	   break;
-	  case"query3":
-		   recommendations = recommendationRepository.listBySeason();
-	   break;	   
-	  case"query4":
-		   recommendations = recommendationRepository.searchBySeason(searchString);
-	   break;
-	  case"query5":
-		   recommendations = recommendationRepository.listByUsername();
-	   break;
-	  case "query6":
-		  recommendations = recommendationRepository.findByTitle(searchString);
-	   
-	  default:
-		  recommendations = recommendationRepository.findAll();
-	  }
-	  
-	  model.addAttribute("recommendations", recommendations);
+		switch (searchType) {
+		case "query1":
+			recommendations = recommendationRepository.findAll();
+			break;
+		case "query2":
+			recommendations = recommendationRepository.listNewest(countryId, searchString);
+			break;
+		case "query3":
+			recommendations = recommendationRepository.listByPlaces(countryId, searchString);
+			break;
+		case "query4":
+			recommendations = recommendationRepository.listBySeason(countryId, searchString);
+			break;
+		case "query5":
+			recommendations = recommendationRepository.listByUsername(countryId, searchString);
+			break;
+		default:
+			recommendations = recommendationRepository.listNewest(0, "");
+		}
 
-	  if (recommendations != null) {
-	   model.addAttribute("count", recommendations.size());
-	  } else {
-	   model.addAttribute("count", count);
-	  }
-	  return"forward:/test";
-	 }
+		model.addAttribute("recommendations", recommendations);
+
+		if (recommendations != null) {
+			model.addAttribute("count", recommendations.size());
+		} else {
+			model.addAttribute("count", count);
+		}
+		return "browse";
+	}
 
 	@Secured("ROLE_USER")
 	@GetMapping("/contacts")
@@ -354,7 +362,9 @@ public class PlacesController {
 
 	}
 
+	
 	@GetMapping("/index")
+	@Secured("ROLE_VIEWER")
 	@Transactional
 	public String getIndex(Model model) {
 
@@ -443,7 +453,7 @@ public class PlacesController {
 			}
 		}
 
-		return "dashboard";
+		return "myJourneys";
 	}
 
 	@Secured("ROLE_USER")
@@ -491,6 +501,7 @@ public class PlacesController {
 	@Secured("ROLE_USER")
 	@PostMapping("/addRecommendation")
 	@Transactional
+
 	public String addRecommendation(Model model, @Valid RecommendationModel rec, Authentication auth,
 			@RequestParam("placeName") String placeName, @RequestParam("countryId") int countryId,
 			@RequestParam(value = "recommendationImage", required = false) MultipartFile imageFile) {
@@ -530,6 +541,51 @@ public class PlacesController {
 		recommendationRepository.save(rec);
 
 		return "redirect:/recommendations";
+	}
+
+	@Secured("ROLE_USER")
+	@GetMapping("/myRecommendations")
+	@Transactional
+	public String getMyRecommendations(Model model, Authentication authentication) {
+
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+		ArrayList<RecommendationModel> recommendations = recommendationRepository.findByUserId(user.getId());
+		
+		List<CountryModel> countries = countryRepository.findAll();
+
+		model.addAttribute("countries", countries);
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+			if (user.getProfilePicture() != null) {
+
+				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
+				PictureModel pp = ppOpt.get();
+				byte[] profilePicture = pp.getContent();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("data:image/jpeg;base64,");
+				sb.append(Base64.encodeBase64String(profilePicture));
+				String image = sb.toString();
+
+				model.addAttribute("image", image);
+			}
+			
+			model.addAttribute("recommendations", recommendations);
+		}
+
+		return "myRecommendations";
+
+	}
+	
+	// Spring 4: @RequestMapping(value = "/deleteMakeup", method = RequestMethod.GET)
+	@GetMapping("/deleteRecommendation")
+	public String delete(Model model, @RequestParam int id) {
+
+		recommendationRepository.removeById(id);
+		
+		return"redirect:/myRecommendations";
 	}
 	
 	@Secured("ROLE_VIEWER")
@@ -591,16 +647,16 @@ public class PlacesController {
 	@GetMapping("/forgotPassword")
 	@Transactional
 	public String getForgotPasswordSite(Model model) {
-		
+
 		return ("forgotPassword");
 	}
-	
+
 	@Secured("ROLE_USER")
 	@PostMapping("/forgotPassword")
 	@Transactional
-	public String getForgotPassword(@RequestParam("username") String username, Model model, Authentication authentication,
-			@RequestParam("mail") String mail) {
-		
+	public String getForgotPassword(@RequestParam("username") String username, Model model,
+			Authentication authentication, @RequestParam("mail") String mail) {
+
 		UserModel user = userRepository.findByUsername(username);
 
 		if (user != null && user.isEnabled() && user.getMail() != null && user.getToken() != null) {
@@ -609,16 +665,15 @@ public class PlacesController {
 			return "login";
 		} else {
 			model.addAttribute("errorMessage", "Error while reading user data!");
-		return "login";
+			return "login";
 		}
-}
+	}
 
 	private void sendPasswordResetMail(UserModel user) {
-		
+
 		String content = "Copy and paste the following link in your browser to reset your password: ";
 		String resetPasswordUrl = "http://localhost:8080/Places/resetPassword?token=" + user.getToken();
-		
-	 
+
 		// Create a thread safe "copy" of the template message and customize it
 		SimpleMailMessage msg = new SimpleMailMessage(this.templateMessage);
 
@@ -632,8 +687,8 @@ public class PlacesController {
 		} catch (MailException ex) {
 			ex.printStackTrace();
 		}
-	}	
-	
+	}
+
 	@GetMapping("/resetPassword")
 	@Transactional
 	public String resetPassword(@RequestParam("token") String token, Model model, Authentication authentication) {
@@ -646,18 +701,17 @@ public class PlacesController {
 		} else
 			model.addAttribute("errorMessage", "Error while reading user data!");
 		return "login";
-	}	
-	
+	}
 
-	@PostMapping("/resetPassword")	
+	@PostMapping("/resetPassword")
 	@Transactional
-	public String resetPassword(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password, 
-			@RequestParam(value = "token", required=false) String token, Model model,
-			Authentication authentication) {
-		
+	public String resetPassword(@RequestParam(value = "username") String username,
+			@RequestParam(value = "password") String password,
+			@RequestParam(value = "token", required = false) String token, Model model, Authentication authentication) {
+
 		UserModel user = userRepository.findFirstByUsername(username);
 		UserModel tokenUser = userRepository.findByToken(token);
-		
+
 		if (user != null && user.isEnabled() && user.equals(tokenUser)) {
 			user.setPassword(password);
 			user.encryptPassword();
@@ -668,8 +722,10 @@ public class PlacesController {
 			model.addAttribute("errorMessage", "Error while reading user data!");
 		}
 		return "login";
+
 }
 	
+
 	@Secured("ROLE_USER")
 	@GetMapping("/userProfile")
 	@Transactional
@@ -702,6 +758,7 @@ public class PlacesController {
 
 	}
 
+	@Secured("ROLE_VIEWER")
 	@RequestMapping("/visitor")
 	@Transactional
 	public String getVisitor(Model model) {
@@ -736,39 +793,26 @@ public class PlacesController {
 	public String getUserList(Model model, Authentication authentication) {
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
-
+		
 		if (user != null && user.isEnabled()) {
-
+			if ((authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))) {
+				
 			model.addAttribute("user", user);
+			List<UserModel> users = userRepository.findAll();
+			
+			
+			model.addAttribute("users", users);
+			model.addAttribute("count", users.size());
+			return "admin_userlist";
+			}
+			
+			return "logout";
 		}
-		return "admin_userlist";
+			
+		return "logout";
 
 	}
 
-	@RequestMapping("/fillUsers")
-	@Secured("ROLE_ADMIN")
-	@Transactional
-	public String fillUsers(Model model, Authentication authentication) {
-
-		UserModel user = userRepository.findFirstByUsername(authentication.getName());
-
-		if (user != null && user.isEnabled()) {
-
-			model.addAttribute("user", user);
-		}
-
-		List<UserModel> users = userRepository.findAll();
-
-		model.addAttribute("users", users);
-		model.addAttribute("count", users.size());
-
-		// CountryModel country1 = new CountryModel("asf","asfd");
-
-		// UserModel user1 = new UserModel("test", "test", "test", "e", "asraerw",
-		// country1, false);
-
-		return "/admin_userlist";
-	}
 
 	@Secured("ROLE_ADMIN")
 	@RequestMapping("/delete")

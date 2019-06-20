@@ -12,7 +12,7 @@
 	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 	<link href="bootstrap/css/light-bootstrap-dashboard.css?v=2.0.0 "
 		rel="stylesheet" />
-	
+
 </div>
 
 <div th:fragment="side">
@@ -52,21 +52,27 @@
 								<p>New Journey</p>
 						</a>
 					</ul></li>
-				<li><a class="nav-link" href="recommendations"> <i
-						class="nc-icon nc-pin-3"></i>
+				<li class="drop"><a class="nav-link" href="recommendations"> <i
+						class="nc-icon nc-air-baloon"></i>
 						<p>Recommendations</p>
-				</a></li>
+				</a>
+					<ul class="dropdowny">
+						<li class="droppy"><a class="nav-link" href="myRecommendations"> <i
+								class="nc-icon nc-attach-87"></i>
+								<p>My Recomms</p>
+						</a>
+					</ul></li>
 
 				<li><a class="nav-link" href="contacts"> <i
 						class="nc-icon nc-chat-round"></i>
 						<p>Contacts</p>
 				</a></li>
-				<li sec:authorize="hasRole('ROLE_ADMIN')"><a class="nav-link" href="userProfile"> <i
-						class="nc-icon nc-globe-2"></i>
+				<li sec:authorize="hasRole('ROLE_ADMIN')"><a class="nav-link"
+					href="userProfile"> <i class="nc-icon nc-globe-2"></i>
 						<p>Public Profile</p>
 				</a></li>
-				<li sec:authorize="hasRole('ROLE_ADMIN')"><a class="nav-link" href="fillUsers"> <i
-						class="nc-icon nc-globe-2"></i>
+				<li sec:authorize="hasRole('ROLE_ADMIN')"><a class="nav-link"
+					href="admin_userlist"> <i class="nc-icon nc-globe-2"></i>
 						<p>Users</p>
 				</a></li>
 			</ul>
@@ -100,8 +106,9 @@
 				</ul>
 			</div>
 			<div>
-			<img class="navbar-image" th:unless="${image} == null" th:src="${image}" />
-			<img class="navbar-image" th:if="${image} == null" src="bootstrap/img/default-avatar.png" />
+				<img class="navbar-image" th:unless="${image} == null"
+					th:src="${image}" /> <img class="navbar-image"
+					th:if="${image} == null" src="bootstrap/img/default-avatar.png" />
 			</div>
 		</div>
 	</nav>
@@ -137,7 +144,7 @@
 			var map = new google.maps.Map(document.getElementById('map'), {
 				zoom : 10,
 				center : uluru,
-				disableDefaultUI: true
+				disableDefaultUI : true
 			});
 		}
 	</script>
