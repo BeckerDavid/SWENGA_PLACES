@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -35,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import at.fh.swenga.places.dao.CountryRepository;
 import at.fh.swenga.places.dao.JourneyRepository;
+import at.fh.swenga.places.dao.PictureRepository;
 import at.fh.swenga.places.dao.PlaceRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserCategoryDao;
@@ -42,6 +44,7 @@ import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
 import at.fh.swenga.places.model.JourneyModel;
+import at.fh.swenga.places.model.PictureModel;
 import at.fh.swenga.places.model.PlaceModel;
 import at.fh.swenga.places.model.RecommendationModel;
 import at.fh.swenga.places.model.UserCategoryModel;
@@ -71,21 +74,9 @@ public class PlacesController {
 
 	@Autowired
 	JourneyRepository journeyRepo;
-
-	@Secured("ROLE_USER")
-	@GetMapping("/achievements")
-	@Transactional
-	public String getAchievments(Model model, Authentication authentication) {
-
-		UserModel user = userRepository.findFirstByUsername(authentication.getName());
-
-		if (user != null && user.isEnabled()) {
-
-			model.addAttribute("user", user);
-		}
-		return "achievements";
-
-	}
+	
+	@Autowired
+	PictureRepository pictureRepository;
 
 	@Secured("ROLE_USER")
 	@RequestMapping("/browse")
@@ -97,6 +88,19 @@ public class PlacesController {
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
+			if (user.getProfilePicture() != null) {
+
+				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
+				PictureModel pp = ppOpt.get();
+				byte[] profilePicture = pp.getContent();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("data:image/jpeg;base64,");
+				sb.append(Base64.encodeBase64String(profilePicture));
+				String image = sb.toString();
+
+				model.addAttribute("image", image);
+			}
 		}
 
 		List<RecommendationModel> allModels = recommendationRepository.findAll();
@@ -111,41 +115,43 @@ public class PlacesController {
 		return "browse";
 	}
 	
-	@Secured({ "ROLE_USER" })
-	@PostMapping("/changeProfilePicture")
-	public String uploadProfilePicture(Model model, Authentication authentication,
-			@RequestParam("username") String username, @RequestParam("imageFile") MultipartFile imageFile) {
-
+	@GetMapping("uploadProfilePicture")
+	public String uploadProfilePicture (Model model, @RequestParam("id") int id) {
+		model.addAttribute("id", id);
+		return "uploadPicture";
+	}
+	
+	@PostMapping(value = "upload")
+	public String uploadDocument(Model model, @RequestParam("id") int id,
+			@RequestParam("myFile") MultipartFile file) {
+ 
 		try {
-			UserModel user = userRepository.findByUsername(username);
-			
-			if (!"image/jpeg".equals(imageFile.getContentType()))
-			{
-				model.addAttribute("errorMessage", "Just JPG Files allowed!");
-				return getProfile(model, authentication);
-			}
-
-			// Load lazy ProfilePicutre and check if there is one already!
-			byte[] currPic = user.getProfilePicture();
-			// Already a Profile Picture available -> delete it
-			if (currPic != null) {
+ 
+			UserModel user = userRepository.findById(id);
+ 
+			// Already a document available -> delete it
+			if (user.getProfilePicture() != null) {
+				pictureRepository.delete(user.getProfilePicture());
+				// Don't forget to remove the relationship too
 				user.setProfilePicture(null);
-				userRepository.save(user);
 			}
+ 
 			// Create a new document and set all available infos
-
-			user.setProfilePicture(imageFile.getBytes());
+ 
+			PictureModel picture = new PictureModel();
+			picture.setContent(file.getBytes());
+			picture.setContentType(file.getContentType());
+			picture.setCreated(new Date());
+			picture.setFilename(file.getOriginalFilename());
+			picture.setName(file.getName());
+			user.setProfilePicture(picture);
 			userRepository.save(user);
-
-			model.addAttribute("message", "Profile Picture successfully uploaded.");
-
 		} catch (Exception e) {
-
 			model.addAttribute("errorMessage", "Error:" + e.getMessage());
 		}
-
-		return getProfile(model, authentication);
-}
+ 
+		return "redirect:/userProfile";
+	}
 	
 	 @RequestMapping(value = {"/find"})
 	 public String find(Model model, @RequestParam String searchString, @RequestParam String searchType) {
@@ -195,6 +201,19 @@ public class PlacesController {
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
+			if (user.getProfilePicture() != null) {
+
+				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
+				PictureModel pp = ppOpt.get();
+				byte[] profilePicture = pp.getContent();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("data:image/jpeg;base64,");
+				sb.append(Base64.encodeBase64String(profilePicture));
+				String image = sb.toString();
+
+				model.addAttribute("image", image);
+			}
 		}
 		return "contacts";
 
@@ -210,6 +229,19 @@ public class PlacesController {
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
+			if (user.getProfilePicture() != null) {
+
+				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
+				PictureModel pp = ppOpt.get();
+				byte[] profilePicture = pp.getContent();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("data:image/jpeg;base64,");
+				sb.append(Base64.encodeBase64String(profilePicture));
+				String image = sb.toString();
+
+				model.addAttribute("image", image);
+			}
 		}
 		return "dashboard";
 
@@ -242,6 +274,19 @@ public class PlacesController {
 		if (user1 != null && user1.isEnabled()) {
 
 			model.addAttribute("user", user1);
+			if (user.getProfilePicture() != null) {
+
+				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
+				PictureModel pp = ppOpt.get();
+				byte[] profilePicture = pp.getContent();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("data:image/jpeg;base64,");
+				sb.append(Base64.encodeBase64String(profilePicture));
+				String image = sb.toString();
+
+				model.addAttribute("image", image);
+			}
 		}
 
 		if (!changedUserModel.getUsername().equals(user.getUsername())) {
@@ -275,6 +320,19 @@ public class PlacesController {
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
+			if (user.getProfilePicture() != null) {
+
+				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
+				PictureModel pp = ppOpt.get();
+				byte[] profilePicture = pp.getContent();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("data:image/jpeg;base64,");
+				sb.append(Base64.encodeBase64String(profilePicture));
+				String image = sb.toString();
+
+				model.addAttribute("image", image);
+			}
 		}
 		return "following";
 
@@ -298,6 +356,19 @@ public class PlacesController {
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
+			if (user.getProfilePicture() != null) {
+
+				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
+				PictureModel pp = ppOpt.get();
+				byte[] profilePicture = pp.getContent();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("data:image/jpeg;base64,");
+				sb.append(Base64.encodeBase64String(profilePicture));
+				String image = sb.toString();
+
+				model.addAttribute("image", image);
+			}
 		}
 
 		List<CountryModel> countries = countryRepository.findAll();
@@ -342,6 +413,19 @@ public class PlacesController {
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
+			if (user.getProfilePicture() != null) {
+
+				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
+				PictureModel pp = ppOpt.get();
+				byte[] profilePicture = pp.getContent();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("data:image/jpeg;base64,");
+				sb.append(Base64.encodeBase64String(profilePicture));
+				String image = sb.toString();
+
+				model.addAttribute("image", image);
+			}
 		}
 
 		return "dashboard";
@@ -370,6 +454,19 @@ public class PlacesController {
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
+			if (user.getProfilePicture() != null) {
+
+				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
+				PictureModel pp = ppOpt.get();
+				byte[] profilePicture = pp.getContent();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("data:image/jpeg;base64,");
+				sb.append(Base64.encodeBase64String(profilePicture));
+				String image = sb.toString();
+
+				model.addAttribute("image", image);
+			}
 		}
 
 		return "recommendations";
@@ -447,6 +544,19 @@ public class PlacesController {
 			model.addAttribute("message", "Welcome" + user.getUsername());
 		}
 		model.addAttribute("user", user);
+		if (user.getProfilePicture() != null) {
+
+			Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
+			PictureModel pp = ppOpt.get();
+			byte[] profilePicture = pp.getContent();
+
+			StringBuilder sb = new StringBuilder();
+			sb.append("data:image/jpeg;base64,");
+			sb.append(Base64.encodeBase64String(profilePicture));
+			String image = sb.toString();
+
+			model.addAttribute("image", image);
+		}
 		return "redirect:/login";
 	}
 	
@@ -472,6 +582,19 @@ public class PlacesController {
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
+			if (user.getProfilePicture() != null) {
+
+				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
+				PictureModel pp = ppOpt.get();
+				byte[] profilePicture = pp.getContent();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("data:image/jpeg;base64,");
+				sb.append(Base64.encodeBase64String(profilePicture));
+				String image = sb.toString();
+
+				model.addAttribute("image", image);
+			}
 		}
 
 		return "userProfile";
@@ -487,6 +610,19 @@ public class PlacesController {
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
+			if (user.getProfilePicture() != null) {
+
+				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
+				PictureModel pp = ppOpt.get();
+				byte[] profilePicture = pp.getContent();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("data:image/jpeg;base64,");
+				sb.append(Base64.encodeBase64String(profilePicture));
+				String image = sb.toString();
+
+				model.addAttribute("image", image);
+			}
 		}
 
 		return "index";
@@ -607,9 +743,9 @@ public class PlacesController {
 				model.addAttribute("message", "Password successfully changed for User: " + username);
 				
 				model.addAttribute("user", user);
-
-				return "redirect:/logout";
+                
 			}
+			return "redirect:logout";
 		}
 
 		return "error";
@@ -626,6 +762,19 @@ public class PlacesController {
 		if (current != null && current.isEnabled()) {
 
 			model.addAttribute("user", current);
+			if (current.getProfilePicture() != null) {
+
+				Optional<PictureModel> ppOpt = pictureRepository.findById(current.getProfilePicture().getId());
+				PictureModel pp = ppOpt.get();
+				byte[] profilePicture = pp.getContent();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("data:image/jpeg;base64,");
+				sb.append(Base64.encodeBase64String(profilePicture));
+				String image = sb.toString();
+
+				model.addAttribute("image", image);
+			}
 		}
 		model.addAttribute("journeys", journeys);
 
@@ -653,6 +802,19 @@ public class PlacesController {
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
+			if (user.getProfilePicture() != null) {
+
+				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
+				PictureModel pp = ppOpt.get();
+				byte[] profilePicture = pp.getContent();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("data:image/jpeg;base64,");
+				sb.append(Base64.encodeBase64String(profilePicture));
+				String image = sb.toString();
+
+				model.addAttribute("image", image);
+			}
 		}
 		return "maps";
 	}

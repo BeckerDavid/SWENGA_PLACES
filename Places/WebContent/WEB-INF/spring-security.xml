@@ -8,18 +8,17 @@
 							http://www.springframework.org/schema/security/spring-security.xsd">
 
 	<http>
-		<csrf />
+		<csrf disabled="true"></csrf>
 		<intercept-url pattern="/login" access="permitAll" />
 		<intercept-url pattern="/forgotPassword" access="permitAll" />
 		<intercept-url pattern="/register" access="permitAll" />
 		<intercept-url pattern="/bootstrap/**" access="permitAll" />
 		<intercept-url pattern="/images/**" access="permitAll" />
-		<intercept-url pattern="/visitor" access="permitAll" />		
+		<intercept-url pattern="/visitor" access="permitAll" />
 		<intercept-url pattern="/**" access="authenticated" />
 		<intercept-url pattern="/delete" access="hasRole('ADMIN')" />
 		<intercept-url pattern="/admin_userlist" access="hasRole('ADMIN')" />
 		
-
 
 		<form-login login-page="/login"
 			default-target-url='/dashboard' always-use-default-target='true'
