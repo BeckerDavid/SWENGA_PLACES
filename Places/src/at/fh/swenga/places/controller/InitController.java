@@ -569,7 +569,7 @@ public class InitController {
 		user2.encryptPassword();
 		user2.addUserCategory(user);
 
-		UserModel defaultUser1 = new UserModel("default", "default", true, "default@default.at","default", "default", token3, country10);
+		UserModel defaultUser1 = new UserModel("default", true,"default", "default","default","default.default@gmx.at", country10, false, token3);
 		defaultUser1.encryptPassword();
 		defaultUser1.addUserCategory(viewer);
 

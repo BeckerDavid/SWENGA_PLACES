@@ -298,6 +298,16 @@ public class PlacesController {
 	public String getDashboard(Model model, Authentication authentication) {
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+		
+		System.out.println(user.getUsername());
+		
+		if(user.getUsername()=="default" && user.isEnabled()) {
+			
+			System.out.println("Hello");
+			
+			return"visitor";			
+		}
+		
 		ArrayList<RecommendationModel> recommendations = recommendationRepository.findByUserId(user.getId());
 
 		if (user != null && user.isEnabled()) {
@@ -424,6 +434,12 @@ public class PlacesController {
 	@Secured("ROLE_VIEWER")
 	@Transactional
 	public String getIndex(Model model) {
+		
+		UserModel user = userRepository.findFirstByUsername("default");
+		
+		System.out.println(user.getUsername());
+
+		model.addAttribute("user", user);
 
 		return "index";
 	}
@@ -858,13 +874,10 @@ public class PlacesController {
 	@Transactional
 	public String getVisitor(Model model) {
 
-		UserModel user = userRepository.getDefaultUser("default");
-
-		if (user != null && user.isEnabled()) {
-
-			model.addAttribute("user", user);
-			}
-			
+		Optional<CountryModel> countryOpt = countryRepository.findById(1);
+		CountryModel country = countryOpt.get();
+		
+		UserCategoryModel viewer = userCategoryRepository.findByRole("ROLE_VIEWER");
 
 		return "index";
 
@@ -1146,6 +1159,7 @@ public class PlacesController {
 		}
 		return "maps";
 	}
+	
 
 	@ExceptionHandler(Exception.class)
 	public String handleAllException(Exception ex) {
