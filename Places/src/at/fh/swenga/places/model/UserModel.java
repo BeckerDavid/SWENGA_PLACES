@@ -309,10 +309,13 @@ public class UserModel {
 	}
 
 	public void changeFavRec(RecommendationModel recMod) {
-		if (isRecLiked(recMod)) {
-			favRecommendations.add(recMod);
-		} else {
+
+		if(isRecLiked(recMod)) {
 			favRecommendations.remove(recMod);
+			System.out.println("Rec liked");
+		} else {
+			favRecommendations.add(recMod);
+			System.out.println("Rec not liked");
 		}
 	}
 

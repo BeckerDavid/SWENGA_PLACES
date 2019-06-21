@@ -213,14 +213,14 @@ public class PlacesController {
 	
 	@Secured("ROLE_USER")
 	@RequestMapping(value = { "/find" })
-	public String find(Model model, @RequestParam String searchString, @RequestParam int countryId, @RequestParam String searchType, Authentication authentication) {
+	public String find(Model model, Authentication authentication, @RequestParam String searchString, @RequestParam int countryId, @RequestParam String searchType) {
 
-	
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
-		int userId = user.getId();
-		
-		System.out.println(userId);
+		if (user != null && user.isEnabled()) {
 
+			model.addAttribute("user", user);
+		}
+		
 		List<CountryModel> countries = countryRepository.findAll();
 		List<RecommendationModel> recommendations = null;
 
@@ -933,21 +933,35 @@ public class PlacesController {
 		
 	}
 	
+
+	//@RequestMapping("/like")
 	@Secured("ROLE_USER")
-	@GetMapping(value = "/like")
+	@PostMapping(value = "/like")
 	@Transactional
-	public void likeRec(Model model, Authentication authentication, @RequestParam int rm) {
+	public String likeRec(Model model, Authentication authentication, @RequestParam int rm) {
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
 		
 		RecommendationModel recModel = recommendationRepository.findById(rm);
 		
+//		System.out.println("Debug - Title: " + recModel.getTitle());
+//		System.out.println("Is Recommendation liked before change?:" + user.isRecLiked(recModel));
+		if (user.isRecLiked(recModel)) {
+			recModel.setRating(recModel.getRating()-1);
+		} else {
+			recModel.setRating(recModel.getRating()+1);
+		}
 		user.changeFavRec(recModel);
+		
+//		System.out.println("Is Recommendation liked after change?:" + user.isRecLiked(recModel));
+		recommendationRepository.save(recModel);
+		userRepository.save(user);
 
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
 		}
+	return "forward:browse";	
 	}
 	
 	/*
