@@ -707,6 +707,44 @@ public class PlacesController {
 		return "redirect:/login";
 	}
 	
+	@Secured("ROLE_ADMIN")
+	@PostMapping("/registerNewUser")
+	@Transactional
+	public String registerNewUser(@Valid UserModel user, BindingResult res, Model model, Authentication auth,
+			@RequestParam(value = "countryId") int cid, @RequestParam(value = "categoryId") int catId) {
+		
+		if (userRepository.findFirstByUsername(user.getUsername()) != null) {
+			model.addAttribute("error", "Username is already in use, sorry!");
+		} else {
+			Set<UserCategoryModel> roles = new HashSet<UserCategoryModel>();
+			UserCategoryModel catU = userCatDao.getRole("ROLE_USER");
+			UserCategoryModel catA = userCatDao.getRole("ROLE_ADMIN");
+			
+			if (catId == 1) {
+				roles.add(catA);
+			}
+			else {
+				roles.add(catU);
+			}
+
+			CountryModel country = countryRepository.getOne(cid);
+			user.setPrivate(false);
+			user.encryptPassword();
+			System.out.println("bin hier");
+			user.setCategory(roles);
+			System.out.println("bin hier");
+			user.setEnabled(true);
+			user.setCountry(country);
+			System.out.println("bin hier");
+			user.setToken(UUID.randomUUID().toString());
+			userDao.persist(user);
+
+		}
+		
+		return "redirect:admin_userlist";
+	}
+	
+	
 
 	@Secured("ROLE_USER")
 	@GetMapping("/forgotPassword")
@@ -850,6 +888,16 @@ public class PlacesController {
 	public String getUserList(Model model, Authentication authentication) {
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+		
+		List<CountryModel> countries = countryRepository.findAll();
+		
+		List<UserCategoryModel> categories = userCategoryRepository.findAll();
+		
+		categories.remove(2);
+		
+		model.addAttribute("countries", countries);
+		model.addAttribute("categories", categories);
+		
 
 		if (user != null && user.isEnabled()) {
 
