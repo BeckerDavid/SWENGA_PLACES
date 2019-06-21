@@ -1,6 +1,5 @@
 package at.fh.swenga.places.controller;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -938,6 +937,14 @@ public class PlacesController {
 
 		UserModel current = userRepository.findByUsername(auth.getName());
 		ArrayList<JourneyModel> journeys = journeyRepo.findByUsersId(current.getId());
+		
+		ArrayList<CountryModel> countries = new ArrayList<CountryModel>();
+		
+		for (int i = 0; i < journeys.size(); i++) {
+			Optional<CountryModel> countryO = countryRepository.findById(journeys.get(i).getCountries().iterator().next().getId());
+			CountryModel country = countryO.get();
+			countries.add(country);
+		}
 
 		if (current != null && current.isEnabled()) {
 
@@ -957,6 +964,7 @@ public class PlacesController {
 			}
 		}
 		model.addAttribute("journeys", journeys);
+		model.addAttribute("countries", countries);
 
 		return "myJourneys";
 	}

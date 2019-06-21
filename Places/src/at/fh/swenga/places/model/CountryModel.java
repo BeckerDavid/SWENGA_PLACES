@@ -33,7 +33,7 @@ public class CountryModel {
 	@ManyToMany(mappedBy="favoriteCountries")
 	private Set<UserModel> favUsers;
 	
-	@ManyToMany(mappedBy="countries")
+	@ManyToMany(mappedBy="countries", fetch = FetchType.EAGER)
 	private Set<JourneyModel> journeys;
 	
 	@OneToMany(mappedBy="country", fetch = FetchType.LAZY)
