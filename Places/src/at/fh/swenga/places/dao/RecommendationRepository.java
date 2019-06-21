@@ -71,7 +71,24 @@ public interface RecommendationRepository extends JpaRepository<RecommendationMo
 					@Param("countryId") int countryId,
 					@Param("searchString") String searchString);
 			
+			
+			
 	//Query6
+			
+			@Query("SELECT r "
+			+ "FROM  RecommendationModel AS r "
+			+ "JOIN r.place AS p "
+			+ "WHERE p.country.id = :countryId OR 0 = :countryId "
+			+ "AND (LOWER(r.title) LIKE CONCAT('%', LOWER(:searchString), '%') "
+			+ "OR LOWER(r.description) LIKE CONCAT('%', LOWER(:searchString), '%') "
+			+ "OR LOWER(r.season) LIKE CONCAT('%', LOWER(:searchString), '%') "
+			+ "OR LOWER(r.user.username) LIKE CONCAT('%', LOWER(:searchString), '%')) "
+			+ "ORDER BY r.id DESC ")
+			public List<RecommendationModel> getRecommendationForJourney(
+					@Param("countryId") int countryId,
+					@Param("searchString") String searchString);
+	
+			
 			/*
 			 * SELECT r.title, c.countryName
 			FROM IMA17_gradwohl_SWENGA_project_2.Recommendations AS r
@@ -89,8 +106,13 @@ public interface RecommendationRepository extends JpaRepository<RecommendationMo
 			+ "JOIN c.journey_country AS jc "
 			+ "JOIN jc.journey AS j 
 			+ "JOIN j.users AS u "
-			+ "WHERE  "	
-			+ "ORDER BY r.user.username ")
+			+ "WHERE p.country.id = :countryId OR 0 = :countryId "
+			+ "AND (LOWER(r.title) LIKE CONCAT('%', LOWER(:searchString), '%') "
+			+ "OR LOWER(r.description) LIKE CONCAT('%', LOWER(:searchString), '%') "
+			+ "OR LOWER(r.season) LIKE CONCAT('%', LOWER(:searchString), '%') "
+			+ "OR LOWER(r.user.username) LIKE CONCAT('%', LOWER(:searchString), '%')) "			
+			+ "ORDER BY r.user.username "	
+			+ "ORDER BY c.countryName ")
 			public List<RecommendationModel> listByJourneyCountry();
 			
 */
