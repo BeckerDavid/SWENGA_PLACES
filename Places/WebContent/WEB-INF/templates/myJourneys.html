@@ -29,32 +29,36 @@
 								<div class="card-head">
 									<h4 class="card-title">My Journeys</h4>
 								</div>
-							</div>
-						</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-4"
+											th:each="journey:${#request.getAttribute('journeys')}">
+											<div class="card">
+												<div class="card-body-rec">
+													<div class="card-recPic">
+														<img class="boopsi2" src="images/airplane.jpg" /> <span
+															th:text="${journey.zip1 + ' ' + journey.city1 + ' ' + countries.get(journeyStat.index).countryName}"></span>
+													</div>
+													<div class="card-body-rec-content">
 
-						<div class="col-sm-8 col-md-6 col-lg-6"
-							th:each="journey:${#request.getAttribute('journeys')}">
-							<div class="card">
-								<div class="card-body-rec">
-									<div class="card-recPic">
-										<div id="map"></div>
-										<span th:text="${journey.zip1 + ' ' + journey.city1}"></span>
-									</div>
-									<div class="card-body-rec-content">
-
-										<h2 th:if="${journey.city2 == null}">Additional Place:</h2>
-										<p th:text="${journey.city2}"></p>
-										<h2>Arrival Date:</h2>
-										<p
-											th:text="${#calendars.format(journey.arrivalDate,'dd.MM.yyyy')}"></p>
-										<h2>Departure Date:</h2>
-										<p
-											th:text="${#calendars.format(journey.departureDate,'dd.MM.yyyy')}"></p>
-										<h2>Budget:</h2>
-										<p th:text="${journey.budget}"></p>
-										<h3 th:if="${journey.description == null}">Description:</h3>
-										<div>
-											<small th:text="${journey.description}"></small>
+														<h2 th:if="${journey.city2 == null}">Additional
+															Place:</h2>
+														<p th:text="${journey.city2}"></p>
+														<h2>Arrival Date:</h2>
+														<p
+															th:text="${#calendars.format(journey.arrivalDate,'dd.MM.yyyy')}"></p>
+														<h2>Departure Date:</h2>
+														<p
+															th:text="${#calendars.format(journey.departureDate,'dd.MM.yyyy')}"></p>
+														<h2>Budget:</h2>
+														<p th:text="${journey.budget}"></p>
+														<h3 th:if="${journey.description == null}">Description:</h3>
+														<div>
+															<small th:text="${journey.description}"></small>
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -63,7 +67,6 @@
 					</div>
 				</div>
 			</div>
-
 
 			<footer class="footer">
 				<div class="container-fluid">
@@ -81,29 +84,28 @@
 			</footer>
 		</div>
 	</div>
-
 </body>
 
 <div th:include="~{includes/fragments :: bootstrapJS}" th:remove="tag" />
 <script>
-		// Initialize and add the map
-		function initMap() {
-			// The location of Barcelona
-			var uluru = {
-				lat : 41.3851,
-				lng : 2.1734
-			};
-			// The map, centered at Barcelona
-			var map = new google.maps.Map(document.getElementById('map'), {
-				zoom : 10,
-				center : uluru,
-				disableDefaultUI : true,
-				
-			});
-		}
-	</script>
-	<script async defer
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDI1wd2IfpO0aSkJq__eaoxr0_qZKkXEA8&callback=initMap">
-		
-	</script>
+	// Initialize and add the map
+	function initMap() {
+		// The location of Barcelona
+		var uluru = {
+			lat : 41.3851,
+			lng : 2.1734
+		};
+		// The map, centered at Barcelona
+		var map = new google.maps.Map(document.getElementById('map'), {
+			zoom : 10,
+			center : uluru,
+			disableDefaultUI : true,
+
+		});
+	}
+</script>
+<script async defer
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDI1wd2IfpO0aSkJq__eaoxr0_qZKkXEA8&callback=initMap">
+	
+</script>
 </html>

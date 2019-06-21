@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -32,26 +34,26 @@ public class JourneyModel {
 	@DateTimeFormat(pattern = "dd.MM.yyyy")
 	@NotNull(message = "Date cannot be null")
 	private Calendar departureDate;
-	
+
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private UserModel users;
-	
-	@Column(scale=2)
+
+	@Column(scale = 2)
 	private Float budget;
-	
+
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	private Set<CountryModel> countries;
-	
+
 	private String city1;
-	
-	@Column(nullable=true)
+
+	@Column(nullable = true)
 	private String city2;
-	
+
 	private int zip1;
-	
-	@Column(nullable=true)
+
+	@Column(nullable = true)
 	private int zip2;
-	
+
 	private String description;
 
 	public String getDescription() {
@@ -93,7 +95,7 @@ public class JourneyModel {
 	public void setUsers(UserModel users) {
 		this.users = users;
 	}
-	
+
 	public Float getBudget() {
 		return budget;
 	}
@@ -189,8 +191,8 @@ public class JourneyModel {
 	}
 
 	public JourneyModel(@NotNull(message = "Date cannot be null") Calendar arrivalDate,
-			@NotNull(message = "Date cannot be null") Calendar departureDate,
-			Set<PlaceModel> journeyDestination, UserModel users) {
+			@NotNull(message = "Date cannot be null") Calendar departureDate, Set<PlaceModel> journeyDestination,
+			UserModel users) {
 		super();
 		this.arrivalDate = arrivalDate;
 		this.departureDate = departureDate;
@@ -229,5 +231,5 @@ public class JourneyModel {
 		this.city1 = city1;
 		this.zip1 = zip1;
 	}
-	
+
 }
