@@ -185,7 +185,7 @@ public class PlacesController {
 	
 	@Secured("ROLE_USER")
 	@RequestMapping(value = { "/find" })
-	public String find(Model model, @RequestParam String searchString, @RequestParam int countryId, @RequestParam String searchType) {
+	public String find(Model model, @RequestParam String searchString, @RequestParam int countryId, @RequestParam String searchType, Authentication authentication) {
 
 
 		List<CountryModel> countries = countryRepository.findAll();
@@ -221,6 +221,8 @@ public class PlacesController {
 		}
 
 		model.addAttribute("recommendations", recommendations);
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+		model.addAttribute("user", user);
 
 		if (recommendations != null) {
 			model.addAttribute("count", recommendations.size());
@@ -469,7 +471,7 @@ public class PlacesController {
 			}
 		}
 
-		return "myJourneys";
+		return "redirect:/journeys";
 	}
 
 	@Secured("ROLE_USER")
@@ -845,7 +847,7 @@ public class PlacesController {
 			model.addAttribute("user", user);
 		}
 		
-		return "forward:fillUsers";
+		return "forward:admin_userlist";
 	}
 	
 	@Secured("ROLE_ADMIN")
