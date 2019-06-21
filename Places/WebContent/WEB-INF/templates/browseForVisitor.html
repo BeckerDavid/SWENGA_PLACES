@@ -21,39 +21,43 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card">
-								<div class="card-head">
-								</div>
+								<div class="card-head"></div>
 							</div>
 						</div>
-						
-						<div class="col-sm-12 col-md-6 col-lg-6" th:each="recommendation : ${recommendations}">
+
+						<div class="col-sm-12 col-md-6 col-lg-6"
+							th:each="recommendation : ${recommendations}">
 							<div class="card">
 								<div class="card-body-rec">
 									<div class="card-recPic">
-										<img class="boopsi" th:src="${recommendation.getPicture()}"	alt="The recommendation's picture" />
-											<span class="rec-title" th:text="${recommendation.getPlace().getName()}"></span>
+										<img class="boopsi" th:src="${recommendation.getPicture()}"
+											alt="The recommendation's picture" /> <span
+											class="rec-title"
+											th:text="${recommendation.getPlace().getName()}"></span>
 									</div>
 									<div class="card-body-rec-content">
 										<div class="row">
 											<div class="col-9 col-sm-9 col-md-9 col-lg-9">
-												<h5 class="card-title" th:text="${recommendation.getTitle()}"></h5>
-												<h6 class="card-title" th:text="${recommendation.getPlace().getCountry().getCountryName()}"></h6>
+												<h5 class="card-title"
+													th:text="${recommendation.getTitle()}"></h5>
+												<h6 class="card-title"
+													th:text="${recommendation.getPlace().getCountry().getCountryName()}"></h6>
 											</div>
 											<div class="col-1 col-sm-1 col-md-1 col-lg-1">
-							
-<!-- 											<a href="#" class="fav-link" data-toggle="dropdown"> -->
-<!-- 			                                    <i class="fas fa-heart" id="heart"></i> -->
-<!-- 			                                    <span class="d-none d-sm-none">Fav</span> -->
-<!-- 			                                </a> -->
-<!-- 								        	<div class="btn-group-toggle" data-toggle="buttons"> -->
-<!-- 												<label class="btn btn-secondary active"> -->
-<!-- 											    	<input type="checkbox" checked autocomplete="off"> -->
-<!-- 											    	 <i class="nc-icon nc-favourite-28"></i> -->
-<!-- 												</label> -->
-<!-- 											</div> -->
-										        
-										    </div>
-									    </div>
+
+												<!-- 											<a href="#" class="fav-link" data-toggle="dropdown"> -->
+												<!-- 			                                    <i class="fas fa-heart" id="heart"></i> -->
+												<!-- 			                                    <span class="d-none d-sm-none">Fav</span> -->
+												<!-- 			                                </a> -->
+												<!-- 								        	<div class="btn-group-toggle" data-toggle="buttons"> -->
+												<!-- 												<label class="btn btn-secondary active"> -->
+												<!-- 											    	<input type="checkbox" checked autocomplete="off"> -->
+												<!-- 											    	 <i class="nc-icon nc-favourite-28"></i> -->
+												<!-- 												</label> -->
+												<!-- 											</div> -->
+
+											</div>
+										</div>
 										<div>
 											<small th:text="${recommendation.getDescription()}"></small>
 										</div>
@@ -69,12 +73,12 @@
 				<div class="container-fluid">
 					<nav>
 						<p class="copyright text-center">
-							©
+							&copy;
 							<script>
 								document.write(new Date().getFullYear())
 							</script>
-							<a href="http://www.creative-tim.com">Creative Ardian</a>, made
-							with love for a better SWENGA project
+							<a href="https://github.com/BeckerDavid/SWENGA_PLACES">Places</a>,
+							made with love for a better SWENGA project
 						</p>
 					</nav>
 				</div>

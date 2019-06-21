@@ -55,7 +55,8 @@
 													</select>
 												</div>
 												<div class="form-group col-sm-2 search-button">
-													<button type="submit" value="Do it" class="btn btn-info btn-fill pull-right">SEARCH</button>
+													<button type="submit" value="Do it"
+														class="btn btn-info btn-fill pull-right">SEARCH</button>
 												</div>
 											</div>
 										</form>
@@ -63,39 +64,52 @@
 								</div>
 							</div>
 						</div>
-						
-						<div class="col-sm-12 col-md-6 col-lg-6" th:each="recommendation : ${recommendations}">
+
+						<div class="col-sm-12 col-md-6 col-lg-6"
+							th:each="recommendation : ${recommendations}">
 							<div class="card">
 								<div class="card-body-rec">
 									<div class="card-recPic">
-										<img class="boopsi" th:src="${recommendation.getPicture()}"	alt="The recommendation's picture" />
-											<span class="rec-title" th:text="${recommendation.getPlace().getName()}"></span>
+										<img class="boopsi" th:src="${recommendation.getPicture()}"
+											alt="The recommendation's picture" /> <span
+											class="rec-title"
+											th:text="${recommendation.getPlace().getName()}"></span>
 									</div>
 									<div class="card-body-rec-content">
 										<div class="row">
 											<div class="col-10 col-sm-10 col-md-10 col-lg-10">
-												<h5 class="card-title" th:text="${recommendation.getTitle()}"></h5>
-												<h6 class="card-title" th:text="${recommendation.getPlace().getCountry().getCountryName()}"></h6>
-												by <a href="#" class="card-title-author" th:text="${recommendation.getUser().getUsername()}" />
+												<h5 class="card-title"
+													th:text="${recommendation.getTitle()}"></h5>
+												<h6 class="card-title"
+													th:text="${recommendation.getPlace().getCountry().getCountryName()}"></h6>
+												by <a href="#" class="card-title-author"
+													th:text="${recommendation.getUser().getUsername()}" />
 											</div>
 											<div class="col-2 col-sm-2 col-md-2 col-lg-2">
 												<div class="form-row">
 													<div class="form-check col-1 col-sm-1 col-md-1 col-lg-1">
-														<form method="POST" th:object="${like}" th:action="@{/like(rm=${recommendation.getId()})}">
-<!-- 															<button th:if="${user.isRecLiked(recommendation)}" type="submit" value="Do it" class="btn btn-info pull-right btn-fill"><i class="nc-icon nc-favourite-28"></i></button> -->
-<!-- 															<button th:unless="${user.isRecLiked(recommendation)}" type="submit" value="Do it" class="btn btn-info pull-right"><i class="nc-icon nc-favourite-28"></i></button> -->
-															<button th:if="${user.isRecLiked(recommendation)}" type="submit" value="Do it" class="btn btn-info pull-right btn-fill">Unlike</button>
-															<button th:unless="${user.isRecLiked(recommendation)}" type="submit" value="Do it" class="btn btn-info pull-right">Like</button>
-													    </form>
+														<form method="POST" th:object="${like}"
+															th:action="@{/like(rm=${recommendation.getId()})}">
+															<!-- 															<button th:if="${user.isRecLiked(recommendation)}" type="submit" value="Do it" class="btn btn-info pull-right btn-fill"><i class="nc-icon nc-favourite-28"></i></button> -->
+															<!-- 															<button th:unless="${user.isRecLiked(recommendation)}" type="submit" value="Do it" class="btn btn-info pull-right"><i class="nc-icon nc-favourite-28"></i></button> -->
+															<button th:if="${user.isRecLiked(recommendation)}"
+																type="submit" value="Do it"
+																class="btn btn-info pull-right btn-fill">Unlike</button>
+															<button th:unless="${user.isRecLiked(recommendation)}"
+																type="submit" value="Do it"
+																class="btn btn-info pull-right">Like</button>
+														</form>
 													</div>
-													
+
 													<div class="form-check col-1 col-sm-1 col-md-1 col-lg-1">
-														<h3 class="card-title" th:text="${recommendation.getRating()}"></h3><span>&#128153;</span>
+														<h3 class="card-title"
+															th:text="${recommendation.getRating()}"></h3>
+														<span>&#128153;</span>
 													</div>
 												</div>
-										        
-										    </div>
-									    </div>
+
+											</div>
+										</div>
 										<div>
 											<small th:text="${recommendation.getDescription()}"></small>
 										</div>
@@ -111,12 +125,12 @@
 				<div class="container-fluid">
 					<nav>
 						<p class="copyright text-center">
-							©
+							&copy;
 							<script>
 								document.write(new Date().getFullYear())
 							</script>
-							<a href="http://www.creative-tim.com">Creative Ardian</a>, made
-							with love for a better SWENGA project
+							<a href="https://github.com/BeckerDavid/SWENGA_PLACES">Places</a>,
+							made with love for a better SWENGA project
 						</p>
 					</nav>
 				</div>
