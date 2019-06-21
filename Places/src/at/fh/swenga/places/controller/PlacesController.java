@@ -221,6 +221,8 @@ public class PlacesController {
 			model.addAttribute("user", user);
 		}
 		
+		int userId = user.getId();
+		
 		List<CountryModel> countries = countryRepository.findAll();
 		List<RecommendationModel> recommendations = null;
 
