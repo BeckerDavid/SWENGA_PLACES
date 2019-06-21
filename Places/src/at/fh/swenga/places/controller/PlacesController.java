@@ -862,7 +862,7 @@ public class PlacesController {
 			model.addAttribute("user", user);
 		}
 		
-		return "forward:fillUsers";
+		return "forward:admin_userlist";
 	}
 	
 	@Secured("ROLE_USER")
