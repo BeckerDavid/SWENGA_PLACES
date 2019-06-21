@@ -301,11 +301,11 @@ public class PlacesController {
 		
 		System.out.println(user.getUsername());
 		
-		if(user.getUsername()=="default" && user.isEnabled()) {
+		if(user.getUsername().equals("default") && user.isEnabled()) {
 			
 			System.out.println("Hello");
 			
-			return"visitor";			
+			return"forward:visitor";			
 		}
 		
 		ArrayList<RecommendationModel> recommendations = recommendationRepository.findByUserId(user.getId());
