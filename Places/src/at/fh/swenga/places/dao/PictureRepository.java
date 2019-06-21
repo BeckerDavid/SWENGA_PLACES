@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import at.fh.swenga.places.model.PictureModel;
 
-
 @Repository
 @Transactional
 public interface PictureRepository extends JpaRepository<PictureModel, Integer> {

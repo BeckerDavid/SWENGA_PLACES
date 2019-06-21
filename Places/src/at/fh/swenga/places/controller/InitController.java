@@ -1,6 +1,12 @@
 package at.fh.swenga.places.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -12,12 +18,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import at.fh.swenga.places.dao.CountryRepository;
+import at.fh.swenga.places.dao.JourneyRepository;
 import at.fh.swenga.places.dao.PlaceRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserCategoryRepository;
 import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
+import at.fh.swenga.places.model.JourneyModel;
 import at.fh.swenga.places.model.PlaceModel;
 import at.fh.swenga.places.model.RecommendationModel;
 import at.fh.swenga.places.model.UserCategoryModel;
@@ -44,6 +52,9 @@ public class InitController {
 	@Autowired
 	PlaceRepository placeRepo;
 
+	@Autowired
+	JourneyRepository journeyRepo;
+
 	@RequestMapping("/")
 	public String loadIndex() {
 
@@ -58,7 +69,7 @@ public class InitController {
 
 	@RequestMapping("/init")
 	@Transactional
-	public String fillDataBase(Model model) {
+	public String fillDataBase(Model model) throws ParseException {
 		CountryModel country1 = new CountryModel("AF", "AFGHANISTAN");
 		CountryModel country2 = new CountryModel("AL", "ALBANIA");
 		CountryModel country3 = new CountryModel("DZ", "ALGERIA");
@@ -544,49 +555,47 @@ public class InitController {
 		userCatRepo.save(admin);
 		userCatRepo.save(user);
 		userCatRepo.save(viewer);
-		
+
 		String token0 = UUID.randomUUID().toString();
 		String token1 = UUID.randomUUID().toString();
 		String token2 = UUID.randomUUID().toString();
 		String token3 = UUID.randomUUID().toString();
 		String token4 = UUID.randomUUID().toString();
 
-
-		UserModel admin1 = new UserModel("admin",  true,"password", "Robert", "Admin", "robert.admin@boop.fh",
+		UserModel admin1 = new UserModel("admin", true, "password", "Robert", "Admin", "robert.admin@boop.fh",
 				country44, false, token1);
 
 		admin1.encryptPassword();
 		admin1.addUserCategory(admin);
 		admin1.addUserCategory(user);
 
-		UserModel user1 = new UserModel("user",  true, "password", "Alexander", "User", "alex.ei@nischl.fh", country222, false, token0);
+		UserModel user1 = new UserModel("user", true, "password", "Alexander", "User", "alex.ei@nischl.fh", country222,
+				false, token0);
 
 		user1.encryptPassword();
 		user1.addUserCategory(user);
 
-		UserModel user2 = new UserModel("user2",  true,"password", "Benjamin", "User2", "bluemchen@ottos.sklave.fh",
+		UserModel user2 = new UserModel("user2", true, "password", "Benjamin", "User2", "bluemchen@ottos.sklave.fh",
 				country14, false, token2);
 		user2.encryptPassword();
 		user2.addUserCategory(user);
 
-		UserModel defaultUser1 = new UserModel("default", true,"default", "default","default","default.default@gmx.at", country10, false, token3);
+		UserModel defaultUser1 = new UserModel("default", true, "default", "default", "default",
+				"default.default@gmx.at", country10, false, token3);
 		defaultUser1.encryptPassword();
 		defaultUser1.addUserCategory(viewer);
 
-		
-		UserModel viki = new UserModel("Viki", true,"password", "Viki","Gradwohl","gradwohl.viktoria@gmx.at", country10, false, token4);
+		UserModel viki = new UserModel("Viki", true, "password", "Viki", "Gradwohl", "gradwohl.viktoria@gmx.at",
+				country10, false, token4);
 		viki.encryptPassword();
 		viki.addUserCategory(user);
 
-		
 		userRepository.save(admin1);
 		userRepository.save(defaultUser1);
 		userRepository.save(user1);
 		userRepository.save(user2);
 
-
 		userRepository.save(viki);
-		
 
 		PlaceModel bangkok = new PlaceModel("Bangkok", country211);
 		PlaceModel place1 = new PlaceModel("FH Joanneum", country14);
@@ -623,7 +632,32 @@ public class InitController {
 		recommendationRepository.save(rec4);
 		recommendationRepository.save(rec5);
 		recommendationRepository.save(rec6);
-		
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date dateD = sdf.parse("2019-06-20");
+		Calendar calD = Calendar.getInstance();
+		calD.setTime(dateD);
+
+		Date dateS = sdf.parse("2019-07-10");
+		Calendar calS = Calendar.getInstance();
+		calS.setTime(dateS);
+
+		Set<PlaceModel> places = new HashSet<PlaceModel>();
+		places.add(bangkok);
+		Set<CountryModel> countries = new HashSet<CountryModel>();
+		countries.add(countryK);
+
+		JourneyModel journey1 = new JourneyModel(calD, calS, places, user1, new Float(1000), countries, "Pristina",
+				10000);
+		JourneyModel journey2 = new JourneyModel(calD, calS, places, user2, new Float(1000), countries, "Prizren",
+				10000);
+		JourneyModel journey3 = new JourneyModel(calD, calS, places, admin1, new Float(1000), countries, "Gjilan",
+				10000);
+
+		journeyRepo.save(journey1);
+		journeyRepo.save(journey2);
+		journeyRepo.save(journey3);
+
 		return "login";
 	}
 

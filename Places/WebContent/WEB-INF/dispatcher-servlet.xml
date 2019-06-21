@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:util="http://www.springframework.org/schema/util" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
 
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/aop 
@@ -24,11 +28,14 @@
 
 
 	<!-- Read settings from external file and replace all ${...} in the xml -->
-	<context:property-placeholder location="classpath:db.properties" />
+	<context:property-placeholder
+		location="classpath:db.properties" />
 
 
-	<!-- - POJOs labeled with the @Controller, @Service,..... annotations are auto-detected. -->
-	<context:component-scan base-package="at.fh.swenga.places" />
+	<!-- - POJOs labeled with the @Controller, @Service,..... annotations are 
+		auto-detected. -->
+	<context:component-scan
+		base-package="at.fh.swenga.places" />
 
 	<!-- ################################################################ -->
 
@@ -37,11 +44,9 @@
 
 	<!-- ################################################################ -->
 
-	<!-- 
-	<bean class="org.springframework.data.web.config.SpringDataWebConfiguration"/>  
-	-->
+	<!-- <bean class="org.springframework.data.web.config.SpringDataWebConfiguration"/> -->
 
- 
+
 	<bean id="conversionService"
 		class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
 
@@ -52,13 +57,14 @@
 
 	<bean id="sortResolver"
 		class="org.springframework.data.web.SortHandlerMethodArgumentResolver" />
-	
+
 	<bean id="pageableResolver"
 		class="org.springframework.data.web.PageableHandlerMethodArgumentResolver">
 		<constructor-arg ref="sortResolver" />
 	</bean>
 
-	<mvc:annotation-driven conversion-service="conversionService">
+	<mvc:annotation-driven
+		conversion-service="conversionService">
 		<mvc:argument-resolvers>
 			<ref bean="sortResolver" />
 			<ref bean="pageableResolver" />
@@ -67,7 +73,7 @@
 
 	<!-- ################################################################ -->
 
-	<!--  <mvc:annotation-driven/> -->
+	<!-- <mvc:annotation-driven/> -->
 
 	<!-- if no Controller can handle a request, ask Servlet Container, if he 
 		can handle it, otherwise return 404 -->
@@ -82,21 +88,22 @@
 		<property name="cacheable" value="false" />
 	</bean>
 
-	<bean id="templateEngine" class="org.thymeleaf.spring5.SpringTemplateEngine">
+	<bean id="templateEngine"
+		class="org.thymeleaf.spring5.SpringTemplateEngine">
 		<property name="templateResolver" ref="templateResolver" />
 		<property name="enableSpringELCompiler" value="true" />
 		<property name="additionalDialects">
-		<set>
-			<bean
-			class="org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect" />
-		</set>
-	</property>
+			<set>
+				<bean
+					class="org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect" />
+			</set>
+		</property>
 	</bean>
-	
+
 	<bean class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
-  	  <property name="templateEngine" ref="templateEngine" />
-  </bean>
-  
+		<property name="templateEngine" ref="templateEngine" />
+	</bean>
+
 	<!-- ################################################################ -->
 
 	<bean
@@ -105,7 +112,8 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="packagesToScan" value="at.fh.swenga.places" />
 		<property name="jpaVendorAdapter">
-			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+			<bean
+				class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
 		</property>
 		<property name="jpaProperties">
 			<props>
@@ -119,16 +127,19 @@
 		</property>
 	</bean>
 
-	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	<bean id="transactionManager"
+		class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory"
+			ref="entityManagerFactory" />
 	</bean>
-	
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+
+	<bean id="mailSender"
+		class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.mailtrap.io" />
 		<property name="port" value="2525" />
 		<property name="username" value="e5efca9bc9074b" />
 		<property name="password" value="922e9e8fafb142" />
- 
+
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.smtp.auth">true</prop>
@@ -136,7 +147,7 @@
 			</props>
 		</property>
 	</bean>
- 
+
 
 	<bean id="customMailMessage"
 		class="org.springframework.mail.SimpleMailMessage">
@@ -155,19 +166,19 @@ Places Team!
 		]]>
 			</value>
 		</property>
-</bean>
-	
+	</bean>
+
 	<tx:annotation-driven />
-	
+
 	<bean id="persistenceExceptionTranslationPostProcessor"
 		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
-	
+
 	<!-- JSR-303/JSR-349 support will be detected on classpath and enabled automatically -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<!-- one of the several properties available; the maximum file size in 
 			bytes -->
-		<property name="maxUploadSizePerFile" value="15242880" />
+		<property name="maxUploadSizePerFile" value="1524288000" />
 	</bean>
 
 </beans>

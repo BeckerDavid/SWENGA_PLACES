@@ -16,7 +16,7 @@ public class UserCategoryDao {
 
 	@PersistenceContext
 	protected EntityManager entityManager;
- 
+
 	public UserCategoryModel getRole(String role) {
 		try {
 			TypedQuery<UserCategoryModel> typedQuery = entityManager
@@ -27,7 +27,7 @@ public class UserCategoryDao {
 			return null;
 		}
 	}
- 
+
 	public void persist(UserCategoryModel userRole) {
 		entityManager.persist(userRole);
 	}
