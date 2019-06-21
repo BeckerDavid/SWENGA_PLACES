@@ -52,7 +52,7 @@ public class UserModel {
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private CountryModel country;
 
-	@ManyToMany(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@ManyToMany(fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private Set<UserCategoryModel> category;
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -69,7 +69,7 @@ public class UserModel {
 	@ManyToMany
 	private Set<CountryModel> favoriteCountries;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<RecommendationModel> favRecommendations;
 	
 	@ManyToMany
@@ -282,6 +282,22 @@ public class UserModel {
 	public void encryptPassword() {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		password = passwordEncoder.encode(password);		
+	}
+	
+	public boolean isRecLiked(RecommendationModel recMod) {
+		if(favRecommendations.contains(recMod)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public void changeFavRec(RecommendationModel recMod) {
+		if(isRecLiked(recMod)) {
+			favRecommendations.add(recMod);
+		} else {
+			favRecommendations.remove(recMod);
+		}
 	}
 
 	public UserModel(String username, String password, String firstName, String lastName, String mail,

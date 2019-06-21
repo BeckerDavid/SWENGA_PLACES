@@ -864,20 +864,21 @@ public class PlacesController {
 	}
 	
 	@Secured("ROLE_USER")
-	@RequestMapping("/like")
-	public String likeRec(Model model, Authentication authentication, @RequestParam int uId, @RequestParam int rId) {
+	@GetMapping(value = "/like")
+	//@RequestMapping("/like")
+	@Transactional
+	public void likeRec(Model model, Authentication authentication, @RequestParam int rm) {
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
-		//userRepository.addFavRec(uId,rId);
 		
-		//RecommendationModel rec = recommendationRepository.findById(rId);
+		RecommendationModel recModel = recommendationRepository.findById(rm);
+		
+		user.changeFavRec(recModel);
 
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
 		}
-		
-		return "forward:fillUsers";
 	}
 	
 	/*

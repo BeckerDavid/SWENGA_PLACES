@@ -94,5 +94,12 @@ public interface RecommendationRepository extends JpaRepository<RecommendationMo
 			public List<RecommendationModel> listByJourneyCountry();
 			
 */
+			
+			@Query("SELECT r "
+			+ "FROM RecommendationModel AS r "
+			+ "WHERE id = :recId")
+			public RecommendationModel findById(
+					@Param("recId") int recId);
+			
 			public List<RecommendationModel> removeById(int id);
 }
