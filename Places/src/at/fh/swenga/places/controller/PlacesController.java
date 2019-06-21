@@ -90,21 +90,6 @@ public class PlacesController {
 	private SimpleMailMessage templateMessage;
 
 	@Secured("ROLE_USER")
-	@GetMapping("/achievements")
-	@Transactional
-	public String getAchievments(Model model, Authentication authentication) {
-
-		UserModel user = userRepository.findFirstByUsername(authentication.getName());
-
-		if (user != null && user.isEnabled()) {
-
-			model.addAttribute("user", user);
-		}
-		return "achievements";
-
-	}
-
-	@Secured("ROLE_USER")
 	@RequestMapping("/browse")
 	@Transactional
 	public String fillRecommendations(Model model, Authentication authentication) {
@@ -149,7 +134,6 @@ public class PlacesController {
 	@Transactional
 	public String fillRecommendationsForVisitor(Model model) {
 
-		System.out.println("Hi");
 		List<CountryModel> countries = countryRepository.findAll();
 
 		model.addAttribute("countries", countries);
@@ -182,13 +166,11 @@ public class PlacesController {
 
 			// Already a document available -> delete it
 			if (user.getProfilePicture() != null) {
-				// FB löscht a kane Bilder
-				// Don't forget to remove the relationship too
+				// Don't forget to remove the relationship
 				user.setProfilePicture(null);
 			}
 
 			// Create a new document and set all available infos
-
 			PictureModel picture = new PictureModel();
 			picture.setContent(file.getBytes());
 			picture.setContentType(file.getContentType());
@@ -256,45 +238,13 @@ public class PlacesController {
 	}
 
 	@Secured("ROLE_USER")
-	@GetMapping("/contacts")
-	@Transactional
-	public String getContacts(Model model, Authentication authentication) {
-
-		UserModel user = userRepository.findFirstByUsername(authentication.getName());
-
-		if (user != null && user.isEnabled()) {
-
-			model.addAttribute("user", user);
-			if (user.getProfilePicture() != null) {
-
-				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
-				PictureModel pp = ppOpt.get();
-				byte[] profilePicture = pp.getContent();
-
-				StringBuilder sb = new StringBuilder();
-				sb.append("data:image/jpeg;base64,");
-				sb.append(Base64.encodeBase64String(profilePicture));
-				String image = sb.toString();
-
-				model.addAttribute("image", image);
-			}
-		}
-		return "contacts";
-
-	}
-
-	@Secured("ROLE_USER")
 	@GetMapping("/dashboard")
 	@Transactional
 	public String getDashboard(Model model, Authentication authentication) {
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
 
-		System.out.println(user.getUsername());
-
 		if (user.getUsername().equals("default") && user.isEnabled()) {
-
-			System.out.println("Hello");
 
 			return "forward:visitor";
 		}
@@ -373,46 +323,12 @@ public class PlacesController {
 
 	}
 
-	@Secured("ROLE_USER")
-	@GetMapping("/following")
-	@Transactional
-	public String getFollowing(Model model, Authentication authentication) {
-
-		UserModel user = userRepository.findFirstByUsername(authentication.getName());
-		List<UserModel> users = userRepository.findAll();
-		model.addAttribute("users", users);
-		model.addAttribute("followers", user.getFollowers());
-		model.addAttribute("following", user.getFollowing());
-
-		if (user != null && user.isEnabled()) {
-
-			model.addAttribute("user", user);
-			if (user.getProfilePicture() != null) {
-
-				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
-				PictureModel pp = ppOpt.get();
-				byte[] profilePicture = pp.getContent();
-
-				StringBuilder sb = new StringBuilder();
-				sb.append("data:image/jpeg;base64,");
-				sb.append(Base64.encodeBase64String(profilePicture));
-				String image = sb.toString();
-
-				model.addAttribute("image", image);
-			}
-		}
-		return "following";
-
-	}
-
 	@GetMapping("/index")
 	@Secured("ROLE_VIEWER")
 	@Transactional
 	public String getIndex(Model model) {
 
 		UserModel user = userRepository.findFirstByUsername("default");
-
-		System.out.println(user.getUsername());
 
 		model.addAttribute("user", user);
 
@@ -721,19 +637,15 @@ public class PlacesController {
 		} else {
 			Set<UserCategoryModel> roles = new HashSet<UserCategoryModel>();
 			UserCategoryModel catU = userCatDao.getRole("ROLE_USER");
-			UserCategoryModel catA = userCatDao.getRole("ROLE_ADMIN");
 
 			roles.add(catU);
 
 			CountryModel country = countryRepository.getOne(cid);
 			user.setPrivate(false);
 			user.encryptPassword();
-			System.out.println("bin hier");
 			user.setCategory(roles);
-			System.out.println("bin hier");
 			user.setEnabled(true);
 			user.setCountry(country);
-			System.out.println("bin hier");
 			user.setToken(UUID.randomUUID().toString());
 			userDao.persist(user);
 
@@ -769,7 +681,6 @@ public class PlacesController {
 	}
 
 	private void sendPasswordResetMail(UserModel user) {
-
 		String content = "Copy and paste the following link in your browser to reset your password: ";
 		String resetPasswordUrl = "http://localhost:8080/Places/resetPassword?token=" + user.getToken();
 
@@ -961,8 +872,6 @@ public class PlacesController {
 
 		UserCategoryModel admin = userCategoryRepository.findByRole("ROLE_ADMIN");
 
-		System.out.println(admin.getRole());
-
 		user.addUserCategory(admin);
 
 		userRepository.save(user);
@@ -987,8 +896,6 @@ public class PlacesController {
 
 		UserCategoryModel admin = userCategoryRepository.findByRole("ROLE_ADMIN");
 
-		System.out.println(admin.getRole());
-
 		user.removeUserCategory(admin);
 
 		userRepository.save(user);
@@ -1011,8 +918,6 @@ public class PlacesController {
 
 		RecommendationModel recModel = recommendationRepository.findById(rm);
 
-//		System.out.println("Debug - Title: " + recModel.getTitle());
-//		System.out.println("Is Recommendation liked before change?:" + user.isRecLiked(recModel));
 		if (user.isRecLiked(recModel)) {
 			recModel.setRating(recModel.getRating() - 1);
 		} else {
@@ -1020,7 +925,6 @@ public class PlacesController {
 		}
 		user.changeFavRec(recModel);
 
-//		System.out.println("Is Recommendation liked after change?:" + user.isRecLiked(recModel));
 		recommendationRepository.save(recModel);
 		userRepository.save(user);
 
@@ -1030,28 +934,6 @@ public class PlacesController {
 		}
 		return "forward:browse";
 	}
-
-	/*
-	 * @Secured({ "ROLE_ADMIN" })
-	 * 
-	 * @GetMapping(value = "/changeUserRole") public String
-	 * changeUserRole(@RequestParam("username") String username, Model model,
-	 * Authentication authentication) {
-	 * 
-	 * UserModel user = userRepository.findFirstByUsername(username);
-	 * 
-	 * if (user != null && user.isEnabled()) {
-	 * 
-	 * if (user.getUsername().equalsIgnoreCase(authentication.getName())) {
-	 * model.addAttribute("warningMessage",
-	 * "You cannot change your own user role!"); return showUserManagement(model,
-	 * authentication); }
-	 * 
-	 * model.addAttribute("user", user); return "changeUserRole"; } else {
-	 * model.addAttribute("errorMessage",
-	 * "Error while reading User data! Either dissabled or does not exist"); return
-	 * showUserManagement(model, authentication); } }
-	 */
 
 	@Secured({ "ROLE_USER" })
 	@PostMapping(value = "/changePassword")
@@ -1067,7 +949,6 @@ public class PlacesController {
 				user.setPassword(passwordNew);
 				user.encryptPassword();
 				userRepository.save(user);
-				System.out.println("PW correcot");
 				model.addAttribute("message", "Password successfully changed for User: " + username);
 
 				model.addAttribute("user", user);
@@ -1118,19 +999,6 @@ public class PlacesController {
 
 		return "myJourneys";
 	}
-
-//	@Secured("ROLE_USER")
-//	@GetMapping("/getPicturePNG")
-//	@Transactional
-//	public String getPicturePNG(Model model) {
-//		model.addAttribute(model)
-//		if (profilePicture == null) {
-//			return "bootstrap/img/default-avatar.png";
-//		}
-//		else {
-//			return "data:image/png;base64," + profilePicture;
-//		}
-//	}
 
 	@RequestMapping(value = "maps")
 	public String showMap(Model model, Authentication authentication) {

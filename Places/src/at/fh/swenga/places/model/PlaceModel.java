@@ -2,7 +2,6 @@ package at.fh.swenga.places.model;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,18 +21,18 @@ public class PlaceModel {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
 	@Column(length = 30)
 	private Set<RecommendationModel> recPlace;
-	
+
 	@ManyToMany(mappedBy = "favoritePlaces")
 	private Set<UserModel> users;
-	
+
 	@ManyToOne
 	private CountryModel country;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private String name;
 
 	public int getId() {
@@ -119,7 +118,5 @@ public class PlaceModel {
 	public PlaceModel() {
 		super();
 	}
-	
-	
 
 }

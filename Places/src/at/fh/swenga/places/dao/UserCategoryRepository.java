@@ -11,13 +11,10 @@ import at.fh.swenga.places.model.UserCategoryModel;
 
 @Repository
 @Transactional
-public interface UserCategoryRepository extends JpaRepository<UserCategoryModel, Integer>{
+public interface UserCategoryRepository extends JpaRepository<UserCategoryModel, Integer> {
 
 	public List<UserCategoryModel> findAll();
-	
-	public UserCategoryModel findByRole(String role);
-	
-	
-}
- 
 
+	public UserCategoryModel findByRole(String role);
+
+}

@@ -544,49 +544,47 @@ public class InitController {
 		userCatRepo.save(admin);
 		userCatRepo.save(user);
 		userCatRepo.save(viewer);
-		
+
 		String token0 = UUID.randomUUID().toString();
 		String token1 = UUID.randomUUID().toString();
 		String token2 = UUID.randomUUID().toString();
 		String token3 = UUID.randomUUID().toString();
 		String token4 = UUID.randomUUID().toString();
 
-
-		UserModel admin1 = new UserModel("admin",  true,"password", "Robert", "Admin", "robert.admin@boop.fh",
+		UserModel admin1 = new UserModel("admin", true, "password", "Robert", "Admin", "robert.admin@boop.fh",
 				country44, false, token1);
 
 		admin1.encryptPassword();
 		admin1.addUserCategory(admin);
 		admin1.addUserCategory(user);
 
-		UserModel user1 = new UserModel("user",  true, "password", "Alexander", "User", "alex.ei@nischl.fh", country222, false, token0);
+		UserModel user1 = new UserModel("user", true, "password", "Alexander", "User", "alex.ei@nischl.fh", country222,
+				false, token0);
 
 		user1.encryptPassword();
 		user1.addUserCategory(user);
 
-		UserModel user2 = new UserModel("user2",  true,"password", "Benjamin", "User2", "bluemchen@ottos.sklave.fh",
+		UserModel user2 = new UserModel("user2", true, "password", "Benjamin", "User2", "bluemchen@ottos.sklave.fh",
 				country14, false, token2);
 		user2.encryptPassword();
 		user2.addUserCategory(user);
 
-		UserModel defaultUser1 = new UserModel("default", true,"default", "default","default","default.default@gmx.at", country10, false, token3);
+		UserModel defaultUser1 = new UserModel("default", true, "default", "default", "default",
+				"default.default@gmx.at", country10, false, token3);
 		defaultUser1.encryptPassword();
 		defaultUser1.addUserCategory(viewer);
 
-		
-		UserModel viki = new UserModel("Viki", true,"password", "Viki","Gradwohl","gradwohl.viktoria@gmx.at", country10, false, token4);
+		UserModel viki = new UserModel("Viki", true, "password", "Viki", "Gradwohl", "gradwohl.viktoria@gmx.at",
+				country10, false, token4);
 		viki.encryptPassword();
 		viki.addUserCategory(user);
 
-		
 		userRepository.save(admin1);
 		userRepository.save(defaultUser1);
 		userRepository.save(user1);
 		userRepository.save(user2);
 
-
 		userRepository.save(viki);
-		
 
 		PlaceModel bangkok = new PlaceModel("Bangkok", country211);
 		PlaceModel place1 = new PlaceModel("FH Joanneum", country14);
@@ -623,7 +621,7 @@ public class InitController {
 		recommendationRepository.save(rec4);
 		recommendationRepository.save(rec5);
 		recommendationRepository.save(rec6);
-		
+
 		return "login";
 	}
 

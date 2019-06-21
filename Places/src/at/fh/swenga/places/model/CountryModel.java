@@ -26,17 +26,17 @@ public class CountryModel {
 
 	@Column(nullable = false, length = 100)
 	private String countryName;
-	
+
 	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
 	private Set<UserModel> users;
-	
-	@ManyToMany(mappedBy="favoriteCountries")
+
+	@ManyToMany(mappedBy = "favoriteCountries")
 	private Set<UserModel> favUsers;
-	
-	@ManyToMany(mappedBy="countries", fetch = FetchType.EAGER)
+
+	@ManyToMany(mappedBy = "countries", fetch = FetchType.EAGER)
 	private Set<JourneyModel> journeys;
-	
-	@OneToMany(mappedBy="country", fetch = FetchType.LAZY)
+
+	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
 	private Set<PlaceModel> places;
 
 	public int getId() {
@@ -128,7 +128,5 @@ public class CountryModel {
 	public CountryModel() {
 		super();
 	}
-
-	
 
 }

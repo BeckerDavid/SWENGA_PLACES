@@ -17,15 +17,15 @@ public class UserDao {
 
 	@PersistenceContext
 	protected EntityManager entityManager;
- 
+
 	public List<UserModel> findByUsername(String username) {
-		TypedQuery<UserModel> typedQuery = entityManager.createQuery("select u from UserModel u where u.username = :name",
-				UserModel.class);
+		TypedQuery<UserModel> typedQuery = entityManager
+				.createQuery("select u from UserModel u where u.username = :name", UserModel.class);
 		typedQuery.setParameter("name", username);
 		List<UserModel> typedResultList = typedQuery.getResultList();
 		return typedResultList;
 	}
- 
+
 	public void persist(UserModel user) {
 		entityManager.persist(user);
 	}
