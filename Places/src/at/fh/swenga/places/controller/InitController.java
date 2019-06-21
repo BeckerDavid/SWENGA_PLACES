@@ -1,6 +1,12 @@
 package at.fh.swenga.places.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -12,12 +18,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import at.fh.swenga.places.dao.CountryRepository;
+import at.fh.swenga.places.dao.JourneyRepository;
 import at.fh.swenga.places.dao.PlaceRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserCategoryRepository;
 import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
+import at.fh.swenga.places.model.JourneyModel;
 import at.fh.swenga.places.model.PlaceModel;
 import at.fh.swenga.places.model.RecommendationModel;
 import at.fh.swenga.places.model.UserCategoryModel;
@@ -44,6 +52,9 @@ public class InitController {
 	@Autowired
 	PlaceRepository placeRepo;
 
+	@Autowired
+	JourneyRepository journeyRepo;
+
 	@RequestMapping("/")
 	public String loadIndex() {
 
@@ -58,7 +69,7 @@ public class InitController {
 
 	@RequestMapping("/init")
 	@Transactional
-	public String fillDataBase(Model model) {
+	public String fillDataBase(Model model) throws ParseException {
 		CountryModel country1 = new CountryModel("AF", "AFGHANISTAN");
 		CountryModel country2 = new CountryModel("AL", "ALBANIA");
 		CountryModel country3 = new CountryModel("DZ", "ALGERIA");
@@ -621,6 +632,31 @@ public class InitController {
 		recommendationRepository.save(rec4);
 		recommendationRepository.save(rec5);
 		recommendationRepository.save(rec6);
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date dateD = sdf.parse("2019-06-20");
+		Calendar calD = Calendar.getInstance();
+		calD.setTime(dateD);
+
+		Date dateS = sdf.parse("2019-07-10");
+		Calendar calS = Calendar.getInstance();
+		calS.setTime(dateS);
+
+		Set<PlaceModel> places = new HashSet<PlaceModel>();
+		places.add(bangkok);
+		Set<CountryModel> countries = new HashSet<CountryModel>();
+		countries.add(countryK);
+
+		JourneyModel journey1 = new JourneyModel(calD, calS, places, user1, new Float(1000), countries, "Pristina",
+				10000);
+		JourneyModel journey2 = new JourneyModel(calD, calS, places, user2, new Float(1000), countries, "Prizren",
+				10000);
+		JourneyModel journey3 = new JourneyModel(calD, calS, places, admin1, new Float(1000), countries, "Gjilan",
+				10000);
+
+		journeyRepo.save(journey1);
+		journeyRepo.save(journey2);
+		journeyRepo.save(journey3);
 
 		return "login";
 	}
