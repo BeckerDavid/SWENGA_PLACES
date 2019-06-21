@@ -23,7 +23,7 @@
 				<a sec:authorize="hasRole('ROLE_USER')" href="dashboard" class="simple-text"> <img
 					src="images/logo.png" width="250px" height="55px">
 				</a>
-				<a href="visitor" class="simple-text"> <img
+				<a sec:authorize="hasRole('ROLE_VIEWER')" href="visitor" class="simple-text"> <img
 					src="images/logo.png" width="250px" height="55px">
 				</a>
 			</div>
@@ -36,7 +36,7 @@
 				<i class="nc-icon nc-tablet-2"></i>
 						<p>Browse</p>
 				</a></li>
-				<li><a class="nav-link" href="browseForVisitor"> 
+				<li><a sec:authorize="hasRole('ROLE_VIEWER')" class="nav-link" href="browseForVisitor"> 
 				<i class="nc-icon nc-tablet-2"></i>
 						<p>Browse</p>
 				</a>

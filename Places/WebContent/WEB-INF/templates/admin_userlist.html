@@ -31,14 +31,15 @@
 					</thead>
 					<tbody>
 						<!--  list all items ----------------------------------------------------------- -->
-						<tr th:each="user : ${users}">
+						<tr th:each="user: ${users}">
 							<td th:text="${user.id}"></td>
 							<td th:text="${user.username}"></td>
 							<td th:text="${user.getCategoryString()}"></td>
 							<td th:if="${user.enabled} == true"><a th:href="@{/delete(id=${user.id})}" class="btn btn-danger">Disable</a></td>
 							<td th:if="${user.enabled} == false"><a th:href="@{/enable(id=${user.id})}" class="btn btn-danger2">Enable</a></td>
-							<td th:if="${user.getCategory().role} == ROLE_USER"><a th:href="@{/toAdmin(id=${user.id})}" class="btn btn-danger3">toAdmin</a></td>
-							<td th:if="${user.getCategory().role} != ROLE_USER"><a></a></td>
+							<td th:if="${user.getCategoryString()} == 1"><a th:href="@{/toAdmin(id=${user.id})}" class="btn btn-danger3">Promote To Admin</a></td>
+							<td th:if="${user.getCategoryString()} == 0"><a th:href="@{/toAdmin(id=${user.id})}" class="btn btn-danger3">Promote To Admin</a></td>
+							<td th:unless="${user.getCategoryString()} == 1"><a th:href="@{/noAdmin(id=${user.id})}" class="btn btn-danger3">Change To User</a></td>
 							
 						</tr>
 						<!--  list all items ----------------------------------------------------------- -->

@@ -40,7 +40,6 @@ public interface UserRepository extends JpaRepository<UserModel, Integer> {
 			+ "JOIN CountryModel ON "
 			+ "SET username = :username, firstName = :firstName, lastName = :lastName, mail = :mail, country = :CountryModel")
 	UserModel updateUserProfile(@Param(username))*/
-	
 
 
 	

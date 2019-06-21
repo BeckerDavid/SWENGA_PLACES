@@ -16,6 +16,8 @@ public interface UserCategoryRepository extends JpaRepository<UserCategoryModel,
 	public List<UserCategoryModel> findAll();
 	
 	public UserCategoryModel findByRole(String role);
+	
+	
 }
  
 

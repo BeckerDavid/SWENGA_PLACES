@@ -836,20 +836,8 @@ public class PlacesController {
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
-			if (user.getProfilePicture() != null) {
-
-				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
-				PictureModel pp = ppOpt.get();
-				byte[] profilePicture = pp.getContent();
-
-				StringBuilder sb = new StringBuilder();
-				sb.append("data:image/jpeg;base64,");
-				sb.append(Base64.encodeBase64String(profilePicture));
-				String image = sb.toString();
-
-				model.addAttribute("image", image);
 			}
-		}
+			
 
 		return "index";
 
@@ -873,6 +861,7 @@ public class PlacesController {
 
 			model.addAttribute("users", users);
 			model.addAttribute("count", users.size());
+			
 			return "admin_userlist";
 			}
 
@@ -880,13 +869,12 @@ public class PlacesController {
 		}
 
 		return "logout";
-
 	}
-	
-	
+		
 	@Secured("ROLE_ADMIN")
 	@RequestMapping("/delete")
 	public String deleteData(Model model, Authentication authentication, @RequestParam int id) {
+		
 		userRepository.disableUser(id);
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
@@ -902,6 +890,7 @@ public class PlacesController {
 	@Secured("ROLE_ADMIN")
 	@RequestMapping("/enable")
 	public String enableData(Model model, Authentication authentication, @RequestParam int id) {
+		
 		userRepository.enableUser(id);
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
@@ -916,16 +905,21 @@ public class PlacesController {
 	
 	@Secured("ROLE_ADMIN")
 	@RequestMapping("/toAdmin")
-	public String toAdmin(Model model, Authentication authentication, @RequestParam int id) {
+	public String toAdmin(Model model,  @RequestParam int id) {
 
-		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+		List<CountryModel> countries = countryRepository.findAll();
+		model.addAttribute("countries", countries);
+
+		UserModel user = userRepository.findById(id);
+
+		UserCategoryModel admin = userCategoryRepository.findByRole("ROLE_ADMIN");
 		
-		UserCategoryModel admin = userCategoryRepository.findByRole("admin");
+		System.out.println(admin.getRole());
 		
 		user.addUserCategory(admin);
 		
 		userRepository.save(user);
-
+	
 		if (user != null && user.isEnabled()) {
 
 			model.addAttribute("user", user);
@@ -935,8 +929,33 @@ public class PlacesController {
 		
 	}
 	
+	@Secured("ROLE_ADMIN")
+	@RequestMapping("/noAdmin")
+	public String noAdmin(Model model,  @RequestParam int id) {
 
-	//@RequestMapping("/like")
+		List<CountryModel> countries = countryRepository.findAll();
+		model.addAttribute("countries", countries);
+
+		UserModel user = userRepository.findById(id);
+
+		UserCategoryModel admin = userCategoryRepository.findByRole("ROLE_ADMIN");
+		
+		System.out.println(admin.getRole());
+		
+		user.removeUserCategory(admin);
+		
+		userRepository.save(user);
+	
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
+
+			return "forward:admin_userlist";
+		
+	}
+	
+	
 	@Secured("ROLE_USER")
 	@PostMapping(value = "/like")
 	@Transactional

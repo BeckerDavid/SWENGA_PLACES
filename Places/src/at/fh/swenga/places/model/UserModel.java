@@ -294,6 +294,10 @@ public class UserModel {
 			category = new HashSet<UserCategoryModel>();
 		category.add(cat);
 	}
+	
+	public void removeUserCategory(UserCategoryModel cat) {
+		category.remove(cat);
+	}
 
 	public void encryptPassword() {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

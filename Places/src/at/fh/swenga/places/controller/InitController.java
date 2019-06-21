@@ -571,6 +571,7 @@ public class InitController {
 
 		UserModel defaultUser1 = new UserModel("default", "default", true, "default@default.at","default", "default", token3, country10);
 		defaultUser1.encryptPassword();
+		defaultUser1.addUserCategory(viewer);
 
 		
 		UserModel viki = new UserModel("Viki", true,"password", "Viki","Gradwohl","gradwohl.viktoria@gmx.at", country10, false, token4);
