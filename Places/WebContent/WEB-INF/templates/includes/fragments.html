@@ -83,7 +83,7 @@
 			<div class="collapse navbar-collapse justify-content-end"
 				id="navigation">
 
-				<ul sec:authorize="hasRole('ROLE_USER')" class="navbar-nav ml-auto">
+				<ul class="navbar-nav ml-auto">
 					<li class="nav-item dropdown"><a
 						class="nav-link dropdown-toggle" href="userProfile"
 						id="navbarDropdownMenuLink" data-toggle="dropdown"
@@ -91,10 +91,10 @@
 							class="no-icon">Account</span>
 					</a>
 
-						<div  class="dropdown-menu"
+						<div class="dropdown-menu"
 							aria-labelledby="navbarDropdownMenuLink">
-							<a class="dropdown-item" href="userProfile">User Profile</a>
-							<div class="divider"></div>
+							<a sec:authorize="hasRole('ROLE_USER')" class="dropdown-item" href="userProfile">User Profile</a>
+							<div sec:authorize="hasRole('ROLE_USER')" class="divider"></div>
 							<a class="dropdown-item" href="#" th:href="@{/logout}">Log
 								out</a>
 						</div></li>

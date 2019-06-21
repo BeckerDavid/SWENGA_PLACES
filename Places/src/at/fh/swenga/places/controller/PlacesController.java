@@ -710,7 +710,7 @@ public class PlacesController {
 	@PostMapping("/registerNewUser")
 	@Transactional
 	public String registerNewUser(@Valid UserModel user, BindingResult res, Model model, Authentication auth,
-			@RequestParam(value = "countryId") int cid, @RequestParam(value = "categoryId") int catId) {
+			@RequestParam(value = "countryId") int cid) {
 		
 		if (userRepository.findFirstByUsername(user.getUsername()) != null) {
 			model.addAttribute("error", "Username is already in use, sorry!");
@@ -718,14 +718,9 @@ public class PlacesController {
 			Set<UserCategoryModel> roles = new HashSet<UserCategoryModel>();
 			UserCategoryModel catU = userCatDao.getRole("ROLE_USER");
 			UserCategoryModel catA = userCatDao.getRole("ROLE_ADMIN");
-			
-			if (catId == 1) {
-				roles.add(catA);
+	
 				roles.add(catU);
-			}
-			else {
-				roles.add(catU);
-			}
+	
 
 			CountryModel country = countryRepository.getOne(cid);
 			user.setPrivate(false);
@@ -901,6 +896,19 @@ public class PlacesController {
 			if ((authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))) {
 
 			model.addAttribute("user", user);
+			if (user.getProfilePicture() != null) {
+
+				Optional<PictureModel> ppOpt = pictureRepository.findById(user.getProfilePicture().getId());
+				PictureModel pp = ppOpt.get();
+				byte[] profilePicture = pp.getContent();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("data:image/jpeg;base64,");
+				sb.append(Base64.encodeBase64String(profilePicture));
+				String image = sb.toString();
+
+				model.addAttribute("image", image);
+			}
 			List<UserModel> users = userRepository.findAll();
 
 
