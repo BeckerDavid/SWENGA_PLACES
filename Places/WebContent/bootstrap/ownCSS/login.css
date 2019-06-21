@@ -75,7 +75,12 @@ input:focus {
 
 div.buttons {
  	margin-left: 95px;
- 	margin-top: 40px;
+ 	margin-top: 25px;
+}
+
+div.buttons2 {
+ 	margin-left: 95px;
+ 	margin-top: -5px;
 }
 
 div.sign-vis{
@@ -96,6 +101,10 @@ button {
   	font-weight: bold;
 }
 
+button3 {
+	left:100px;
+}
+
 .alert {
 	position: relative;
 	left: 50px;
@@ -106,4 +115,10 @@ button {
 	left: 100px;
 	top: 20px;
 }
+
+.loginform {
+	margin-top:10px;
+}
+
+
 
