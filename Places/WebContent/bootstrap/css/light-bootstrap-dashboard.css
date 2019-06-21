@@ -1259,6 +1259,11 @@ fieldset[disabled] .btn-warning.active {
     color: #4aff4a;
 }
 
+.btn-danger3 {
+    border-color: #296dcb;
+    color: #296dcb;
+}
+
 .btn-danger:hover,
 .btn-danger:focus,
 .btn-danger:active,
@@ -1276,6 +1281,15 @@ fieldset[disabled] .btn-warning.active {
     background-color: transparent;
     color: #20b806;
     border-color: #20b806;
+}
+
+.btn-danger3:hover,
+.btn-danger3:focus,
+.btn-danger3:active,
+.btn-danger3.active {
+    background-color: transparent;
+    color: #0d4a9d;
+    border-color: #0d4a9d;
 }
 
 .btn-danger.disabled,

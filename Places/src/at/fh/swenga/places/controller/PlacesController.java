@@ -43,6 +43,7 @@ import at.fh.swenga.places.dao.PictureRepository;
 import at.fh.swenga.places.dao.PlaceRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserCategoryDao;
+import at.fh.swenga.places.dao.UserCategoryRepository;
 import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
@@ -68,6 +69,9 @@ public class PlacesController {
 
 	@Autowired
 	RecommendationRepository recommendationRepository;
+	
+	@Autowired
+	UserCategoryRepository userCategoryRepository;
 
 	@Autowired
 	PlaceRepository placeRepo;
@@ -142,6 +146,31 @@ public class PlacesController {
 
 		return "browse";
 	}
+	
+	
+	@Secured("ROLE_VIEWER")
+	@GetMapping("/browseForVisitor")
+	@Transactional
+	public String fillRecommendationsForVisitor(Model model) {
+
+		System.out.println("Hi");
+		List<CountryModel> countries = countryRepository.findAll();
+		
+		model.addAttribute("countries", countries);
+		
+		List<RecommendationModel> allModels = recommendationRepository.listNewest(0, "");
+		RecommendationModel defaultModel = new RecommendationModel();
+
+		if (allModels.size() > 0) {
+			model.addAttribute("recommendations", allModels);
+		} else {
+			model.addAttribute("recommendations", defaultModel);
+		}
+
+		return "browseForVisitor";
+	}
+
+	
 
 	@Secured("ROLE_USER")
 	@GetMapping("uploadProfilePicture")
@@ -186,12 +215,37 @@ public class PlacesController {
 	@RequestMapping(value = { "/find" })
 	public String find(Model model, @RequestParam String searchString, @RequestParam int countryId, @RequestParam String searchType, Authentication authentication) {
 
+	
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+		int userId = user.getId();
+		
+		System.out.println(userId);
 
 		List<CountryModel> countries = countryRepository.findAll();
 		List<RecommendationModel> recommendations = null;
 
 		model.addAttribute("countries", countries);
-
+	
+		JourneyModel journeyFromUser = new JourneyModel();
+		List<JourneyModel> journeyFromUserList = new ArrayList<JourneyModel>();
+		
+		try {
+			journeyFromUserList= journeyRepo.findTop1ByUsersId(userId);
+			System.out.println("Hi");
+			} catch (Exception e) {
+	            ;
+	        }
+		
+		System.out.println(journeyFromUserList);
+		
+		
+		Set<CountryModel> countriesFromUserJourney = journeyFromUser.getCountries();
+		
+		CountryModel firstCountryOfUser = countriesFromUserJourney.iterator().next();
+		
+		int idOfCountryForUser = firstCountryOfUser.getId();
+		
+		
 		int count = 0;
 
 		switch (searchType) {
@@ -210,18 +264,14 @@ public class PlacesController {
 		case "query5":
 			recommendations = recommendationRepository.listByUsername(countryId, searchString);
 			break;
-//		case"query6":
-//			recommendations = recommendationRepository.listByJourneyCountry(countryId, searchString);
-		default:
-			if(recommendationRepository.listNewest(0, "").isEmpty()) {
-				
-			}
-			recommendations = recommendationRepository.listNewest(0, "");
+		case"query6":
+			recommendations = recommendationRepository.getRecommendationForJourney(idOfCountryForUser, searchString);
+		default:				
+				recommendations = recommendationRepository.listNewest(0, "");
+
 		}
 
 		model.addAttribute("recommendations", recommendations);
-		UserModel user = userRepository.findFirstByUsername(authentication.getName());
-		model.addAttribute("user", user);
 
 		if (recommendations != null) {
 			model.addAttribute("count", recommendations.size());
@@ -624,9 +674,7 @@ public class PlacesController {
 			model.addAttribute("error", "Username is already in use, sorry!");
 		} else {
 			Set<UserCategoryModel> roles = new HashSet<UserCategoryModel>();
-			UserCategoryModel catV = userCatDao.getRole("ROLE_VIEWER");
 			UserCategoryModel catU = userCatDao.getRole("ROLE_USER");
-			roles.add(catV);
 			roles.add(catU);
 
 			CountryModel country = countryRepository.getOne(cid);
@@ -861,12 +909,32 @@ public class PlacesController {
 			model.addAttribute("user", user);
 		}
 		
-		return "forward:fillUsers";
+		return "forward:admin_userlist";
+	}
+	
+	@Secured("ROLE_ADMIN")
+	@RequestMapping("/toAdmin")
+	public String toAdmin(Model model, Authentication authentication, @RequestParam int id) {
+
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+		
+		UserCategoryModel admin = userCategoryRepository.findByRole("admin");
+		
+		user.addUserCategory(admin);
+		
+		userRepository.save(user);
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
+
+			return "forward:admin_userlist";
+		
 	}
 	
 	@Secured("ROLE_USER")
 	@GetMapping(value = "/like")
-	//@RequestMapping("/like")
 	@Transactional
 	public void likeRec(Model model, Authentication authentication, @RequestParam int rm) {
 

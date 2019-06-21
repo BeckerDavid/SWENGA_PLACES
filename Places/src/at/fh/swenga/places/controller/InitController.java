@@ -18,7 +18,6 @@ import at.fh.swenga.places.dao.UserCategoryRepository;
 import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
-import at.fh.swenga.places.model.JourneyModel;
 import at.fh.swenga.places.model.PlaceModel;
 import at.fh.swenga.places.model.RecommendationModel;
 import at.fh.swenga.places.model.UserCategoryModel;
@@ -559,29 +558,24 @@ public class InitController {
 		admin1.encryptPassword();
 		admin1.addUserCategory(admin);
 		admin1.addUserCategory(user);
-		admin1.addUserCategory(viewer);
 
 		UserModel user1 = new UserModel("user",  true, "password", "Alexander", "User", "alex.ei@nischl.fh", country222, false, token0);
 
 		user1.encryptPassword();
 		user1.addUserCategory(user);
-		user1.addUserCategory(viewer);
 
 		UserModel user2 = new UserModel("user2",  true,"password", "Benjamin", "User2", "bluemchen@ottos.sklave.fh",
 				country14, false, token2);
 		user2.encryptPassword();
 		user2.addUserCategory(user);
-		user2.addUserCategory(viewer);
 
 		UserModel defaultUser1 = new UserModel("default", "default", true, "default@default.at","default", "default", token3, country10);
 		defaultUser1.encryptPassword();
-		defaultUser1.addUserCategory(viewer);
 
 		
 		UserModel viki = new UserModel("Viki", true,"password", "Viki","Gradwohl","gradwohl.viktoria@gmx.at", country10, false, token4);
 		viki.encryptPassword();
 		viki.addUserCategory(user);
-		viki.addUserCategory(viewer);
 
 		
 		userRepository.save(admin1);
