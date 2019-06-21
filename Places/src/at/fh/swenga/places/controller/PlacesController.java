@@ -363,7 +363,7 @@ public class PlacesController {
 		if (!changedUserModel.getUsername().equals(user.getUsername())) {
 			if (userRepository.findFirstByUsername(changedUserModel.getUsername()) != null) {
 				model.addAttribute("error", "Username is already in use, sorry!");
-				return "dashboard";
+				return "redirect:/dashboard";
 			}
 		}
 
@@ -636,7 +636,7 @@ public class PlacesController {
 		return "myRecommendations";
 
 	}
-
+	@Secured("ROLE_USER")
 	@GetMapping("/deleteRecommendation")
 	public String delete(Model model, @RequestParam int id) {
 
@@ -644,7 +644,7 @@ public class PlacesController {
 
 		return "redirect:/myRecommendations";
 	}
-	
+	@Secured("ROLE_USER")
 	@GetMapping("/deleteRecommendationD")
 	public String deleteD(Model model, @RequestParam int id) {
 
@@ -652,6 +652,16 @@ public class PlacesController {
 
 		return "redirect:/dashboard";
 	}
+	
+	@Secured("ROLE_USER")
+	@GetMapping("/deleteJourney")
+	public String deleteJ(Model model, @RequestParam int id) {
+
+		journeyRepo.removeById(id);
+
+		return "redirect:/journeys";
+	}
+	
 
 
 	@Secured("ROLE_VIEWER")

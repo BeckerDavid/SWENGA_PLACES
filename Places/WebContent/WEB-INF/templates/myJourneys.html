@@ -56,6 +56,12 @@
 														<div>
 															<small th:text="${journey.description}"></small>
 														</div>
+																										<a
+													th:href="@{/deleteJourney(id=${journey.id})}"
+													class="btn btn-xs btn-danger"> <span
+													class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+													Delete
+												</a>
 													</div>
 												</div>
 											</div>

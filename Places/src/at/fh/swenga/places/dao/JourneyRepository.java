@@ -25,5 +25,6 @@ public interface JourneyRepository extends JpaRepository<JourneyModel, Integer> 
 	*/
 	List<JourneyModel> findTop1ByUsersId(int userId);
 	
-	
+	public List<JourneyModel> removeById(int id);
+
 }

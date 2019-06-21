@@ -141,4 +141,10 @@
 
 </body>
 <div th:include="~{includes/fragments :: bootstrapJS}" th:remove="tag" />
+<script>
+	var url = window.location.href;
+	if (url.includes("?error")) {
+		alert("Sorry, that username is already in use!");
+	}
+</script>
 </html>
