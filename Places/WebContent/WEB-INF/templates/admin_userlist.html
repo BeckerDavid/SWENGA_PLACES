@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- <html xmlns="http://www.w3.org/1999/xhtml" 	xmlns:th="http://www.thymeleaf.org"> -->
-
 <head>
 <meta charset="utf-8" />
-<!--     <link rel="apple-touch-icon" sizes="76x76" href="../bootstrap/img/apple-icon.png"> -->
-<!-- 	<link rel="icon" type="image/png" href="../bootstrap/img/favicon.ico"> -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <title>User List</title>
 <div th:include="~{includes/fragments :: bootstrapCSS}" th:remove="tag" />
@@ -17,130 +13,135 @@
 			<div th:include="~{includes/fragments :: nav}" th:remove="tag" />
 			<div class="content">
 
-				<div class="row">
-					<div class="card">
-						<div class="card-header">
-							<h4 class="card-title">Create User</h4>
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-header">
+									<h4 class="card-title">Create User</h4>
+								</div>
+								<div class="card-body">
+									<form class="form-horizontal" method="post"
+										th:action="@{/registerNewUser}">
+										<div class="row">
+											<!--  ----------------  username ---------------- -->
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for="inputUsername">Username</label> <input
+														type="text" class="form-control" placeholder="Username"
+														id="username" name="username">
+												</div>
+											</div>
+											<!--  ----------------  Email ---------------- -->
+											<div class="col-md-6 pl-1">
+												<div class="form-group">
+													<label for="inputEmail">Email address</label> <input
+														type="email" class="form-control" placeholder="Email"
+														id="email" name="mail">
+
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<!--  ----------------  First Name  ---------------- -->
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for="inputFirstName">First Name</label> <input
+														type="text" class="form-control" placeholder="FirstName"
+														id="firstName" name="firstName">
+												</div>
+											</div>
+											<!--  ----------------  Last Name  ---------------- -->
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for="inputLastName">Last Name</label> <input
+														type="text" class="form-control" placeholder="LastName"
+														id="lastName" name="lastName">
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for="inputPassword">Password</label> <input
+														type="password" class="form-control" name="password"
+														id="password" placeholder="Password" required
+														onkeyup="confP()">
+
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for="inputPasswordConfirm">Password</label> <input
+														type="password" class="form-control" name="password2"
+														id="password2" placeholder="Confirm Password" required
+														onkeyup="confP()">
+
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for="inputCountry">Country</label> <select
+														name="countryId" class="form-control" id="country">
+														<option
+															th:each="country:${#request.getAttribute('countries')}"
+															th:value="${country.id}" th:text="${country.countryName}"
+															th:selected="${country.id == user.country.id}"></option>
+													</select>
+												</div>
+											</div>
+										</div>
+
+										<button type="submit" class="btn btn-info btn-fill pull-right"
+											id="sendB">Create User</button>
+										<div class="clearfix"></div>
+									</form>
+
+								</div>
+							</div>
 						</div>
-						<div class="card-body">
-							<form class="form-horizontal" method="post"
-								th:action="@{/registerNewUser}">
-								<div class="row">
-									<!--  ----------------  username ---------------- -->
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="inputUsername">Username</label> <input
-												type="text" class="form-control" placeholder="Username"
-												id="username" name="username">
-										</div>
-									</div>
-									<!--  ----------------  Email ---------------- -->
-									<div class="col-md-6 pl-1">
-										<div class="form-group">
-											<label for="inputEmail">Email address</label> <input
-												type="email" class="form-control" placeholder="Email"
-												id="email" name="mail">
+						<div class="col-md-6 card">
+							<div class="card-header">
+								<h4 class="card-title">User List</h4>
+							</div>
+							<div class="card-body">
+								<table data-toggle="table" class="table table-striped">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Username</th>
+											<th>Role</th>
+											<th>Action</th>
+											<th>Permission</th>
+										</tr>
+									</thead>
+									<tbody>
+										<!--  list all items ----------------------------------------------------------- -->
+										<tr th:each="user: ${users}">
+											<td th:text="${user.id}"></td>
+											<td th:text="${user.username}"></td>
+											<td th:text="${user.getCategoryString()}"></td>
+											<td th:if="${user.enabled} == true"><a
+												th:href="@{/delete(id=${user.id})}" class="btn btn-danger">Disable</a></td>
+											<td th:if="${user.enabled} == false"><a
+												th:href="@{/enable(id=${user.id})}" class="btn btn-danger2">Enable</a></td>
+											<td th:if="${user.getCategoryString()} == 1"><a
+												th:href="@{/toAdmin(id=${user.id})}" class="btn btn-danger3">
+													To Admin</a></td>
+											<td th:unless="${user.getCategoryString()} == 1"><a
+												th:href="@{/noAdmin(id=${user.id})}" class="btn btn-danger3">
+													To User</a></td>
 
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<!--  ----------------  First Name  ---------------- -->
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="inputFirstName">First Name</label> <input
-												type="text" class="form-control" placeholder="FirstName"
-												id="firstName" name="firstName">
-										</div>
-									</div>
-									<!--  ----------------  Last Name  ---------------- -->
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="inputLastName">Last Name</label> <input
-												type="text" class="form-control" placeholder="LastName"
-												id="lastName" name="lastName">
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="inputPassword">Password</label> <input
-												type="password" class="form-control" name="password"
-												id="password" placeholder="Password" required
-												onkeyup="confP()">
+										</tr>
+										<!--  list all items ----------------------------------------------------------- -->
+									</tbody>
+								</table>
 
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="inputPasswordConfirm">Password</label> <input
-												type="password" class="form-control" name="password2"
-												id="password2" placeholder="Confirm Password" required
-												onkeyup="confP()">
-
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-12">
-										<div class="form-group">
-											<label for="inputCountry">Country</label> <select
-												name="countryId" class="form-control" id="country">
-												<option
-													th:each="country:${#request.getAttribute('countries')}"
-													th:value="${country.id}" th:text="${country.countryName}"
-													th:selected="${country.id == user.country.id}"></option>
-											</select>
-										</div>
-									</div>
-								</div>
-
-								<button type="submit" class="btn btn-info btn-fill pull-right" id = "sendB">Create
-									User</button>
-								<div class="clearfix"></div>
-							</form>
-
+							</div>
 						</div>
-					</div>
-					<div class="card">
-						<div class="card-header">
-						<div class="col-md-10 offset-md-1">
-							<h4 class="card-title">User List</h4>
-							<table data-toggle="table" class="table table-striped">
-								<thead>
-									<tr>
-										<th>ID</th>
-										<th>Username</th>
-										<th>Role</th>
-										<th>Action</th>
-										<th>Permission</th>
-									</tr>
-								</thead>
-								<tbody>
-									<!--  list all items ----------------------------------------------------------- -->
-									<tr th:each="user: ${users}">
-										<td th:text="${user.id}"></td>
-										<td th:text="${user.username}"></td>
-										<td th:text="${user.getCategoryString()}"></td>
-										<td th:if="${user.enabled} == true"><a
-											th:href="@{/delete(id=${user.id})}" class="btn btn-danger">Disable</a></td>
-										<td th:if="${user.enabled} == false"><a
-											th:href="@{/enable(id=${user.id})}" class="btn btn-danger2">Enable</a></td>
-										<td th:if="${user.getCategoryString()} == 1"><a
-											th:href="@{/toAdmin(id=${user.id})}" class="btn btn-danger3">
-												To Admin</a></td>
-										<td th:unless="${user.getCategoryString()} == 1"><a
-											th:href="@{/noAdmin(id=${user.id})}" class="btn btn-danger3">
-												To User</a></td>
 
-									</tr>
-									<!--  list all items ----------------------------------------------------------- -->
-								</tbody>
-							</table>
-
-						</div>
-					</div>
 					</div>
 				</div>
 			</div>
@@ -152,8 +153,8 @@
 							<script>
 								document.write(new Date().getFullYear())
 							</script>
-							<a href="https://github.com/BeckerDavid/SWENGA_PLACES">Places</a>, made
-							with love for a better SWENGA project
+							<a href="https://github.com/BeckerDavid/SWENGA_PLACES">Places</a>,
+							made with love for a better SWENGA project
 						</p>
 					</nav>
 				</div>
@@ -166,18 +167,18 @@
 
 <div th:include="~{includes/fragments :: bootstrapJS}" th:remove="tag" />
 <script>
-var good_color = "#66cc66";
-var bad_color  = "#ff6666";
-var p1 = document.getElementById("password");
-var p2 = document.getElementById("password2");
-function confP(){
-if (p1.value != p2.value) {
-	p2.style.color = bad_color;
-	document.getElementById("sendB").disabled = true;
-} else {
-	p2.style.color = good_color;
-	document.getElementById("sendB").disabled = false;
-}
-}
+	var good_color = "#66cc66";
+	var bad_color = "#ff6666";
+	var p1 = document.getElementById("password");
+	var p2 = document.getElementById("password2");
+	function confP() {
+		if (p1.value != p2.value) {
+			p2.style.color = bad_color;
+			document.getElementById("sendB").disabled = true;
+		} else {
+			p2.style.color = good_color;
+			document.getElementById("sendB").disabled = false;
+		}
+	}
 </script>
 </html>

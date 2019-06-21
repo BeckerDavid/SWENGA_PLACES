@@ -26,10 +26,12 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card">
-								<div class="card-head">
+								<div class="card-header">
 									<h4 class="card-title">My Journeys</h4>
 								</div>
 								<div class="card-body">
+									<p th:unless="${#request.getAttribute('journeys').size()} > 0">Please
+										add a journey first.</p>
 									<div class="row">
 										<div class="col-md-4"
 											th:each="journey:${#request.getAttribute('journeys')}">
@@ -56,12 +58,11 @@
 														<div>
 															<small th:text="${journey.description}"></small>
 														</div>
-																										<a
-													th:href="@{/deleteJourney(id=${journey.id})}"
-													class="btn btn-xs btn-danger"> <span
-													class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-													Delete
-												</a>
+														<a th:href="@{/deleteJourney(id=${journey.id})}"
+															class="btn btn-xs btn-danger"> <span
+															class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+															Delete
+														</a>
 													</div>
 												</div>
 											</div>

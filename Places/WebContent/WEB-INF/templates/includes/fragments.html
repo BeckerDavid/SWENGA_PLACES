@@ -20,34 +20,34 @@
 	<div class="sidebar" data-image="images/bulli.jpeg" data-color="black">
 		<div class="sidebar-wrapper">
 			<div class="logo">
-				<a sec:authorize="hasRole('ROLE_USER')" href="dashboard" class="simple-text"> <img
-					src="images/logo.png" width="250px" height="55px">
-				</a>
-				<a sec:authorize="hasRole('ROLE_VIEWER')" href="visitor" class="simple-text"> <img
-					src="images/logo.png" width="250px" height="55px">
+				<a sec:authorize="hasRole('ROLE_USER')" href="dashboard"
+					class="simple-text"> <img src="images/logo.png" width="250px"
+					height="55px">
+				</a> <a sec:authorize="hasRole('ROLE_VIEWER')" href="visitor"
+					class="simple-text"> <img src="images/logo.png" width="250px"
+					height="55px">
 				</a>
 			</div>
 			<ul class="nav">
-				<li sec:authorize="hasRole('ROLE_USER')" class="nav-item"><a class="nav-link" href="dashboard">
-						<i class="nc-icon nc-icon nc-paper-2"></i>
+				<li sec:authorize="hasRole('ROLE_USER')" class="nav-item"><a
+					class="nav-link" href="dashboard"> <i
+						class="nc-icon nc-icon nc-paper-2"></i>
 						<p>Dashboard</p>
 				</a></li>
-				<li><a sec:authorize="hasRole('ROLE_USER')" class="nav-link" href="browse"> 
-				<i class="nc-icon nc-tablet-2"></i>
+				<li><a sec:authorize="hasRole('ROLE_USER')" class="nav-link"
+					href="browse"> <i class="nc-icon nc-tablet-2"></i>
 						<p>Browse</p>
 				</a></li>
-				<li><a sec:authorize="hasRole('ROLE_VIEWER')" class="nav-link" href="browseForVisitor"> 
-				<i class="nc-icon nc-tablet-2"></i>
+				<li><a sec:authorize="hasRole('ROLE_VIEWER')" class="nav-link"
+					href="browseForVisitor"> <i class="nc-icon nc-tablet-2"></i>
 						<p>Browse</p>
-				</a>
-				
-				</li>
-				<li sec:authorize="hasRole('ROLE_USER')"><a class="nav-link" href="maps"> <i
-						class="nc-icon nc-map-big"></i>
+				</a></li>
+				<li sec:authorize="hasRole('ROLE_USER')"><a class="nav-link"
+					href="maps"> <i class="nc-icon nc-map-big"></i>
 						<p>Maps</p>
 				</a></li>
-				<li sec:authorize="hasRole('ROLE_USER')" class="drop"><a class="nav-link" href="journeys"> <i
-						class="nc-icon nc-pin-3"></i>
+				<li sec:authorize="hasRole('ROLE_USER')" class="drop"><a
+					class="nav-link" href="journeys"> <i class="nc-icon nc-pin-3"></i>
 						<p>Journeys</p>
 				</a>
 					<ul class="dropdowny">
@@ -56,14 +56,15 @@
 								<p>New Journey</p>
 						</a>
 					</ul></li>
-				<li sec:authorize="hasRole('ROLE_USER')" class="drop"><a class="nav-link" href="recommendations"> <i
+				<li sec:authorize="hasRole('ROLE_USER')" class="drop"><a
+					class="nav-link" href="myRecommendations"> <i
 						class="nc-icon nc-air-baloon"></i>
-						<p>Recommendations</p>
+						<p>My Recomms</p>
 				</a>
 					<ul class="dropdowny">
-						<li class="droppy"><a class="nav-link" href="myRecommendations"> <i
-								class="nc-icon nc-attach-87"></i>
-								<p>My Recomms</p>
+						<li class="droppy"><a class="nav-link" href="recommendations">
+								<i class="nc-icon nc-attach-87"></i>
+								<p>New Recomm</p>
 						</a>
 					</ul></li>
 				<li sec:authorize="hasRole('ROLE_ADMIN')"><a class="nav-link"
@@ -93,14 +94,15 @@
 
 						<div class="dropdown-menu"
 							aria-labelledby="navbarDropdownMenuLink">
-							<a sec:authorize="hasRole('ROLE_USER')" class="dropdown-item" href="userProfile">User Profile</a>
+							<a sec:authorize="hasRole('ROLE_USER')" class="dropdown-item"
+								href="userProfile">User Profile</a>
 							<div sec:authorize="hasRole('ROLE_USER')" class="divider"></div>
 							<a class="dropdown-item" href="#" th:href="@{/logout}">Log
 								out</a>
 						</div></li>
 				</ul>
 			</div>
-			<div sec:authorize="hasRole('ROLE_USER')" >
+			<div sec:authorize="hasRole('ROLE_USER')">
 				<img class="navbar-image" th:unless="${image} == null"
 					th:src="${image}" /> <img class="navbar-image"
 					th:if="${image} == null" src="bootstrap/img/default-avatar.png" />

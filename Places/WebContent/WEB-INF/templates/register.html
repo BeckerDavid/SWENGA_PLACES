@@ -15,42 +15,41 @@
 		<h1>Sign Up</h1>
 		<form th:action="@{/register}" class="signupform" id="signup-form"
 			method="post">
-				<input type="text" name="username"
-				id="username" placeholder="Username" required autofocus>
-				<input type="password" name="password" id="password" placeholder="Password"
-				required onkeyup="confP()">
-				<input type="password" name="password2" id="password2"
-				placeholder="Confirm Password" required onkeyup="confP()">
-				<input type="text"
+			<input type="text" name="username" id="username"
+				placeholder="Username" required autofocus> <input
+				type="password" name="password" id="password" placeholder="Password"
+				required onkeyup="confP()"> <input type="password"
+				name="password2" id="password2" placeholder="Confirm Password"
+				required onkeyup="confP()"> <input type="text"
 				name="firstName" id="firstName" placeholder="First Name" required>
-				<input type="text" name="lastName" id="lastName"
-				placeholder="Last Name" required>
-				<input type="email"
+			<input type="text" name="lastName" id="lastName"
+				placeholder="Last Name" required> <input type="email"
 				name="mail" id="mail" placeholder="E-Mail Address" required>
-				<select name="countryId" id="country">
+			<select name="countryId" id="country">
 				<option selected disabled>COUNTRY</option>
 				<div th:each="country:${#request.getAttribute('countries')}">
-					<option th:value="${country.id}" th:text="${country.countryName}" th:selected="${country.id == 1}"></option>
+					<option th:value="${country.id}" th:text="${country.countryName}"
+						th:selected="${country.id == 1}"></option>
 				</div>
-				</select>
+			</select>
 
 			<button type="submit" id="sendB" class="btn1">Submit</button>
 		</form>
 	</div>
 </body>
 <script>
-var good_color = "#66cc66";
-var bad_color  = "#ff6666";
-var p1 = document.getElementById("password");
-var p2 = document.getElementById("password2");
-function confP(){
-if (p1.value != p2.value) {
-	p2.style.color = bad_color;
-	document.getElementById("sendB").disabled = true;
-} else {
-	p2.style.color = good_color;
-	document.getElementById("sendB").disabled = false;
-}
-}
+	var good_color = "#66cc66";
+	var bad_color = "#ff6666";
+	var p1 = document.getElementById("password");
+	var p2 = document.getElementById("password2");
+	function confP() {
+		if (p1.value != p2.value) {
+			p2.style.color = bad_color;
+			document.getElementById("sendB").disabled = true;
+		} else {
+			p2.style.color = good_color;
+			document.getElementById("sendB").disabled = false;
+		}
+	}
 </script>
 </html>
