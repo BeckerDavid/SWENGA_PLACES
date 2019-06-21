@@ -30,7 +30,7 @@
 				<select name="countryId" id="country">
 				<option selected disabled>COUNTRY</option>
 				<div th:each="country:${#request.getAttribute('countries')}">
-					<option th:value="${country.id}" th:text="${country.countryName}"></option>
+					<option th:value="${country.id}" th:text="${country.countryName}" th:selected="${country.id == 1}"></option>
 				</div>
 				</select>
 
