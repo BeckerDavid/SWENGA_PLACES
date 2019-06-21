@@ -78,7 +78,7 @@ public class PlacesController {
 
 	@Autowired
 	JourneyRepository journeyRepo;
-	
+
 	@Autowired
 	PictureRepository pictureRepository;
 
@@ -104,7 +104,7 @@ public class PlacesController {
 
 	}
 
-	@Secured("ROLE_VIEWER")
+	@Secured("ROLE_USER")
 	@RequestMapping("/browse")
 	@Transactional
 	public String fillRecommendations(Model model, Authentication authentication) {
@@ -143,7 +143,8 @@ public class PlacesController {
 
 		return "browse";
 	}
-	
+
+	@Secured("ROLE_USER")
 	@GetMapping("uploadProfilePicture")
 	public String uploadProfilePicture (Model model, @RequestParam("id") int id) {
 		model.addAttribute("id", id);
@@ -186,6 +187,7 @@ public class PlacesController {
 	@RequestMapping(value = { "/find" })
 	public String find(Model model, @RequestParam String searchString, @RequestParam int countryId, @RequestParam String searchType) {
 
+
 		List<CountryModel> countries = countryRepository.findAll();
 		List<RecommendationModel> recommendations = null;
 
@@ -209,7 +211,12 @@ public class PlacesController {
 		case "query5":
 			recommendations = recommendationRepository.listByUsername(countryId, searchString);
 			break;
+//		case"query6":
+//			recommendations = recommendationRepository.listByJourneyCountry(countryId, searchString);
 		default:
+			if(recommendationRepository.listNewest(0, "").isEmpty()) {
+				
+			}
 			recommendations = recommendationRepository.listNewest(0, "");
 		}
 
@@ -516,7 +523,6 @@ public class PlacesController {
 
 		UserModel user = userRepository.findByUsername(auth.getName());
 
-
 		if (imageFile != null) {
 			try {
 				PictureModel picture = new PictureModel();
@@ -592,17 +598,10 @@ public class PlacesController {
 
 		recommendationRepository.removeById(id);
 
-		return"redirect:/myRecommendations";
+		return "redirect:/myRecommendations";
 	}
-	
-	@GetMapping("/deleteRecommendationD")
-	public String deleteRec(Model model, @RequestParam int id) {
 
-		recommendationRepository.removeById(id);
-		
-		return"redirect:/dashboard";
-	}
-	
+
 	@Secured("ROLE_VIEWER")
 	@GetMapping("/register")
 	@Transactional
@@ -739,8 +738,10 @@ public class PlacesController {
 			model.addAttribute("errorMessage", "Error while reading user data!");
 		}
 		return "login";
+
 }
 	
+
 
 	@Secured("ROLE_USER")
 	@GetMapping("/userProfile")
@@ -831,32 +832,6 @@ public class PlacesController {
 
 	}
 	
-	
-	@RequestMapping("/fillUsers")
-	@Secured("ROLE_ADMIN")
-	@Transactional
-	public String fillUsers(Model model, Authentication authentication) {
-
-		UserModel user = userRepository.findFirstByUsername(authentication.getName());
-
-		if (user != null && user.isEnabled()) {
-
-			model.addAttribute("user", user);
-		}
-		
-		List<UserModel> users = userRepository.findAll();
-		
-		
-		model.addAttribute("users", users);
-		model.addAttribute("count", users.size());
-		
-		//CountryModel country1 = new CountryModel("asf","asfd");
-		
-		//UserModel user1 = new UserModel("test", "test", "test", "e", "asraerw",
-		//		country1, false);
-	
-		return "/admin_userlist";
-	}
 	
 	@Secured("ROLE_ADMIN")
 	@RequestMapping("/delete")
