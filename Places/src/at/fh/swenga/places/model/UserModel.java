@@ -1,6 +1,8 @@
 package at.fh.swenga.places.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -27,15 +29,15 @@ public class UserModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name="username", unique=true, nullable = false, length = 45)
+	@Column(name = "username", unique = true, nullable = false, length = 45)
 	private String username;
 
-	@Column(name="password", nullable = false, length = 60)
+	@Column(name = "password", nullable = false, length = 60)
 	private String password;
 
-	@Column(name="enabled", nullable=false)
+	@Column(name = "enabled", nullable = false)
 	private boolean enabled;
-	
+
 	@Column(nullable = false, length = 30)
 	private String firstName;
 
@@ -44,43 +46,42 @@ public class UserModel {
 
 	@Column(nullable = false, length = 30)
 	private String mail;
-	
+
 	@Column(name = "token", nullable = false, unique = true)
 	private String token;
 
-	
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private CountryModel country;
 
-	@ManyToMany(fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private Set<UserCategoryModel> category;
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private Set<RecommendationModel> recommendations;
-	
+
 	private boolean isPrivate;
-	
+
 	@ManyToMany
 	private Set<PlaceModel> favoritePlaces;
-	
-	@OneToMany(mappedBy="users")
+
+	@OneToMany(mappedBy = "users")
 	private Set<JourneyModel> journeys;
-	
+
 	@ManyToMany
 	private Set<CountryModel> favoriteCountries;
-	
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<RecommendationModel> favRecommendations;
-	
+
 	@ManyToMany
 	private Set<UserModel> followers;
-	
+
 	@ManyToMany
 	private Set<UserModel> following;
-	
-	@OneToOne(cascade=CascadeType.ALL)
+
+	@OneToOne(cascade = CascadeType.ALL)
 	private PictureModel profilePicture;
-	
+
 	public int getId() {
 		return id;
 	}
@@ -161,8 +162,24 @@ public class UserModel {
 		this.country = country;
 	}
 
-	public Set<UserCategoryModel> getCategory() {
-		return category;
+	public UserCategoryModel getCategory() {
+
+		List<UserCategoryModel> mainList = new ArrayList<UserCategoryModel>();
+
+		mainList.addAll(category);
+
+		return mainList.get(0);
+	}
+
+	public String getCategoryString() {
+		
+		List<UserCategoryModel> mainList = new ArrayList<UserCategoryModel>();
+		
+		mainList.addAll(category);
+		
+		
+		return Integer.toString(mainList.size());
+		
 	}
 
 	public void setCategory(Set<UserCategoryModel> category) {
@@ -257,8 +274,6 @@ public class UserModel {
 		this.following = following;
 	}
 
-
-
 	public UserModel() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -275,25 +290,26 @@ public class UserModel {
 	}
 
 	public void addUserCategory(UserCategoryModel cat) {
-		if(category==null) category = new HashSet<UserCategoryModel>();
+		if (category == null)
+			category = new HashSet<UserCategoryModel>();
 		category.add(cat);
-		}
-	
+	}
+
 	public void encryptPassword() {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		password = passwordEncoder.encode(password);		
+		password = passwordEncoder.encode(password);
 	}
-	
+
 	public boolean isRecLiked(RecommendationModel recMod) {
-		if(favRecommendations.contains(recMod)) {
+		if (favRecommendations.contains(recMod)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	public void changeFavRec(RecommendationModel recMod) {
-		if(isRecLiked(recMod)) {
+		if (isRecLiked(recMod)) {
 			favRecommendations.add(recMod);
 		} else {
 			favRecommendations.remove(recMod);
@@ -311,9 +327,9 @@ public class UserModel {
 		this.country = country;
 		this.isPrivate = isPrivate;
 	}
-	
 
-	public UserModel(String username, String password, boolean isPrivate, String mail, String firstName, String lastName, String token, CountryModel country) {
+	public UserModel(String username, String password, boolean isPrivate, String mail, String firstName,
+			String lastName, String token, CountryModel country) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -324,7 +340,7 @@ public class UserModel {
 		this.token = token;
 		this.country = country;
 	}
-	
+
 	public UserModel(String username, String password, boolean enabled, String firstName, String lastName, String mail,
 			CountryModel country, String token, boolean isPrivate) {
 		super();
@@ -351,8 +367,6 @@ public class UserModel {
 		this.country = country;
 		this.isPrivate = isPrivate;
 	}
-	
-	
 
 	public UserModel(String username, String password, boolean enabled, String firstName, String lastName, String mail,
 			CountryModel country, boolean isPrivate, PictureModel profilePicture) {
@@ -367,10 +381,9 @@ public class UserModel {
 		this.isPrivate = isPrivate;
 		this.profilePicture = profilePicture;
 	}
-	
 
-	public UserModel(String username, boolean enabled,  String password, String firstname, String lastname, String eMail, CountryModel country,
-			boolean isPrivate, String token) {
+	public UserModel(String username, boolean enabled, String password, String firstname, String lastname, String eMail,
+			CountryModel country, boolean isPrivate, String token) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -381,10 +394,9 @@ public class UserModel {
 		this.country = country;
 		this.isPrivate = true;
 		this.token = token;
-}
-	
-	
-	public UserModel(String username, boolean enabled,  String password, String firstname, String lastname, String eMail,
+	}
+
+	public UserModel(String username, boolean enabled, String password, String firstname, String lastname, String eMail,
 			String token) {
 		super();
 		this.username = username;
@@ -394,7 +406,7 @@ public class UserModel {
 		this.mail = eMail;
 		this.enabled = true;
 		this.token = token;
-}
+	}
 
 	@Override
 	public int hashCode() {
@@ -462,7 +474,5 @@ public class UserModel {
 			return false;
 		return true;
 	}
-	
-	
-	
+
 }

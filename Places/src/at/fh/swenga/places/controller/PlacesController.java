@@ -44,6 +44,7 @@ import at.fh.swenga.places.dao.PictureRepository;
 import at.fh.swenga.places.dao.PlaceRepository;
 import at.fh.swenga.places.dao.RecommendationRepository;
 import at.fh.swenga.places.dao.UserCategoryDao;
+import at.fh.swenga.places.dao.UserCategoryRepository;
 import at.fh.swenga.places.dao.UserDao;
 import at.fh.swenga.places.dao.UserRepository;
 import at.fh.swenga.places.model.CountryModel;
@@ -69,6 +70,9 @@ public class PlacesController {
 
 	@Autowired
 	RecommendationRepository recommendationRepository;
+	
+	@Autowired
+	UserCategoryRepository userCategoryRepository;
 
 	@Autowired
 	PlaceRepository placeRepo;
@@ -865,9 +869,29 @@ public class PlacesController {
 		return "forward:admin_userlist";
 	}
 	
+	@Secured("ROLE_ADMIN")
+	@RequestMapping("/toAdmin")
+	public String toAdmin(Model model, Authentication authentication, @RequestParam int id) {
+
+		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+		
+		UserCategoryModel admin = userCategoryRepository.findByRole("admin");
+		
+		user.addUserCategory(admin);
+		
+		userRepository.save(user);
+
+		if (user != null && user.isEnabled()) {
+
+			model.addAttribute("user", user);
+		}
+
+			return "forward:admin_userlist";
+		
+	}
+	
 	@Secured("ROLE_USER")
 	@GetMapping(value = "/like")
-	//@RequestMapping("/like")
 	@Transactional
 	public void likeRec(Model model, Authentication authentication, @RequestParam int rm) {
 
