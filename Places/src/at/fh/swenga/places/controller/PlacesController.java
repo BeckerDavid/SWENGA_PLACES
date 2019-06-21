@@ -55,7 +55,6 @@ import at.fh.swenga.places.model.UserCategoryModel;
 import at.fh.swenga.places.model.UserModel;
 
 @Controller
-//@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "session")
 public class PlacesController {
 
 	@Autowired
@@ -490,7 +489,8 @@ public class PlacesController {
 		journey.setDepartureDate(calS);
 		journey.setArrivalDate(calD);
 
-		UserModel user = userRepository.findByUsername(auth.getName());
+		UserModel user1 = userRepository.findByUsername(auth.getName());
+		UserModel user = userRepository.getOne(user1.getId());
 		journey.setUsers(user);
 
 		journeyRepo.save(journey);
@@ -513,7 +513,7 @@ public class PlacesController {
 			}
 		}
 
-		return "redirect:/journeys";
+		return "journey";
 	}
 
 	@Secured("ROLE_USER")
