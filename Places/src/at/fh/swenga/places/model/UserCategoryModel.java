@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Table(name = "user_roles")
 public class UserCategoryModel implements java.io.Serializable {
 	private static final long serialVersionUID = 4290441020117679859L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -23,7 +23,7 @@ public class UserCategoryModel implements java.io.Serializable {
 	@ManyToMany(mappedBy = "category", fetch = FetchType.LAZY)
 	private Set<UserModel> users;
 
-	@Column(name="role",nullable = false, length = 45)
+	@Column(name = "role", nullable = false, length = 45)
 	private String role;
 
 	public UserCategoryModel(String role) {
@@ -54,7 +54,7 @@ public class UserCategoryModel implements java.io.Serializable {
 	public String getRole() {
 		return role;
 	}
-	
+
 	public void setRole(String name) {
 		this.role = name;
 	}

@@ -1,6 +1,5 @@
 package at.fh.swenga.places.model;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -174,14 +173,13 @@ public class UserModel {
 	}
 
 	public String getCategoryString() {
-		
+
 		List<UserCategoryModel> mainList = new ArrayList<UserCategoryModel>();
-		
+
 		mainList.addAll(category);
-		
-		
+
 		return Integer.toString(mainList.size());
-		
+
 	}
 
 	public void setCategory(Set<UserCategoryModel> category) {
@@ -278,7 +276,6 @@ public class UserModel {
 
 	public UserModel() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -296,7 +293,7 @@ public class UserModel {
 			category = new HashSet<UserCategoryModel>();
 		category.add(cat);
 	}
-	
+
 	public void removeUserCategory(UserCategoryModel cat) {
 		category.remove(cat);
 	}
@@ -316,7 +313,7 @@ public class UserModel {
 
 	public void changeFavRec(RecommendationModel recMod) {
 
-		if(isRecLiked(recMod)) {
+		if (isRecLiked(recMod)) {
 			favRecommendations.remove(recMod);
 			System.out.println("Rec liked");
 		} else {
@@ -417,21 +414,22 @@ public class UserModel {
 		this.token = token;
 	}
 
-	public String getImage() throws UnsupportedEncodingException {
+	/**
+	 * @return Base64-representation of profilepicture or default picture if none
+	 *         present
+	 */
+	public String getImage() {
 		if (profilePicture == null) {
 			return "bootstrap/img/default-avatar.png";
-		}
-		else {
+		} else {
 			try {
 				return "data:image/jpg;base64," + new String(Base64.encodeBase64(profilePicture.getContent()));
 			} catch (Exception e) {
-	            // TODO Auto-generated catch block
-	            e.printStackTrace();
-	            return "bootstrap/img/default-avatar.png";
-	        }
+				return "bootstrap/img/default-avatar.png";
+			}
 		}
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

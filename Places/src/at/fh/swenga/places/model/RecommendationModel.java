@@ -1,6 +1,5 @@
 package at.fh.swenga.places.model;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -26,7 +25,7 @@ public class RecommendationModel {
 
 	@Column(nullable = false, length = 140)
 	private String title;
-	
+
 	@ManyToOne
 	private PlaceModel place;
 
@@ -35,20 +34,19 @@ public class RecommendationModel {
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private UserModel user;
-	
+
 	private boolean approved;
-	
-	@OneToOne(cascade=CascadeType.ALL)
+
+	@OneToOne(cascade = CascadeType.ALL)
 	private PictureModel recommendationPicture;
-	
+
 	private int rating;
-	
+
 	@Column(length = 30)
 	private String season;
-	
-	@ManyToMany(mappedBy="favRecommendations")
+
+	@ManyToMany(mappedBy = "favRecommendations")
 	private Set<UserModel> favUsers;
-	
 
 	public int getId() {
 		return id;
@@ -65,7 +63,7 @@ public class RecommendationModel {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	public PlaceModel getPlace() {
 		return place;
 	}
@@ -168,8 +166,6 @@ public class RecommendationModel {
 		return true;
 	}
 
-	
-
 	public RecommendationModel(String title, PlaceModel place, String description, UserModel user,
 			PictureModel recommendationPicture, String season) {
 		super();
@@ -208,8 +204,6 @@ public class RecommendationModel {
 		this.user = user;
 	}
 
-
-	
 	public RecommendationModel(String title, PlaceModel place, UserModel user, boolean approved, int rating) {
 		super();
 		this.title = title;
@@ -218,19 +212,20 @@ public class RecommendationModel {
 		this.approved = approved;
 		this.rating = rating;
 	}
-	
-	public String getPicture() throws UnsupportedEncodingException {
+
+	/**
+	 * @return Base64-representation of recommendationpicture or default picture if
+	 *         none present
+	 */
+	public String getPicture() {
 		if (recommendationPicture == null) {
 			return "bootstrap/img/globe.jpg";
-		}
-		else {
+		} else {
 			try {
 				return "data:image/jpg;base64," + new String(Base64.encodeBase64(recommendationPicture.getContent()));
 			} catch (Exception e) {
-	            // TODO Auto-generated catch block
-	            e.printStackTrace();
-	            return "bootstrap/img/globe.jpg";
-	        }
+				return "bootstrap/img/globe.jpg";
+			}
 		}
 	}
 
