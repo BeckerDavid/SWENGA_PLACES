@@ -3,19 +3,60 @@
 <!-- <html xmlns="http://www.w3.org/1999/xhtml" 	xmlns:th="http://www.thymeleaf.org"> -->
 
 <head>
-    <meta charset="utf-8" />
+<meta charset="utf-8" />
 <!--     <link rel="apple-touch-icon" sizes="76x76" href="../bootstrap/img/apple-icon.png"> -->
 <!-- 	<link rel="icon" type="image/png" href="../bootstrap/img/favicon.ico"> -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>Following</title>
-    <div th:include="~{includes/fragments :: bootstrapCSS}" th:remove="tag" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Following</title>
+<div th:include="~{includes/fragments :: bootstrapCSS}" th:remove="tag" />
 </head>
 
 <body>
-		<div class="wrapper">
+	<div class="wrapper">
 		<div th:include="~{includes/fragments :: side}" th:remove="tag" />
 		<div class="main-panel">
 			<div th:include="~{includes/fragments :: nav}" th:remove="tag" />
+			<div class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-sm-12 col-md-6 col-lg-6" th:each="user: ${users}">
+							<div class="card">
+								<div class="card-body-rec">
+									<div class="card-recPic">
+										<img class="avatar border-gray" th:src="${user.getImage()}" alt="The user's profile picture">
+											<span class="rec-title" th:text="${user.username}"></span>
+									</div>
+									<div class="card-body-rec-content">
+										<div class="row">
+											<div class="col-10 col-sm-10 col-md-10 col-lg-10">
+												<h5 class="card-title" th:text="${user.firstName}"></h5>
+											</div>
+											<div class="col-2 col-sm-2 col-md-2 col-lg-2">
+												<div class="form-row">
+													<div class="form-check col-1 col-sm-1 col-md-1 col-lg-1">
+														<form method="POST" th:object="${follown}" th:action="@{/follown(id=${user.id})}">
+															<button th:if="${user.following(recommendation)}" type="submit" value="Do it" class="btn btn-info pull-right btn-fill">Unfollow</button>
+															<button th:unless="${user.isRecLiked(recommendation)}" type="submit" value="Do it" class="btn btn-info pull-right">Follow</button>
+													    </form>
+													</div>
+													
+													<div class="form-check col-1 col-sm-1 col-md-1 col-lg-1">
+														<h5 class="card-title" th:text="${recommendation.getRating()}"></h5>
+													</div>
+												</div>
+										        
+										    </div>
+									    </div>
+										<div>
+											<small th:text="${recommendation.getDescription()}"></small>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			
 			<div class="content">
 				<div class="container-fluid">
 					<div class="row">
@@ -23,36 +64,26 @@
 							<div class="card strpied-tabled-with-hover">
 								<div class="card-header "></div>
 								<div class="card-body table-full-width table-responsive">
-									<table data-toggle="table"
-										class="table table-hover table-striped"
-										th:each="recommendation : ${recommendations}">
-										<tbody>
+								<div class="col-sm-8 col-md-6 col-lg-6" th:each="user: ${users}">
+									<div class="card">
+										<div class="card-body-rec">
+											<div class="card-recPic">
+												<img class="avatar border-gray" th:src="${user.getImage()}" alt="The user's profile picture">
+													<span th:text="${user.username}"></span>
+													<span th:text="${user.firstName}"></span>
 										
-										
-										</tbody>
-<!-- 										<tbody> -->
-<!-- 											 list all items ----------------------------------------------------------- -->
-<!-- 											<tr> -->
-<!-- 												<td th:text="${recommendation.id}"></td> -->
-<!-- 												<td th:text="${recommendation.name}"></td> -->
-<!-- 												<td th:text="${recommendation.colour}"></td> -->
-<!-- 												<td th:text="${recommendation.price}"></td> -->
-<!-- 												<td th:text="${recommendation.producer.brandName}"></td> -->
-<!-- 												<td th:text="${recommendation.rating}"></td> -->
-<!-- 												<td th:text="${recommendation.expirationDate}"></td> -->
-<!-- 											</tr> -->
-<!-- 											 list all items ----------------------------------------------------------- -->
-
-<!-- 										</tbody> -->
-									</table>
+											</div>
+										</div>
+									</div>
+								</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			
-		<footer class="footer">
+
+			<footer class="footer">
 				<div class="container-fluid">
 					<nav>
 						<p class="copyright text-center">
@@ -66,7 +97,7 @@
 					</nav>
 				</div>
 			</footer>
-			
+
 		</div>
 	</div>
 

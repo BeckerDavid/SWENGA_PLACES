@@ -1,5 +1,6 @@
 package at.fh.swenga.places.model;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
@@ -415,6 +417,21 @@ public class UserModel {
 		this.token = token;
 	}
 
+	public String getImage() throws UnsupportedEncodingException {
+		if (profilePicture == null) {
+			return "bootstrap/img/default-avatar.png";
+		}
+		else {
+			try {
+				return "data:image/jpg;base64," + new String(Base64.encodeBase64(profilePicture.getContent()));
+			} catch (Exception e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	            return "bootstrap/img/default-avatar.png";
+	        }
+		}
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

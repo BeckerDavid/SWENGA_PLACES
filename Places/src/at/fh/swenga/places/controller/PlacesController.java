@@ -213,7 +213,9 @@ public class PlacesController {
 	
 	@Secured("ROLE_USER")
 	@RequestMapping(value = { "/find" })
-	public String find(Model model, Authentication authentication, @RequestParam String searchString, @RequestParam int countryId, @RequestParam String searchType) {
+	public String find(Model model, Authentication authentication, @RequestParam String searchString, @RequestParam int countryId,
+			@RequestParam String searchType) {
+
 
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
 		if (user != null && user.isEnabled()) {
@@ -221,33 +223,11 @@ public class PlacesController {
 			model.addAttribute("user", user);
 		}
 		
-		int userId = user.getId();
-		
 		List<CountryModel> countries = countryRepository.findAll();
 		List<RecommendationModel> recommendations = null;
 
 		model.addAttribute("countries", countries);
-	
-		JourneyModel journeyFromUser = new JourneyModel();
-		List<JourneyModel> journeyFromUserList = new ArrayList<JourneyModel>();
-		
-		try {
-			journeyFromUserList= journeyRepo.findTop1ByUsersId(userId);
-			System.out.println("Hi");
-			} catch (Exception e) {
-	            ;
-	        }
-		
-		System.out.println(journeyFromUserList);
-		
-		
-		Set<CountryModel> countriesFromUserJourney = journeyFromUser.getCountries();
-		
-		CountryModel firstCountryOfUser = countriesFromUserJourney.iterator().next();
-		
-		int idOfCountryForUser = firstCountryOfUser.getId();
-		
-		
+
 		int count = 0;
 
 		switch (searchType) {
@@ -266,11 +246,11 @@ public class PlacesController {
 		case "query5":
 			recommendations = recommendationRepository.listByUsername(countryId, searchString);
 			break;
-		case"query6":
-			recommendations = recommendationRepository.getRecommendationForJourney(idOfCountryForUser, searchString);
-		default:				
-				recommendations = recommendationRepository.listNewest(0, "");
-
+		default:
+			if(recommendationRepository.listNewest(0, "").isEmpty()) {
+				
+			}
+			recommendations = recommendationRepository.listNewest(0, "");
 		}
 
 		model.addAttribute("recommendations", recommendations);
@@ -282,6 +262,7 @@ public class PlacesController {
 		}
 		return "browse";
 	}
+	
 
 	@Secured("ROLE_USER")
 	@GetMapping("/contacts")
@@ -409,7 +390,14 @@ public class PlacesController {
 	@Transactional
 	public String getFollowing(Model model, Authentication authentication) {
 
+		
+		
+		
 		UserModel user = userRepository.findFirstByUsername(authentication.getName());
+		List<UserModel> users = userRepository.findAll();
+		model.addAttribute("users",users);
+		model.addAttribute("followers", user.getFollowers());
+		model.addAttribute("following", user.getFollowing());
 
 		if (user != null && user.isEnabled()) {
 
@@ -722,6 +710,7 @@ public class PlacesController {
 			
 			if (catId == 1) {
 				roles.add(catA);
+				roles.add(catU);
 			}
 			else {
 				roles.add(catU);
